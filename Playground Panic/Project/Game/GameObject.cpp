@@ -1,0 +1,33 @@
+#include "stdafx.h"
+#include "Sprite.h"
+#include "GameObject.h"
+//#include "Collider.h"
+
+GameObject::GameObject(Sprite *sprite, Collider *collider)
+:m_position(0.0f, 0.0f)
+,m_sprite(sprite)
+,m_collider(collider)
+{
+	
+}
+
+	const sf::Vector2f &GameObject::GetPosition() const {
+		return m_position;
+	}
+	void GameObject::SetPosition(const sf::Vector2f &position){
+		m_position = position;
+	}
+	bool GameObject::HasSprite() const{
+		return m_sprite;
+	}
+	Sprite* GameObject::GetSprite(){
+		return m_sprite;
+	}
+	
+	bool GameObject::HasCollider() const{
+		
+		return m_collider != nullptr;
+	}
+	Collider* GameObject::GetCollider(){
+		return m_collider;
+	}
