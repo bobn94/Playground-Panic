@@ -1,4 +1,6 @@
 #include <string>
+
+#include "stdafx.h"
 #include "State.h"
 
 	int State::GetState(){

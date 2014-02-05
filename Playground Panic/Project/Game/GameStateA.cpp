@@ -1,11 +1,13 @@
+
+#include "stdafx.h"
 #include <iostream>
 
 
 #include "GameStateA.h"
-#include "Level.h"
+//#include "Level.h"
 
 
-GameStateA::GameStateA() {
+GameStateA::GameStateA(){
 	m_level = nullptr;
 };
 
@@ -19,7 +21,7 @@ void GameStateA::Exit() {
 
 };
 
-bool GameStateA::Update(float deltatime, SpriteManager* m_sprite_manager) {
+bool GameStateA::Update(float deltatime) {
 
 	return false;	
 };

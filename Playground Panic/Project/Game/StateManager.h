@@ -11,12 +11,13 @@ public:
 	~StateManager();
 
 	 void Attach(State *state);
-	 void Update(float deltatime, SpriteManager* m_sprite_manager);
-	 void Draw(DrawManager* m_draw_manager);
+	 void Update(float deltatime);
+	 //void Draw(DrawManager* m_draw_manager);
 	 void SetState(const std::string &type);
 	 void ChangeState();
 	 bool IsRunning();
 
+	 bool isRunning;
 	 State *m_current;
 private:
 	std::vector<State*> m_states;

@@ -2,12 +2,13 @@
 
 #include <string>
 #include <vector>
+#include "stdafx.h"
 #include <map>
-#include <SDL_ttf.h>
-#include "Vector2.h"
+//#include <SDL_ttf.h>
+//#include "Vector2.h"
 #include "State.h"
-#include "SpriteManager.h"
-#include "DrawManager.h"
+//#include "SpriteManager.h"
+//#include "DrawManager.h"
 
 class SpriteManager;
 class Sprite;
@@ -20,9 +21,9 @@ public:
 	
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime, SpriteManager* m_sprite_manager);
-	void Initialize(SpriteManager* m_sprite_manager);
-	void Draw(DrawManager* m_draw_manager);
+	bool Update(float deltatime);
+	void Initialize();
+	//void Draw(DrawManager* m_draw_manager);
 	std::string Next();
 	bool IsType(const std::string &type);
 
@@ -30,12 +31,12 @@ public:
 	bool m_changetoOptionsState;
 
 	void SpawnMenuCrosshair(SpriteManager *sprite_manager);
-	bool CheckCrosshairCollision(Vector2 &offset, SpriteManager* sprite_manager);
+	bool CheckCrosshairCollision(sf::Vector2u &offset, SpriteManager* sprite_manager);
 
 private:
 
 
-	Vector2 m_crosshairPos;
+	sf::Vector2u m_crosshairPos;
 	Sprite* m_BackgroundSprite;
 	std::vector<GameObject*> m_objects;
 

@@ -3,11 +3,12 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <SDL_ttf.h>
-#include "Vector2.h"
+#include "stdafx.h"
+//#include <SDL_ttf.h>
+//#include "Vector2.h"
 #include "State.h"
-#include "SpriteManager.h"
-#include "DrawManager.h"
+//#include "SpriteManager.h"
+//#include "DrawManager.h"
 
 class SpriteManager;
 class Sprite;
@@ -20,8 +21,8 @@ public:
 	
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime, SpriteManager* m_sprite_manager);
-	void Initialize(SpriteManager* m_sprite_manager);
+	bool Update(float deltatime);
+	void Initialize();
 	void Draw(DrawManager* m_draw_manager);
 	std::string Next();
 	bool IsType(const std::string &type);
@@ -30,7 +31,7 @@ public:
 	bool m_changetoGameState;
 
 	void SpawnMenuCrosshair(SpriteManager *sprite_manager);
-	bool CheckCrosshairCollision(Vector2 &offset, SpriteManager* sprite_manager);
+	bool CheckCrosshairCollision(sf::Vector2u &offset, SpriteManager* sprite_manager);
 
 	void ResetHighscore();
 
@@ -38,12 +39,12 @@ public:
 
 private:
 
-	Vector2 m_crosshairPos;
+	sf::Vector2u m_crosshairPos;
 	Sprite* m_BackgroundSprite;
-	std::vector<GameObject*> m_objects;
+	//std::vector<GameObject*> m_objects;
 
-	GameObject *m_resethighscoretext;
-	GameObject *m_gametext;
+	//GameObject *m_resethighscoretext;
+	//GameObject *m_gametext;
 
 	bool m_GoGamestate;
 	bool m_resetit;
