@@ -10,7 +10,7 @@ class GameObject{
 	friend class MenuState;
 	friend class OptionsState;
 public:
-	GameObject(Sprite *sprite = nullptr, Collider *collider = nullptr);
+	GameObject(Sprite *sprite = nullptr, Collider *collider = nullptr, int flag = 0);
 
 	const sf::Vector2f &GetPosition() const;
 	void SetPosition(const sf::Vector2f &position);
@@ -23,5 +23,5 @@ protected:
 	sf::Vector2f m_position;
 	Sprite* m_sprite;
 	Collider *m_collider;
-	int m_flag;// flagga för att kunna välja om ett object ska få en collider eller inte
+	int m_flag;
 };
