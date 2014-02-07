@@ -1,5 +1,5 @@
-#include <iostream>
 #include "stdafx.h"
+#include <iostream>
 #include "State.h"
 #include "StateManager.h"
 
