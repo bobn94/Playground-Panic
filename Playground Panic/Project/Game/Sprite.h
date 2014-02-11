@@ -3,7 +3,7 @@
 struct SDL_Texture;
 struct SDL_Surface;
 
-class Sprite: sf::Sprite{
+class Sprite : sf::Sprite{
 	friend class DrawManager;
 	friend class SpriteManager;
 

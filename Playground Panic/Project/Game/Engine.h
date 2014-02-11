@@ -5,6 +5,8 @@
 #include "MenuState.h"
 #include "stdafx.h"
 
+class PlayerObject;
+
 class Engine{
 public:
 	Engine();
@@ -15,4 +17,18 @@ public:
 
 private:
 	sf::RenderWindow m_window;
+
+	PlayerObject * m_player;
+
+	//Temporary
+	sf::RectangleShape * rec;
+	sf::Sprite m_player_sprite;
+	sf::Texture m_player_texture;
+
+	float m_global_speed;
+
+	float m_deltatime;
+	sf::Clock deltaClock;
+	sf::Time deltaTime;
+
 };
