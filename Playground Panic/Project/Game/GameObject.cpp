@@ -3,7 +3,7 @@
 #include "GameObject.h"
 //#include "Collider.h"
 
-GameObject::GameObject(sf::Sprite* sprite, sf::Texture* texture, Collider *collider, int flag)
+GameObject::GameObject(sf::Sprite* sprite, Collider *collider, int flag)
 :m_position(0.0f, 0.0f)
 ,m_sprite(sprite)
 ,m_collider(collider)

@@ -10,9 +10,9 @@
 //using namespace sf;
 
 PlayerObject::PlayerObject(sf::Sprite* sprite, sf::Texture* texture, Collider* collider)
-: GameObject(sprite, texture, collider)
+: GameObject(sprite, collider)
 {
-	m_speed = 200;
+	m_speed = 60000;
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
@@ -20,23 +20,54 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, sf::Texture* texture, Collider* c
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos)
 {
+	//////////Movement
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		m_sprite->move(0.0f, -5.0f * deltatime * global_speed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			m_sprite->move(0.0f, -4.0f * deltatime * m_speed * global_speed);
+		}
+		else
+		{
+			m_sprite->move(0.0f, -5.0f * deltatime * m_speed * global_speed);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		m_sprite->move(0.0f, 5.0f * deltatime * global_speed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			m_sprite->move(0.0f, 4.0f * deltatime * m_speed * global_speed);
+		}
+		else
+		{
+			m_sprite->move(0.0f, 5.0f * deltatime * m_speed * global_speed);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		m_sprite->move(-5.0f * deltatime * global_speed, 0.0f);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			m_sprite->move(-4.0f * deltatime * m_speed * global_speed, 0.0f);
+		}
+		else
+		{
+			m_sprite->move(-5.0f * deltatime * m_speed * global_speed, 0.0f);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		m_sprite->move(5.0f * deltatime * global_speed, 0.0f);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			m_sprite->move(4.0f * deltatime * m_speed * global_speed, 0.0f);
+		}
+		else
+		{
+			m_sprite->move(5.0f * deltatime * m_speed * global_speed, 0.0f);
+		}
 	}
 
+
+	//////////////Rotation
 	//Your origin
 	sf::Vector2f origin = m_sprite->getPosition();
 
@@ -54,6 +85,7 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mous
 
 	if (m_sprite->getPosition().y < mousePos.y)
 	{
+		// - 13
 		m_sprite->setRotation(90 + rotAngle);
 	}
 	else if (m_sprite->getPosition().x == mousePos.x && m_sprite->getPosition().y == mousePos.y)
@@ -61,15 +93,19 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mous
 	}
 	else
 	{
+		// - 13
 		m_sprite->setRotation(90 - rotAngle);
 	}
-	
+
+
 /*
 	if (m_current_animation != nullptr)
 	{
 		m_current_animation->Update(deltatime);
 	}
 */
+
+	m_position = m_sprite->getPosition();
 
 	if (HasCollider())
 	{

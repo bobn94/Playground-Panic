@@ -10,7 +10,7 @@ class GameObject{
 	friend class MenuState;
 	friend class OptionsState;
 public:
-	GameObject(sf::Sprite* sprite, sf::Texture* texture = nullptr, Collider *collider = nullptr, int flag = 0);
+	GameObject(sf::Sprite* sprite, Collider *collider = nullptr, int flag = 0);
 
 	const sf::Vector2f &GetPosition() const;
 	void SetPosition(const sf::Vector2f &position);
