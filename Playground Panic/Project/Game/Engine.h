@@ -4,10 +4,12 @@
 #include "OptionsState.h"
 #include "MenuState.h"
 #include "stdafx.h"
+#include "CountdownTimer.h"
 
 class PlayerObject;
 class Collider;
 class ProjectileObject;
+class SlowKid;
 
 class Engine{
 public:
@@ -20,7 +22,7 @@ public:
 private:
 	sf::RenderWindow m_window;
 	//StateManager * mgr;
-
+	CountdownTimer* m_timer;
 	PlayerObject * m_player;
 	Collider * m_player_collider;
 	sf::Sprite m_player_sprite;
@@ -30,6 +32,12 @@ private:
 	std::vector<sf::Sprite*> m_projectile_sprite;
 	sf::Texture m_projectile_texture;
 	std::vector<Collider*> m_projectile_collider;
+
+	std::vector<SlowKid*> m_slow_kid;
+	std::vector<sf::Sprite*> m_slow_kid_sprite;
+	sf::Texture m_slow_kid_texture;
+	std::vector<Collider*> m_slow_kid_collider;
+
 	sf::Clock m_player_pst;
 	//Time between projectile-spawns
 	sf::Int32 m_player_pss;

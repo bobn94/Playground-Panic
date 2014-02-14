@@ -1,15 +1,18 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
-bool Enemy::GetCanShoot(){
-	return canShoot;
+Enemy::Enemy(){
+
 }
-std::string Enemy::GetType(){
-	return type;
+Enemy::Enemy(sf::Sprite* sprite, Collider* collider) : GameObject(sprite, collider){
+
+}
+bool Enemy::GetCanShoot(){
+	return m_canShoot;
 }
 int Enemy::GetDirt(){
-	return dirtLevel;
+	return m_dirtLevel;
 }
-int Enemy::GetSpeed(){
-	return speed;
+float Enemy::GetSpeed(){
+	return m_speed;
 }

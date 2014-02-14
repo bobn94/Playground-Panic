@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="CountdownTimer.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameStateA.h" />
@@ -96,6 +98,7 @@
     <ClInclude Include="OptionsState.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="ProjectileObject.h" />
+    <ClInclude Include="SlowKid.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
@@ -104,6 +107,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CountdownTimer.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateA.cpp" />
@@ -113,6 +118,7 @@
     <ClCompile Include="OptionsState.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="ProjectileObject.cpp" />
+    <ClCompile Include="SlowKid.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="stdafx.cpp">

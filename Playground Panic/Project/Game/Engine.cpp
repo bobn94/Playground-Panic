@@ -3,7 +3,9 @@
 #include "GameObject.h"
 #include "PlayerObject.h"
 #include "ProjectileObject.h"
+#include "SlowKid.h"
 #include "Collider.h"
+#include "CountdownTimer.h"
 
 Engine::Engine(){
 	m_player = nullptr;
@@ -28,6 +30,12 @@ void Engine::Initialize(){
 	}
 	m_projectile_texture.setSmooth(true);
 
+	if (!m_slow_kid_texture.loadFromFile("../data/textures/SlowChild2.png"))
+	{
+		// Shit happened
+	}
+	m_projectile_texture.setSmooth(true);
+
 	/*
 	float recWidth = 20.0f, recHeight = 15.0f;
 	rec = new sf::RectangleShape(sf::Vector2f(recWidth, recHeight));
@@ -44,7 +52,7 @@ void Engine::Initialize(){
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
 	m_player = new PlayerObject(&m_player_sprite);
 	m_player->SetPosition(sf::Vector2f(200.0f, 200.0f));	
-
+	
 
 
 	/*
@@ -63,8 +71,13 @@ void Engine::Run(){
 
 		mgr.isRunning = true;
 		sf::RenderWindow m_window(sf::VideoMode(1080, 720), "Playground Panic");
+		m_timer = new CountdownTimer();
+		m_timer->SetTime(0, 0, 5);
+		m_timer->Reset();
+		m_timer->Start();
 		while (mgr.IsRunning())
 		{
+			
 			sf::Event event;
 			while (m_window.pollEvent(event))
 			{
@@ -75,10 +88,10 @@ void Engine::Run(){
 			}
 
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
-
+			m_timer->Update();
 			/////////////////////////////////////////////////////////
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))// && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
 			{
 				m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
 				m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.7f, 0.7f);
@@ -92,7 +105,15 @@ void Engine::Run(){
 				m_player_pst.restart();
 				//m_player_pss = 10000000;
 			}
-
+			if (m_timer->Done()){
+				m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
+				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.7f, 0.7f);
+				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]));
+				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(sf::Mouse::getPosition().x - m_window.getPosition().x, sf::Mouse::getPosition().y - m_window.getPosition().y));
+				m_timer->Reset();
+				m_timer->Start();
+			}
+			
 			m_player->Update(m_deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
 
 			{
@@ -101,6 +122,16 @@ void Engine::Run(){
 				while (it != m_projectile.end())
 				{
 					m_projectile[i]->Update(m_deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
+					++it;
+					i++;
+				}
+			}
+			{
+				auto it = m_slow_kid.begin();
+				int i = 0;
+				while (it != m_slow_kid.end())
+				{
+					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player->GetPosition());
 					++it;
 					i++;
 				}
@@ -115,6 +146,10 @@ void Engine::Run(){
 			for (int i = 0; i < m_projectile.size(); i++)
 			{
 				m_window.draw(*m_projectile[i]->GetSprite());
+			}
+			for (int i = 0; i < m_slow_kid.size(); i++)
+			{
+				m_window.draw(*m_slow_kid[i]->GetSprite());
 			}
 			
 
@@ -167,7 +202,7 @@ void Engine::Run(){
 			{
 				m_window.draw(*m_projectile[0]->GetSprite());
 			}*/
-			m_window.setMouseCursorVisible(false);
+			//m_window.setMouseCursorVisible(false);
 			
 			m_window.display();
 		}

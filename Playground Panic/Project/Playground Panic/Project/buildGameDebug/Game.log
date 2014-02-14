@@ -1,0 +1,26 @@
+﻿Build started 2014-02-11 16:45:51.
+     1>Project "C:\Users\Zlackzor\Desktop\Project\Playground Panic\Project\Game\Game.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"../bin/Game_d.exe" /INCREMENTAL /NOLOGO /LIBPATH:../dependencies/sfml/lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"../bin/Game_d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"../bin/Game_d.lib" /MACHINE:X86 ../buildGameDebug/Collider.obj
+         ../buildGameDebug/Enemy.obj
+         ../buildGameDebug/Engine.obj
+         ../buildGameDebug/GameObject.obj
+         ../buildGameDebug/GameStateA.obj
+         ../buildGameDebug/Input.obj
+         ../buildGameDebug/main.obj
+         ../buildGameDebug/MenuState.obj
+         ../buildGameDebug/OptionsState.obj
+         ../buildGameDebug/PlayerObject.obj
+         ../buildGameDebug/Sprite.obj
+         ../buildGameDebug/StateManager.obj
+         ../buildGameDebug/stdafx.obj
+         ../buildGameDebug/Vervivevev.obj
+     1>Engine.obj : error LNK2019: unresolved external symbol "public: __thiscall Enemy::Enemy(void)" (??0Enemy@@QAE@XZ) referenced in function "public: void __thiscall Engine::Run(void)" (?Run@Engine@@QAEXXZ)
+     1>Engine.obj : error LNK2019: unresolved external symbol "public: bool __thiscall Enemy::SetSprites(class sf::Sprite)" (?SetSprites@Enemy@@QAE_NVSprite@sf@@@Z) referenced in function "public: void __thiscall Engine::Initialize(void)" (?Initialize@Engine@@QAEXXZ)
+     1>PlayerObject.obj : error LNK2019: unresolved external symbol "public: __thiscall GameObject::GameObject(class sf::Sprite *,class sf::Texture *,class Collider *,int)" (??0GameObject@@QAE@PAVSprite@sf@@PAVTexture@2@PAVCollider@@H@Z) referenced in function "public: __thiscall PlayerObject::PlayerObject(class sf::Sprite *,class sf::Texture *,class Collider *)" (??0PlayerObject@@QAE@PAVSprite@sf@@PAVTexture@2@PAVCollider@@@Z)
+     1>../bin/Game_d.exe : fatal error LNK1120: 3 unresolved externals
+     1>Done Building Project "C:\Users\Zlackzor\Desktop\Project\Playground Panic\Project\Game\Game.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.22

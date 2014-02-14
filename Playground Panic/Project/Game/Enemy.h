@@ -3,15 +3,15 @@
 #include "GameObject.h"
 #include <string>
 
-class Enemy : GameObject{
+class Enemy : public GameObject{
 public:
+	Enemy();
+	Enemy(sf::Sprite* sprite, Collider* collider);
 	bool GetCanShoot();
-	std::string GetType();
 	int GetDirt();
-	int GetSpeed();
+	float GetSpeed();
 private:
-	bool canShoot;
-	std::string type;
-	int dirtLevel;
-	int speed;
+	bool m_canShoot;
+	int m_dirtLevel;
+	float m_speed;
 };
