@@ -32,20 +32,13 @@ void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2i target)
 	float DirectionY = AngleY / vectorLength;
 
 	m_velocity = sf::Vector2f(DirectionX * m_speed, DirectionY * m_speed);
-}
-
-void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos) //Remove mousePos unless we do homing
-{
-
-	m_sprite->move(m_velocity * deltatime * global_speed);
-
 
 	//////////////Rotation
 	//Your origin
-	sf::Vector2f origin = m_sprite->getPosition();
+	//sf::Vector2f origin = m_sprite->getPosition();
 
 	//Calculate the direction vector
-	sf::Vector2f dirVec = sf::Vector2f(m_mouse_position.x - origin.x, m_mouse_position.y - origin.y);
+	sf::Vector2f dirVec = sf::Vector2f(target.x - origin.x, target.y - origin.y);
 
 	//Calculate the length^2
 	float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
@@ -56,18 +49,57 @@ void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i 
 	//Get the angle and change it to deg (SFML need deg)
 	float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
-	if (m_sprite->getPosition().y < m_mouse_position.y)
+	if (m_sprite->getPosition().y < target.y)
 	{
 		// - 13
 		m_sprite->setRotation(90 + rotAngle);
 	}
-	else if (m_sprite->getPosition().x == m_mouse_position.x && m_sprite->getPosition().y == m_mouse_position.y)
+	else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
 	{
 	}
 	else
 	{
 		// - 13
 		m_sprite->setRotation(90 - rotAngle);
+	}
+}
+
+void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos) //Remove mousePos unless we do homing
+{
+
+	m_sprite->move(m_velocity * deltatime * global_speed);
+
+	if (1 == 0) //Homing
+	{
+		//////////////Rotation
+		//Your origin
+		sf::Vector2f origin = m_sprite->getPosition();
+
+		//Calculate the direction vector
+		sf::Vector2f dirVec = sf::Vector2f(m_mouse_position.x - origin.x, m_mouse_position.y - origin.y);
+
+		//Calculate the length^2
+		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
+
+		//Change the mag to 1 (you dont need the y for getting the angle
+		dirVec.x = (dirVec.x) / magSquare;
+
+		//Get the angle and change it to deg (SFML need deg)
+		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
+
+		if (m_sprite->getPosition().y < m_mouse_position.y)
+		{
+			// - 13
+			m_sprite->setRotation(90 + rotAngle);
+		}
+		else if (m_sprite->getPosition().x == m_mouse_position.x && m_sprite->getPosition().y == m_mouse_position.y)
+		{
+		}
+		else
+		{
+			// - 13
+			m_sprite->setRotation(90 - rotAngle);
+		}
 	}
 
 	/*
@@ -78,7 +110,7 @@ void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i 
 	*/
 
 	//m_sprite->setPosition(m_mouse_position.x, m_mouse_position.y);
-	
+
 	m_position = m_sprite->getPosition();
 
 	if (HasCollider())
