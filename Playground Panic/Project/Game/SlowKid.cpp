@@ -53,6 +53,9 @@ SlowKid::SlowKid(sf::Sprite* sprite, float radius) : Enemy(sprite, radius){
 		{
 		// - 13
 			m_sprite->setRotation(90 + rotAngle);
+			
+			sf::Vector2f pos(float(cos(90 + rotAngle) * (m_radius * 2))/2, float(sin(90 + rotAngle) * (m_radius * 2))/2);
+			m_sprite->setOrigin(m_sprite->getPosition().x + pos.x, m_sprite->getPosition().y + pos.y);
 		}
 		else if (m_sprite->getPosition().x == playerPos.x && m_sprite->getPosition().y == playerPos.y)
 		{
@@ -61,6 +64,9 @@ SlowKid::SlowKid(sf::Sprite* sprite, float radius) : Enemy(sprite, radius){
 		{
 			// - 13
 			m_sprite->setRotation(90 - rotAngle);
+			sf::Vector2f pos(float(cos(90 - rotAngle) * (m_radius * 2))/2, float(sin(90 - rotAngle) * (m_radius * 2))/2);
+			m_sprite->setOrigin(m_sprite->getPosition().x - pos.x, m_sprite->getPosition().y - pos.y);
+
 		}
 
 
