@@ -9,8 +9,8 @@
 
 //using namespace sf;
 
-PlayerObject::PlayerObject(sf::Sprite* sprite, sf::Texture* texture, Collider* collider)
-: GameObject(sprite, collider)
+PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
+: GameObject(sprite, radius, collider)
 {
 	m_speed = 60000;
 	m_org_speed = m_speed;

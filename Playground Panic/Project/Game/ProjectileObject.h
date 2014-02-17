@@ -14,7 +14,7 @@ class AnimatedSprite;
 class ProjectileObject : public GameObject
 {
 public:
-	ProjectileObject(sf::Sprite* sprite, Collider* collider = nullptr);
+	ProjectileObject(sf::Sprite* sprite, float radius, Collider* collider = nullptr);
 	void Initialize(sf::Vector2f origin, sf::Vector2i target);
 
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);

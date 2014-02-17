@@ -11,7 +11,7 @@ class GameObject{
 	friend class OptionsState;
 public:
 	GameObject();
-	GameObject(sf::Sprite* sprite, Collider *collider = nullptr, int flag = 0);
+	GameObject(sf::Sprite* sprite, float radius = 32, Collider *collider = nullptr, int flag = 0);
 
 	const sf::Vector2f &GetPosition() const;
 	void SetPosition(const sf::Vector2f &position);
@@ -19,6 +19,7 @@ public:
 	sf::Texture* GetTexture();
 	bool HasCollider() const;
 	Collider* GetCollider();
+	float m_radius;
 	sf::Sprite* GetSprite();
 	//sf::Shape* HasShape();
 

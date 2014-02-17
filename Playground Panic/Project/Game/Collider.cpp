@@ -32,13 +32,13 @@ bool Collider::Overlap(Collider &other, Collider &self, sf::Vector2f &offset){
 					if(self.m_position.x < other.m_position.x)
 						{
 							offset.x = -dx;
-							other.m_position.x += -dx;
+							//other.m_position.x += -dx;
 						}
 						else
 
 						{
 							offset.x = dx;
-							other.m_position.x += dx;
+							//other.m_position.x += dx;
 						}
 				}
  				else
@@ -46,13 +46,13 @@ bool Collider::Overlap(Collider &other, Collider &self, sf::Vector2f &offset){
 						if(self.m_position.y < other.m_position.y)
 						{
 							offset.y = -dy;
-							other.m_position.y += -dy;
+							//other.m_position.y += -dy;
 						}
 						else
 
 						{
 							offset.y = dy;
-							other.m_position.y += dy;
+							//other.m_position.y += dy;
 						}
     
 					
@@ -64,3 +64,11 @@ bool Collider::Overlap(Collider &other, Collider &self, sf::Vector2f &offset){
 		}
 		return false;
 	}
+bool Collider::Overlap(sf::Vector2f origo1, sf::Vector2f origo2, float radius1, float radius2){
+	if(sqrt(((origo2.y - origo1.y)*(origo2.y - origo1.y)) + ((origo2.x - origo1.x)*(origo2.x - origo1.x))) < radius1 + radius2){
+		return true;
+	}
+	else{
+		return false;
+	}
+}

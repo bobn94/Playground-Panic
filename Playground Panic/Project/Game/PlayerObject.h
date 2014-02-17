@@ -15,7 +15,7 @@ class AnimatedSprite;
 class PlayerObject : public GameObject
 {
 public:
-	PlayerObject(sf::Sprite* sprite, sf::Texture* texture = nullptr, Collider* collider = nullptr);
+	PlayerObject(sf::Sprite* sprite, float radius, Collider* collider);
 
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);
 	void Collision(bool hit);

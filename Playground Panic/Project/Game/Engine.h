@@ -20,12 +20,13 @@ public:
 	void Cleanup();
 
 private:
+	Collider* Collisions;
 	sf::RenderWindow m_window;
 	//StateManager * mgr;
 	CountdownTimer* m_timer;
 	PlayerObject * m_player;
 	Collider * m_player_collider;
-	sf::Sprite m_player_sprite;
+	sf::Sprite *m_player_sprite;
 	sf::Texture m_player_texture;
 
 	std::vector<ProjectileObject*> m_projectile;

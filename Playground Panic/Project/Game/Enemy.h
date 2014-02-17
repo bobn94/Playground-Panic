@@ -6,12 +6,13 @@
 class Enemy : public GameObject{
 public:
 	Enemy();
-	Enemy(sf::Sprite* sprite, Collider* collider);
+	Enemy(sf::Sprite* sprite, float radius);
 	bool GetCanShoot();
 	int GetDirt();
 	float GetSpeed();
-private:
-	bool m_canShoot;
 	int m_dirtLevel;
 	float m_speed;
+private:
+	bool m_canShoot;
+	
 };

@@ -8,8 +8,8 @@
 
 //using namespace sf;
 
-ProjectileObject::ProjectileObject(sf::Sprite* sprite, Collider* collider)
-: GameObject(sprite, collider)
+ProjectileObject::ProjectileObject(sf::Sprite* sprite, float radius, Collider* collider)
+: GameObject(sprite, radius, collider)
 {
 	m_speed = 1000000;
 	m_org_speed = m_speed;

@@ -4,7 +4,7 @@
 Enemy::Enemy(){
 
 }
-Enemy::Enemy(sf::Sprite* sprite, Collider* collider) : GameObject(sprite, collider){
+Enemy::Enemy(sf::Sprite* sprite, float radius) : GameObject(sprite, radius){
 
 }
 bool Enemy::GetCanShoot(){
