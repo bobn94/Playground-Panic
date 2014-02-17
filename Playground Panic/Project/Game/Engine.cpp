@@ -98,7 +98,7 @@ void Engine::Run(){
 				m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
 				m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.7f, 0.7f);
 				m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(32.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(64.0f, 32.0f))));
-				m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getOrigin(), sf::Mouse::getPosition(m_window));
+				m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
 				
 				/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
 				m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
@@ -111,7 +111,7 @@ void Engine::Run(){
 				m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
 				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.7f, 0.7f);
 				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(128.0f)));
-				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100, rand()%500+100));
+				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100/* + m_window.getPosition().x*/, rand()%500+100/* + m_window.getPosition().y*/));
 				m_timer->Reset();
 				m_timer->Start();
 			}
@@ -134,7 +134,7 @@ void Engine::Run(){
 				int i = 0;
 				while (it != m_slow_kid.end())
 				{
-					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player->GetPosition(), m_slow_kid[i]->GetSprite()->getOrigin(), m_player->GetSprite()->getOrigin());
+					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player->GetPosition(), m_slow_kid[i]->GetPosition(), m_player->GetPosition());
 					++it;
 					i++;
 				}
@@ -149,6 +149,7 @@ void Engine::Run(){
 					for(int j = 0; j < m_slow_kid.size(); j++){
 						sf::Vector2f offset;
 						auto it_kids = m_slow_kid.begin();
+						
 						if(Collisions->Overlap(m_slow_kid[j]->GetSprite()->getOrigin(),m_projectile[i]->GetSprite()->getOrigin(), m_slow_kid[j]->m_radius, m_projectile[i]->m_radius)){
 							m_slow_kid[j]->m_dirtLevel -= 1;
 							if(m_slow_kid[j]->m_dirtLevel == 0){
