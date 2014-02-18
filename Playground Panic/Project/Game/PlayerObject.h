@@ -20,7 +20,8 @@ public:
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);
 	void Collision(bool hit);
 	int GetMiddle(int width);
-
+	
+	int m_dirt;
 	void AddAnimation(const std::string &name, AnimatedSprite *sprite);
 
 protected:
@@ -28,7 +29,6 @@ protected:
 	int m_speed;
 	int m_org_speed;
 	float m_pi;
-
 	AnimatedSprite *m_current_animation;
 	std::map<std::string, AnimatedSprite*> m_animations;
 };

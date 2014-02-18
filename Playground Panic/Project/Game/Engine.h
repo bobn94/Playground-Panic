@@ -24,23 +24,35 @@ private:
 	sf::RenderWindow m_window;
 	//StateManager * mgr;
 	CountdownTimer* m_timer;
+
 	PlayerObject * m_player;
+
 	Collider * m_player_collider;
+
 	sf::Sprite *m_player_sprite;
+
 	sf::Texture m_player_texture;
 
 	std::vector<ProjectileObject*> m_projectile;
+
 	std::vector<sf::Sprite*> m_projectile_sprite;
+
 	sf::Texture m_projectile_texture;
+
 	std::vector<Collider*> m_projectile_collider;
 
 	std::vector<SlowKid*> m_slow_kid;
+
 	std::vector<sf::Sprite*> m_slow_kid_sprite;
+
 	sf::Texture m_slow_kid_texture;
+
 	std::vector<Collider*> m_slow_kid_collider;
 
 	sf::Clock m_player_pst;
+
 	//Time between projectile-spawns
+
 	sf::Int32 m_player_pss;
 
 	//Temporary
@@ -49,6 +61,7 @@ private:
 	float m_global_speed;
 
 	float m_deltatime;
+
 	sf::Clock deltaClock;
 	//sf::Time deltaTime;
 

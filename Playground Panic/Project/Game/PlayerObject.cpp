@@ -16,6 +16,7 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
+	m_dirt = 10;
 }
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos)
