@@ -6,6 +6,7 @@
 #include "SlowKid.h"
 #include "Collider.h"
 #include "CountdownTimer.h"
+#include "HealthBar.h"
 #include <cmath>
 #include <iostream>
 
@@ -14,6 +15,8 @@ Engine::Engine(){
 	m_player_collider = nullptr;
 	m_global_speed = 1;
 	m_player_pss = 100;
+	m_health_pss = 200;
+	m_healthbar = 0;
 }
 Engine::~Engine(){
 
@@ -38,6 +41,18 @@ void Engine::Initialize(){
 	}
 	m_projectile_texture.setSmooth(true);
 
+	if (!m_framehealthbar_texture.loadFromFile("../data/textures/HealthBar2.png"))
+	{
+		// Shit happened
+	}
+	m_framehealthbar_texture.setSmooth(true);
+
+	if (!m_healthbar_texture.loadFromFile("../data/textures/spr_healthbar.png"))
+	{
+		// Shit happened
+	}
+	m_healthbar_texture.setSmooth(true);
+
 	/*
 	float recWidth = 20.0f, recHeight = 15.0f;
 	rec = new sf::RectangleShape(sf::Vector2f(recWidth, recHeight));
@@ -54,8 +69,18 @@ void Engine::Initialize(){
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
 	m_player = new PlayerObject(m_player_sprite, float(128.0f), m_player_collider);
 	m_player->SetPosition(sf::Vector2f(200.0f, 200.0f));	
-	
 
+
+	m_healthbar_sprite = new sf::Sprite(m_healthbar_texture);
+	//m_healthbar_sprite->setTexture(m_healthbar_texture);
+
+	/*if
+	(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+	m_healthbar_sprite->setScale(m_healthbar/ 100, 1);
+	}*/
+	m_framehealthbar_sprite.setTexture(m_framehealthbar_texture);
+	
 
 	/*
 	AnimatedSprite* spritePlayer = m_sprite_manager->Load("../data/animations/player_idle.txt");
@@ -79,10 +104,11 @@ void Engine::Run(){
 		m_timer->Start();
 		while (mgr.IsRunning())
 		{
-			
+
 			sf::Event event;
 			while (m_window.pollEvent(event))
 			{
+
 				if (event.type == sf::Event::Closed)
 				{
 					mgr.isRunning = false;
@@ -91,14 +117,35 @@ void Engine::Run(){
 
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			m_timer->Update();
+//m_healthbar_sprite->setScale(m_player->GetHealth()/ 460, 40);
 			/////////////////////////////////////////////////////////
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && m_health_pst.getElapsedTime().asMilliseconds() > m_health_pss)
+			{
+				if(m_player->GetCurrentHealth() > 0){
+					m_player->ChangeHealth(float(-5.0f));
+				}
+			
+				m_health_pst.restart();
+			}
+			else if(m_health_pst.getElapsedTime().asMilliseconds() > m_health_pss) 
+			{
+				m_player->ChangeHealth(0.3f);
+				m_health_pst.restart();
+			}
+			
+			if(m_player->GetCurrentHealth() > m_player->GetMaxHealth()){
+				m_player->ChangeHealth(m_player->GetMaxHealth());
+			}
+			if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
+			{
+				m_healthbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
+			}
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
 			{
 				m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
 				m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.7f, 0.7f);
-				m_projectile_sprite[m_projectile_sprite.size() - 1]->setOrigin(32.0f, 32.0f);
-				m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(20.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(64.0f, 32.0f))));
+				m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(32.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(64.0f, 32.0f))));
 				m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
 				
 				/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
@@ -110,10 +157,9 @@ void Engine::Run(){
 			}
 			if (m_timer->Done()){
 				m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
-				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.5f, 0.5f);
-				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f)));
-				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100, rand()%500+100));
-				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(64.0f, 64.0f);
+				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.7f, 0.7f);
+				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(128.0f)));
+				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100/* + m_window.getPosition().x*/, rand()%500+100/* + m_window.getPosition().y*/));
 				m_timer->Reset();
 				m_timer->Start();
 			}
@@ -136,7 +182,7 @@ void Engine::Run(){
 				int i = 0;
 				while (it != m_slow_kid.end())
 				{
-					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition(), m_timer);
+					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player->GetPosition(), m_slow_kid[i]->GetPosition(), m_player->GetPosition());
 					++it;
 					i++;
 				}
@@ -144,16 +190,15 @@ void Engine::Run(){
 
 			if(m_slow_kid.size() != 0 && m_projectile.size() != 0)
 			{
-				auto it_kids = m_slow_kid.begin();
-				auto it_proj = m_projectile.begin();
+				
 				for(int i = 0; i < m_projectile.size(); i++)
 				{
-					
+					auto it_proj = m_projectile.begin();
 					for(int j = 0; j < m_slow_kid.size(); j++){
 						sf::Vector2f offset;
+						auto it_kids = m_slow_kid.begin();
 						
-						
-						if(Collisions->Overlap(m_slow_kid[j]->GetSprite()->getPosition(),m_projectile[i]->GetSprite()->getPosition(), m_slow_kid[j]->m_radius, m_projectile[i]->m_radius)){
+						if(Collisions->Overlap(m_slow_kid[j]->GetSprite()->getOrigin(),m_projectile[i]->GetSprite()->getOrigin(), m_slow_kid[j]->m_radius, m_projectile[i]->m_radius)){
 							m_slow_kid[j]->m_dirtLevel -= 1;
 							if(m_slow_kid[j]->m_dirtLevel == 0){
 								delete (*it_kids)->GetSprite();
@@ -163,8 +208,6 @@ void Engine::Run(){
 							}
 							else{
 								
-									it_kids++;
-								
 							}
 							std::cout << "HIT" << std::endl;
 							delete (*it_proj)->GetSprite();
@@ -173,7 +216,7 @@ void Engine::Run(){
 							
 						}
 						else{
-							
+							//i++;
 						}
 						
 						
@@ -248,6 +291,12 @@ void Engine::Run(){
 			}*/
 			//m_window.setMouseCursorVisible(false);
 			
+
+			m_window.draw(*m_healthbar_sprite);
+			
+
+			m_window.draw(m_framehealthbar_sprite);
+			
 			m_window.display();
 		}
 
@@ -268,6 +317,11 @@ void Engine::Cleanup(){
 	{
 		delete m_player_collider;
 		m_player_collider = nullptr;
+	}
+	if (m_healthbar_sprite != nullptr)
+	{
+		delete m_healthbar_sprite;
+		m_healthbar_sprite = nullptr;
 	}
 
 	{

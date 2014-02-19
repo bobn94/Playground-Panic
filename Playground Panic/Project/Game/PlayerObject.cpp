@@ -16,7 +16,9 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
-	m_dirt = 10;
+	m_maxHP = 46;
+	m_currentHP = m_maxHP;
+	
 }
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos)
@@ -128,4 +130,20 @@ int PlayerObject::GetMiddle(int width)
 {
 	int temp = width / 2;
 	return m_position.x + temp;
+}
+
+int PlayerObject::GetMaxHealth()
+{
+	return m_maxHP;
+}
+
+int PlayerObject::GetCurrentHealth()
+{
+	
+	return m_currentHP;
+}
+
+void PlayerObject::ChangeHealth(float hp)
+{
+	m_currentHP += hp;
 }

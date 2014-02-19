@@ -20,15 +20,18 @@ public:
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);
 	void Collision(bool hit);
 	int GetMiddle(int width);
-	
-	int m_dirt;
 	void AddAnimation(const std::string &name, AnimatedSprite *sprite);
+	int GetCurrentHealth();
+	int GetMaxHealth();
+	void ChangeHealth(float hp);
 
 protected:
 	Keyboard* m_keyboard;
 	int m_speed;
 	int m_org_speed;
 	float m_pi;
+	float m_currentHP;
+	float m_maxHP;
 	AnimatedSprite *m_current_animation;
 	std::map<std::string, AnimatedSprite*> m_animations;
 };

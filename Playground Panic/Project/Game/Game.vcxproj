@@ -93,6 +93,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameStateA.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="OptionsState.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateA.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuState.cpp" />
