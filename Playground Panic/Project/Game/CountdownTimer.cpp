@@ -4,6 +4,9 @@
 
 	CountdownTimer::CountdownTimer(){
 		ticking = false;
+		Seconds = 0;
+		Minutes = 0;
+		Hours = 0;
 }
 	void CountdownTimer::SetTime(int hours, int minutes, int seconds){
 		defaultHours = hours;

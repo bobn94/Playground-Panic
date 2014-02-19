@@ -14,5 +14,4 @@ public:
 	float m_speed;
 private:
 	bool m_canShoot;
-	
 };

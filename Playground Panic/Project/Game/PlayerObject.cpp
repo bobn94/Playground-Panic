@@ -17,7 +17,7 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
 	m_maxHP = 46;
-	m_currentHP = m_maxHP;
+	m_currentHP = 0;
 	
 }
 
@@ -132,18 +132,18 @@ int PlayerObject::GetMiddle(int width)
 	return m_position.x + temp;
 }
 
-int PlayerObject::GetMaxHealth()
+float PlayerObject::GetMaxHealth()
 {
 	return m_maxHP;
 }
 
-int PlayerObject::GetCurrentHealth()
+float PlayerObject::GetCurrentHealth()
 {
 	
 	return m_currentHP;
 }
 
-void PlayerObject::ChangeHealth(float hp)
+void PlayerObject::SetCurrentHealth(float hp)
 {
-	m_currentHP += hp;
+	m_currentHP = hp;
 }

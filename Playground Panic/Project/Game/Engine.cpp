@@ -15,8 +15,7 @@ Engine::Engine(){
 	m_player_collider = nullptr;
 	m_global_speed = 1;
 	m_player_pss = 100;
-	m_health_pss = 200;
-	m_healthbar = 0;
+	m_enemies_to_spawn = 0;
 }
 Engine::~Engine(){
 
@@ -29,7 +28,7 @@ void Engine::Initialize(){
 	}
 	m_player_texture.setSmooth(true);
 
-	if (!m_projectile_texture.loadFromFile("../data/textures/TestPlayer.png"))
+	if (!m_projectile_texture.loadFromFile("../data/textures/Sponge.png"))
 	{
 		// Shit happened
 	}
@@ -95,7 +94,8 @@ void Engine::Run(){
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
 		mgr.SetState("MenuState");
-
+		
+		m_enemies_to_spawn = 1;
 		mgr.isRunning = true;
 		sf::RenderWindow m_window(sf::VideoMode(1080, 720), "Playground Panic");
 		m_timer = new CountdownTimer();
@@ -117,24 +117,11 @@ void Engine::Run(){
 
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			m_timer->Update();
-//m_healthbar_sprite->setScale(m_player->GetHealth()/ 460, 40);
-			/////////////////////////////////////////////////////////
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && m_health_pst.getElapsedTime().asMilliseconds() > m_health_pss)
-			{
-				if(m_player->GetCurrentHealth() > 0){
-					m_player->ChangeHealth(float(-5.0f));
-				}
 			
-				m_health_pst.restart();
-			}
-			else if(m_health_pst.getElapsedTime().asMilliseconds() > m_health_pss) 
-			{
-				m_player->ChangeHealth(0.3f);
-				m_health_pst.restart();
-			}
+			
 			
 			if(m_player->GetCurrentHealth() > m_player->GetMaxHealth()){
-				m_player->ChangeHealth(m_player->GetMaxHealth());
+				m_player->SetCurrentHealth(m_player->GetMaxHealth());
 			}
 			if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
 			{
@@ -156,12 +143,16 @@ void Engine::Run(){
 				//m_player_pss = 10000000;
 			}
 			if (m_timer->Done()){
-				m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
-				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.7f, 0.7f);
-				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(128.0f)));
-				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100/* + m_window.getPosition().x*/, rand()%500+100/* + m_window.getPosition().y*/));
-				m_timer->Reset();
-				m_timer->Start();
+				for(int i = 0; i < m_enemies_to_spawn; i++){
+					m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
+					m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.5f, 0.5f);
+					m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand()%4+3));
+					m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100, rand()%500+100));
+					m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(64.0f, 64.0f);
+					m_timer->Reset();
+					m_timer->SetTime(0, 0, 5);
+					m_timer->Start();
+				}
 			}
 			
 			m_player->Update(m_deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
@@ -182,47 +173,59 @@ void Engine::Run(){
 				int i = 0;
 				while (it != m_slow_kid.end())
 				{
-					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player->GetPosition(), m_slow_kid[i]->GetPosition(), m_player->GetPosition());
+					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
 					++it;
 					i++;
 				}
 			}
 
-			if(m_slow_kid.size() != 0 && m_projectile.size() != 0)
+			 if (m_slow_kid.size() != 0 && m_projectile.size() != 0)
 			{
-				
-				for(int i = 0; i < m_projectile.size(); i++)
-				{
-					auto it_proj = m_projectile.begin();
-					for(int j = 0; j < m_slow_kid.size(); j++){
-						sf::Vector2f offset;
-						auto it_kids = m_slow_kid.begin();
-						
-						if(Collisions->Overlap(m_slow_kid[j]->GetSprite()->getOrigin(),m_projectile[i]->GetSprite()->getOrigin(), m_slow_kid[j]->m_radius, m_projectile[i]->m_radius)){
-							m_slow_kid[j]->m_dirtLevel -= 1;
-							if(m_slow_kid[j]->m_dirtLevel == 0){
-								delete (*it_kids)->GetSprite();
-								delete (*it_kids)->GetCollider();
-								m_slow_kid.erase(it_kids++);
-								
+				auto it = m_slow_kid.begin();
+				for (int i = 0; i < m_slow_kid.size();)
+					{
+						int Destroyed = 0;
+				for (int j = 0; j < m_projectile.size();)
+					{
+					if (Collisions->Overlap(m_slow_kid[i]->GetSprite()->getPosition(), m_projectile[j]->GetSprite()->getPosition(), m_slow_kid[i]->m_radius, m_projectile[j]->m_radius))
+						{
+							m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
+
+							m_slow_kid[i]->m_dirtLevel -= 1;
+							if (m_slow_kid[i]->m_dirtLevel <= 0)
+							{
+								delete (*it)->GetSprite();
+								delete (*it)->GetCollider();
+								m_slow_kid.erase(it);
+								Destroyed = 1;
+
+								/*std::cout << "Dirtlvl: ";
+								for (int p = 0; p < m_slow_kid.size(); p++)
+								{
+									std::cout << m_slow_kid[p]->m_dirtLevel << ", ";
+								}
+
+								std::cout << std::endl;
+								*/
 							}
-							else{
-								
-							}
-							std::cout << "HIT" << std::endl;
-							delete (*it_proj)->GetSprite();
-							delete (*it_proj)->GetCollider();
-							m_projectile.erase(it_proj++);
-							
+							j++;
 						}
-						else{
-							//i++;
-						}
-						
-						
+					else
+					{
+						j++;
+					}
+					if (Destroyed == 1)
+					{
+						i--;
+						j = 9999999999999;
+
+
 					}
 				}
+				i++;
 			}
+		}
+
 			
 			m_window.clear(sf::Color(0x11, 0x22, 0x33));
 			

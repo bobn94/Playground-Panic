@@ -21,10 +21,9 @@ public:
 	void Collision(bool hit);
 	int GetMiddle(int width);
 	void AddAnimation(const std::string &name, AnimatedSprite *sprite);
-	int GetCurrentHealth();
-	int GetMaxHealth();
-	void ChangeHealth(float hp);
-
+	float GetCurrentHealth();
+	float GetMaxHealth();
+	void SetCurrentHealth(float hp);
 protected:
 	Keyboard* m_keyboard;
 	int m_speed;

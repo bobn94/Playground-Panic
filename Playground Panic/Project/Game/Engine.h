@@ -64,5 +64,6 @@ private:
 	float m_deltatime;
 	sf::Clock deltaClock;
 	//sf::Time deltaTime;
-
+	
+	int m_enemies_to_spawn;
 };
