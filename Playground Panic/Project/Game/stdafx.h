@@ -18,9 +18,9 @@
 #pragma comment(lib, "sfml-audio-s-d.lib")
 #else
 #pragma comment(lib, "sfml-window-s.lib")
-#pragma comment(lib, "sfml-window-s.lib")
-#pragma comment(lib, "sfml-window-s.lib")
-#pragma comment(lib, "sfml-window-s.lib")
+#pragma comment(lib, "sfml-graphics-s.lib")
+#pragma comment(lib, "sfml-system-s.lib")
+#pragma comment(lib, "sfml-audio-s.lib")
 #endif
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

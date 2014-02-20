@@ -100,7 +100,7 @@ void Engine::Initialize(){
 	AnimatedSprite* spritePlayer = m_sprite_manager->Load("../data/animations/player_idle.txt");
 	m_player->AddAnimation("Idle", spritePlayer);
 	*/
-	if (!m_font.loadFromFile("arial.ttf"))
+	if (!m_font.loadFromFile("../data/fonts/arial.ttf"))
 	{
 		// Error...
 	}
