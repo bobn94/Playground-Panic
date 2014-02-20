@@ -52,6 +52,18 @@ void Engine::Initialize(){
 	}
 	m_healthbar_texture.setSmooth(true);
 
+	if (!m_frameheatbar_texture.loadFromFile("../data/textures/HealthBar2.png"))
+	{
+		// Shit happened
+	}
+	m_frameheatbar_texture.setSmooth(true);
+
+	if (!m_heatbar_texture.loadFromFile("../data/textures/spr_heatbar.png"))
+	{
+		// Shit happened
+	}
+	m_heatbar_texture.setSmooth(true);
+
 	/*
 	float recWidth = 20.0f, recHeight = 15.0f;
 	rec = new sf::RectangleShape(sf::Vector2f(recWidth, recHeight));
@@ -71,6 +83,7 @@ void Engine::Initialize(){
 
 
 	m_healthbar_sprite = new sf::Sprite(m_healthbar_texture);
+	m_heatbar_sprite = new sf::Sprite(m_heatbar_texture);
 	//m_healthbar_sprite->setTexture(m_healthbar_texture);
 
 	/*if
@@ -79,13 +92,18 @@ void Engine::Initialize(){
 	m_healthbar_sprite->setScale(m_healthbar/ 100, 1);
 	}*/
 	m_framehealthbar_sprite.setTexture(m_framehealthbar_texture);
-	
+	m_frameheatbar_sprite.setTexture(m_frameheatbar_texture);
+	m_heatbar_sprite->setPosition(0, 40);
+	m_frameheatbar_sprite.setPosition(0, 40);
 
 	/*
 	AnimatedSprite* spritePlayer = m_sprite_manager->Load("../data/animations/player_idle.txt");
 	m_player->AddAnimation("Idle", spritePlayer);
 	*/
-
+	if (!m_font.loadFromFile("arial.ttf"))
+	{
+		// Error...
+	}
 
 }
 void Engine::Run(){
@@ -93,7 +111,7 @@ void Engine::Run(){
 		mgr.Attach(new MenuState());
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
-		mgr.SetState("MenuState");
+		mgr.SetState("GameStateA");
 		
 		m_enemies_to_spawn = 1;
 		mgr.isRunning = true;
@@ -102,6 +120,10 @@ void Engine::Run(){
 		m_timer->SetTime(0, 0, 5);
 		m_timer->Reset();
 		m_timer->Start();
+		m_levelup_timer = new CountdownTimer();
+		m_levelup_timer->SetTime(0, 0, 10);
+		m_levelup_timer->Reset();
+		m_levelup_timer->Start();
 		while (mgr.IsRunning())
 		{
 
@@ -117,7 +139,7 @@ void Engine::Run(){
 
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			m_timer->Update();
-			
+			m_levelup_timer->Update();
 			
 			
 			if(m_player->GetCurrentHealth() > m_player->GetMaxHealth()){
@@ -127,30 +149,55 @@ void Engine::Run(){
 			{
 				m_healthbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
 			}
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
+			if(10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
 			{
-				m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
-				m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.7f, 0.7f);
-				m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(32.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(64.0f, 32.0f))));
-				m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
+				m_heatbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetWeaponHeat(), 40));	
+			}
+			if(m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss){
+				m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
+				if(m_player->GetWeaponHeat() < 0){
+					m_player->SetWeaponHeat(0.0f);
+				}
+			}
+			if(m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat()){
+				m_player->SetOverheat(false);
+			}
+			if(m_levelup_timer->Done()){
+				m_enemies_to_spawn += 1;
+				m_levelup_timer->Reset();
+				m_levelup_timer->Start();
+			}
+			
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && m_player->GetWeaponHeat() < m_player->GetWeaponMaxHeat() && !m_player->GetOverheat())
+			{
 				
+					m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
+					m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.4f, 0.4f);
+					m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(32.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(64.0f, 32.0f))));
+					m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
+				
+
 				/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
 				m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
 				m_projectile[0]->SetPosition(sf::Vector2f(200.0f, 200.0f));*/
 
 				m_player_pst.restart();
 				//m_player_pss = 10000000;
+
+				if(m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f){
+					m_player->SetOverheat(true);
+				}
+				m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 1.0f);
+				
 			}
 			if (m_timer->Done()){
 				for(int i = 0; i < m_enemies_to_spawn; i++){
 					m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
 					m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.5f, 0.5f);
-					m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand()%4+3));
+					m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand()%4+1));
 					m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand()%800 + 100, rand()%500+100));
 					m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(64.0f, 64.0f);
 					m_timer->Reset();
-					m_timer->SetTime(0, 0, 5);
 					m_timer->Start();
 				}
 			}
@@ -293,12 +340,14 @@ void Engine::Run(){
 				m_window.draw(*m_projectile[0]->GetSprite());
 			}*/
 			//m_window.setMouseCursorVisible(false);
-			
 
 			m_window.draw(*m_healthbar_sprite);
 			
-
 			m_window.draw(m_framehealthbar_sprite);
+
+			m_window.draw(*m_heatbar_sprite);
+			
+			m_window.draw(m_frameheatbar_sprite);
 			
 			m_window.display();
 		}

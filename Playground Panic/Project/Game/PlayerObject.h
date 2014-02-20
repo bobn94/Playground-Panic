@@ -24,8 +24,16 @@ public:
 	float GetCurrentHealth();
 	float GetMaxHealth();
 	void SetCurrentHealth(float hp);
+	float GetWeaponHeat();
+	float GetWeaponMaxHeat();
+	void SetWeaponHeat(float heat);
+	bool GetOverheat();
+	void SetOverheat(bool tf);
 protected:
 	Keyboard* m_keyboard;
+	bool m_Overheat;
+	float m_weapon_heat;
+	float m_weapon_max_heat;
 	int m_speed;
 	int m_org_speed;
 	float m_pi;

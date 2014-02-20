@@ -18,7 +18,9 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 	m_pi = 3.14159265359f;
 	m_maxHP = 46;
 	m_currentHP = 0;
-	
+	m_weapon_heat = 0;
+	m_weapon_max_heat = 46;
+	m_Overheat = false;
 }
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos)
@@ -146,4 +148,20 @@ float PlayerObject::GetCurrentHealth()
 void PlayerObject::SetCurrentHealth(float hp)
 {
 	m_currentHP = hp;
+}
+float PlayerObject::GetWeaponHeat(){
+	return m_weapon_heat;
+}
+	
+void PlayerObject::SetWeaponHeat(float heat){
+	m_weapon_heat = heat;
+}
+float PlayerObject::GetWeaponMaxHeat(){
+	return m_weapon_max_heat;
+}
+bool PlayerObject::GetOverheat(){
+	return m_Overheat;
+}
+void PlayerObject::SetOverheat(bool truefalse){
+	m_Overheat = truefalse;
 }
