@@ -21,18 +21,22 @@ public:
 	void Cleanup();
 
 private:
-	sf::Font m_font;
-	sf::String m_score;
 	Collider* Collisions;
 	sf::RenderWindow m_window;
+	sf::View m_view;
+	float m_zoom;
+	sf::Vector2f m_mouse_position;
+
+	sf::Sprite m_background_sprite;
+	sf::Texture m_background_texture;
+
 	//StateManager * mgr;
 	CountdownTimer* m_timer;
-	CountdownTimer* m_levelup_timer;
 	PlayerObject * m_player;
 	Collider * m_player_collider;
 	sf::Sprite *m_player_sprite;
 	sf::Texture m_player_texture;
-	
+
 	std::vector<ProjectileObject*> m_projectile;
 	std::vector<sf::Sprite*> m_projectile_sprite;
 	sf::Texture m_projectile_texture;
@@ -49,11 +53,14 @@ private:
 	sf::Sprite *m_healthbar_sprite;
 	sf::Texture m_healthbar_texture;
 
+	CountdownTimer* m_levelup_timer;
+
 	sf::Sprite *m_heatbar_sprite;
 	sf::Texture m_heatbar_texture;
 
 	sf::Sprite m_frameheatbar_sprite;
 	sf::Texture m_frameheatbar_texture;
+
 
 	float m_healthbar;
 

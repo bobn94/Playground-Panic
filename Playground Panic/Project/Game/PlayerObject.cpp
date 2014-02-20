@@ -12,18 +12,20 @@
 PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 : GameObject(sprite, radius, collider)
 {
-	m_speed = 60000;
+	m_speed = 70000;
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
 	m_maxHP = 46;
 	m_currentHP = 0;
+	
 	m_weapon_heat = 0;
 	m_weapon_max_heat = 46;
 	m_Overheat = false;
+
 }
 
-void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos)
+void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mousePos)
 {
 	//////////Movement
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -149,10 +151,11 @@ void PlayerObject::SetCurrentHealth(float hp)
 {
 	m_currentHP = hp;
 }
+
 float PlayerObject::GetWeaponHeat(){
 	return m_weapon_heat;
 }
-	
+
 void PlayerObject::SetWeaponHeat(float heat){
 	m_weapon_heat = heat;
 }

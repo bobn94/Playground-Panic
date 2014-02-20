@@ -17,7 +17,7 @@ ProjectileObject::ProjectileObject(sf::Sprite* sprite, float radius, Collider* c
 	m_pi = 3.14159265359f;
 }
 
-void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2i target)
+void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2f target)
 {
 	m_sprite->setPosition(origin);
 	m_position = origin;

@@ -10,13 +10,12 @@ SlowKid::SlowKid(sf::Sprite* sprite, float radius, int atkTimer) : Enemy(sprite,
 		m_dirtLevel = 6;
 		m_speed = 150000.0f;
 		m_attack_timer = new CountdownTimer();
-		m_attack_timer->SetTime(0,0,atkTimer);
+		m_attack_timer->SetTime(0,0, atkTimer);
 		m_attack_timer->Start();
 	}
 	
 	SlowKid::SlowKid(sf::Vector2f spawn_pos){
-		m_pi = 3.14159265359f;
-		
+		m_pi = 3.14159265359f;		
 	}
 	SlowKid::~SlowKid(){
 
@@ -37,95 +36,95 @@ SlowKid::SlowKid(sf::Sprite* sprite, float radius, int atkTimer) : Enemy(sprite,
 		float DirectionX = AngleX / vectorLength;
 		float DirectionY = AngleY / vectorLength;
 		m_velocity = sf::Vector2f(DirectionX * m_speed, DirectionY * m_speed);
-		if(vectorLength >= 10 && vectorLength <= 400){
-		m_sprite->move(m_velocity * deltatime * global_speed);
-
-		sf::Vector2f m_origin = m_sprite->getPosition();
-
-	//Calculate the direction vector
-		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
-
-	//Calculate the length^2
-		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
-
-	//Change the mag to 1 (you dont need the y for getting the angle
-		dirVec.x = (dirVec.x) / magSquare;
-
-	//Get the angle and change it to deg (SFML need deg)
-		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
-
-		if (m_sprite->getPosition().y < player->GetPosition().y)
+		if(vectorLength >= 55 && vectorLength <= 600)
 		{
-		// - 13
-			m_sprite->setRotation(90 + rotAngle);
-		}
-		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
-		{
-		}
-		else
-		{
-			// - 13
-			m_sprite->setRotation(90 - rotAngle);
-		}
+			m_sprite->move(m_velocity * deltatime * global_speed);
 
+			sf::Vector2f m_origin = m_sprite->getPosition();
 
-/*
-	if (m_current_animation != nullptr)
-	{
-		m_current_animation->Update(deltatime);
-	}
-*/
+		//Calculate the direction vector
+			sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
 
-	m_position = m_sprite->getPosition();
+		//Calculate the length^2
+			float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
 
-	if (HasCollider())
-	{
-		m_collider->m_position = m_sprite->getPosition();
-	}
-		}
-		else if(vectorLength <= 10){
-		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
+		//Change the mag to 1 (you dont need the y for getting the angle
+			dirVec.x = (dirVec.x) / magSquare;
 
-	//Calculate the length^2
-		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
+		//Get the angle and change it to deg (SFML need deg)
+			float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
-	//Change the mag to 1 (you dont need the y for getting the angle
-		dirVec.x = (dirVec.x) / magSquare;
-
-	//Get the angle and change it to deg (SFML need deg)
-		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
-
-		if (m_sprite->getPosition().y < player->GetPosition().y)
-		{
-		// - 13
-			m_sprite->setRotation(90 + rotAngle);
-		}
-		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
-		{
-		}
-		else
-		{
-			// - 13
-			m_sprite->setRotation(90 - rotAngle);
-		}
-		if(m_attack_timer->Done()){
-			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
-			if(player->GetCurrentHealth() > player->GetMaxHealth()){
-				player->SetCurrentHealth(player->GetMaxHealth());
+			if (m_sprite->getPosition().y < player->GetPosition().y)
+			{
+				m_sprite->setRotation(90 + rotAngle);
 			}
-			std::cout << player->GetCurrentHealth();
-			m_attack_timer->Reset();
-			m_attack_timer->Start();
+			else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
+			{
+			}
+			else
+			{
+				m_sprite->setRotation(90 - rotAngle);
+			}
+
+
+		/*
+			if (m_current_animation != nullptr)
+			{
+				m_current_animation->Update(deltatime);
+			}
+		*/
+
+			m_position = m_sprite->getPosition();
+
+			if (HasCollider())
+			{
+				m_collider->m_position = m_sprite->getPosition();
+			}
 		}
+		else if(vectorLength <= 10)
+		{
+			sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
+
+		//Calculate the length^2
+			float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
+
+		//Change the mag to 1 (you dont need the y for getting the angle
+			dirVec.x = (dirVec.x) / magSquare;
+
+		//Get the angle and change it to deg (SFML need deg)
+			float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
+
+			if (m_sprite->getPosition().y < player->GetPosition().y)
+			{
+			// - 13
+				m_sprite->setRotation(90 + rotAngle);
+			}
+			else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
+			{
+			}
+			else
+			{
+				// - 13
+				m_sprite->setRotation(90 - rotAngle);
+			}
+			if(m_attack_timer->Done()){
+				player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
+				if(player->GetCurrentHealth() > player->GetMaxHealth()){
+					player->SetCurrentHealth(player->GetMaxHealth());
+				}
+				//std::cout << player->GetCurrentHealth();
+				m_attack_timer->Reset();
+				m_attack_timer->Start();
+			}
 		
 		}
-		if(vectorLength <= 25){
+		if(vectorLength <= 55){
 			if(m_attack_timer->Done()){
 			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
 			if(player->GetCurrentHealth() > player->GetMaxHealth()){
 				player->SetCurrentHealth(player->GetMaxHealth());
 			}
-			std::cout << player->GetCurrentHealth();
+			//std::cout << player->GetCurrentHealth();
 			m_attack_timer->Reset();
 			m_attack_timer->Start();
 		}
