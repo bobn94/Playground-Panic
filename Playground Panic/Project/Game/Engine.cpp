@@ -153,36 +153,36 @@ void Engine::Run(){
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			m_timer->Update();
 
-			m_view.setCenter(m_player->GetPosition());
-			m_window.setView(m_view);
+		m_view.setCenter(m_player->GetPosition());
+		m_window.setView(m_view);
 			
-			m_mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 2.0f)) / m_zoom;
+		m_mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 2.0f)) / m_zoom;
 			
-			m_healthbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
-			m_framehealthbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
-			m_heatbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
-			m_frameheatbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
+		m_healthbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
+		m_framehealthbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
+		m_heatbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
+		m_frameheatbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
 
-			if(m_player->GetCurrentHealth() > m_player->GetMaxHealth())
-			{
-				m_player->SetCurrentHealth(m_player->GetMaxHealth());
-			}
-			if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
-			{
-				m_healthbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
-			}
+		if(m_player->GetCurrentHealth() > m_player->GetMaxHealth())
+		{
+			m_player->SetCurrentHealth(m_player->GetMaxHealth());
+		}
+		if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
+		{
+			m_healthbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
+		}
 
-			if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
-			{
-				m_heatbar_sprite->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
+		if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
+		{
+			m_heatbar_sprite->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
+		}
+		if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss){
+			m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
+			if (m_player->GetWeaponHeat() < 0){
+				m_player->SetWeaponHeat(0.0f);
 			}
-			if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss){
-				m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
-				if (m_player->GetWeaponHeat() < 0){
-					m_player->SetWeaponHeat(0.0f);
-				}
-			}
-			if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
+		}
+		if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
 			{
 				m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
 				if (m_player->GetWeaponHeat() < 0)
@@ -191,21 +191,28 @@ void Engine::Run(){
 				}
 			}
 
-			if (m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat()){
-				m_player->SetOverheat(false);
+		if (m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat()){
+			m_player->SetOverheat(false);
+		}
+		if (m_levelup_timer->Done()){
+			if (m_enemies_to_spawn < 10){
+				m_enemies_to_spawn += 1;
+				m_levelup_timer->Reset();
+				m_levelup_timer->Start();
+				std::cout << m_enemies_to_spawn << std::endl;
 			}
-			if (m_levelup_timer->Done()){
-				if (m_enemies_to_spawn < 10){
-					m_enemies_to_spawn += 1;
-					m_levelup_timer->Reset();
-					m_levelup_timer->Start();
-				}
-				else{
-					m_levelup_timer->Stop();
+			else{
+				m_levelup_timer->Stop();
 				}
 			}
+			if(m_player->GetCurrentHealth() == m_player->GetMaxHealth()){
+				return false;
+			}
+			if (m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f){
+					m_player->SetOverheat(true);
+				}
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 			{
 				m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
 				m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.6f, 0.6f);
@@ -232,19 +239,18 @@ void Engine::Run(){
 					m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background_sprite.getGlobalBounds().width + 100, rand() % (int)m_background_sprite.getGlobalBounds().height + 100));
 					m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().width / 2, m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().height / 2);
 					m_timer->Reset();
-					m_timer->SetTime(0, 0, 5);
 					m_timer->Start();
 				}
 			}
 
-			m_player->Update(m_deltatime, m_global_speed, m_mouse_position);
+			m_player->Update(deltatime, m_global_speed, m_mouse_position);
 
 			{
 				auto it = m_projectile.begin();
 				int i = 0;
 				while (it != m_projectile.end())
 				{
-					m_projectile[i]->Update(m_deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
+					m_projectile[i]->Update(deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
 					++it;
 					i++;
 				}
@@ -255,7 +261,7 @@ void Engine::Run(){
 				int i = 0;
 				while (it != m_slow_kid.end())
 				{
-					m_slow_kid[i]->Update(m_deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
+					m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
 					++it;
 					i++;
 				}
@@ -272,7 +278,7 @@ void Engine::Run(){
 					auto it_proj = m_projectile.begin();
 					if (Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_projectile[j]->GetPosition(), m_slow_kid[i]->m_radius, m_projectile[j]->m_radius))
 					{
-						std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
+						//std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
 						m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
 						delete (*it_proj)->GetSprite();
 						delete (*it_proj)->GetCollider();
@@ -286,12 +292,12 @@ void Engine::Run(){
 							m_slow_kid.erase(it);
 							Destroyed = 1;
 
-							std::cout << "Dirtlvl: ";
+							/*std::cout << "Dirtlvl: ";
 							for (int p = 0; p < m_slow_kid.size(); p++)
 							{
 								std::cout << m_slow_kid[p]->m_dirtLevel << ", ";
 							}
-							std::cout << std::endl;
+							std::cout << std::endl;*/
 						}
 						j++;
 					}
@@ -336,7 +342,7 @@ void Engine::Run(){
 				}
 			}
 
-			m_window.clear(sf::Color(0x11, 0x22, 0x33));
+			m_window.clear(sf::Color(18, 45, 0));
 			m_window.draw(m_background_sprite);
 			
 			for (int i = 0; i < m_projectile.size(); i++)
@@ -372,7 +378,6 @@ void Engine::Run(){
 			
 			m_window.display();
 		}
-
 	//mgr.~StateManager();
 }
 void Engine::Cleanup(){
