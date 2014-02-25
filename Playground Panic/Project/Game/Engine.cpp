@@ -37,8 +37,7 @@ void Engine::Run(){
 		mgr.Attach(new OptionsState());
 		mgr.SetState("GameStateA");
 		mgr.isRunning = true;
-		
-		
+
 		sf::RenderWindow m_window(sf::VideoMode(1080, 720), "Playground Panic");
 		
 		m_view.setSize(sf::Vector2f(m_window.getSize().x, m_window.getSize().y));
@@ -49,8 +48,17 @@ void Engine::Run(){
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			
 			mgr.Update(m_deltatime, m_window, m_view);
-		}
 		
+			sf::Event event;
+			while (m_window.pollEvent(event)){
+				if (event.type == sf::Event::Closed){
+					m_window.close();
+					mgr.isRunning = false;
+				}
+			}
+		
+
+		}
 
 	//mgr.~StateManager();
 }
