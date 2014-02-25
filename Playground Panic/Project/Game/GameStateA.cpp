@@ -98,8 +98,7 @@ bool GameStateA::Enter() {
 	
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
 	m_player = new PlayerObject(m_player_sprite, float(128.0f), m_player_collider);
-	m_player->SetPosition(sf::Vector2f(2490.0f, 900.0f));	
-
+	m_player->SetPosition(sf::Vector2f(2490.0f, 900.0f));
 
 	m_healthbar_sprite = new sf::Sprite(m_healthbar_texture);
 	m_framehealthbar_sprite.setTexture(m_framehealthbar_texture);
@@ -115,21 +114,16 @@ bool GameStateA::Enter() {
 	m_frameheatbar_sprite.setPosition(0, 40);
 
 	m_enemies_to_spawn = 1;
-		
-		
-		
-		
-		
 
-		m_timer = new CountdownTimer();
-		m_timer->SetTime(0, 0, 5);
-		m_timer->Reset();
-		m_timer->Start();
+	m_timer = new CountdownTimer();
+	m_timer->SetTime(0, 0, 5);
+	m_timer->Reset();
+	m_timer->Start();
 
-		m_levelup_timer = new CountdownTimer();
-		m_levelup_timer->SetTime(0, 0, 15);
-		m_levelup_timer->Reset();
-		m_levelup_timer->Start();
+	m_levelup_timer = new CountdownTimer();
+	m_levelup_timer->SetTime(0, 0, 15);
+	m_levelup_timer->Reset();
+	m_levelup_timer->Start();
 
 	return true;
 };
@@ -178,11 +172,31 @@ void GameStateA::Exit() {
 	}
 };
 
-bool GameStateA::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view)
+bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m_view)
 {
 	m_timer->Update();
+	
+	/*if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
+		|| (m_view.getCenter().x - (m_view.getSize().x * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().width - 1
+		|| (m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
+		|| (m_view.getCenter().y - (m_view.getSize().y * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().height - 1)
+	{
+		if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
+			|| (m_view.getCenter().x - (m_view.getSize().x * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().width - 1)
+		{
+			m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
+		}
+		if ((m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
+			|| (m_view.getCenter().y - (m_view.getSize().y * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().height - 1)
+		{
+			m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
+		}
+	}
+	else*/
+	{
+		m_view.setCenter(m_player->GetPosition());
+	}
 
-	m_view.setCenter(m_player->GetPosition());
 	m_window.setView(m_view);
 			
 	m_mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 2.0f)) / 1.4f;
@@ -223,170 +237,178 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m
 	if (m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat()){
 		m_player->SetOverheat(false);
 	}
-	if (m_levelup_timer->Done()){
-		if (m_enemies_to_spawn < 10){
+	if (m_levelup_timer->Done())
+	{
+		if (m_enemies_to_spawn < 10)
+		{
 			m_enemies_to_spawn += 1;
 			m_levelup_timer->Reset();
 			m_levelup_timer->Start();
 			std::cout << m_enemies_to_spawn << std::endl;
 		}
-		else{
+		else
+		{
 			m_levelup_timer->Stop();
-			}
 		}
-		if(m_player->GetCurrentHealth() == m_player->GetMaxHealth()){
-			return false;
-		}
-		if (m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f){
-				m_player->SetOverheat(true);
-			}
+	}
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
-		{
-			m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
-			m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.6f, 0.6f);
-			m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(8.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))));
-			m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f), m_mouse_position);
+	if(m_player->GetCurrentHealth() == m_player->GetMaxHealth())
+	{
+		return false;
+	}
+
+	if (m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f)
+	{
+		m_player->SetOverheat(true);
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
+	{
+		m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
+		m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.6f, 0.6f);
+		m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(8.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))));
+		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f), m_mouse_position);
 				
-			/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
-			m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
-			m_projectile[0]->SetPosition(sf::Vector2f(200.0f, 200.0f));*/
+		/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
+		m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
+		m_projectile[0]->SetPosition(sf::Vector2f(200.0f, 200.0f));*/
 
-			m_player_pst.restart();
-			//m_player_pss = 10000000;
+		m_player_pst.restart();
+		//m_player_pss = 10000000;
 
-			if (m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f){
-				m_player->SetOverheat(true);
-			}
-			m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 1.0f);
-		}
-
-		if (m_timer->Done()){
-			for (int i = 0; i < m_enemies_to_spawn; i++){
-				m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
-				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.6f, 0.6f);
-				m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
-				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background_sprite.getGlobalBounds().width + 100, rand() % (int)m_background_sprite.getGlobalBounds().height + 100));
-				m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().width / 2, m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().height / 2);
-				m_timer->Reset();
-				m_timer->Start();
-			}
-		}
-
-		m_player->Update(deltatime, m_global_speed, m_mouse_position);
-
+		if (m_player->GetWeaponHeat() >= m_player->GetWeaponMaxHeat() - 1.0f)
 		{
-			auto it = m_projectile.begin();
-			int i = 0;
-			while (it != m_projectile.end())
-			{
-				m_projectile[i]->Update(deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
-				++it;
-				i++;
-			}
+			m_player->SetOverheat(true);
 		}
+		m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 1.0f);
+	}
 
-		{
-			auto it = m_slow_kid.begin();
-			int i = 0;
-			while (it != m_slow_kid.end())
-			{
-				m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
-				++it;
-				i++;
-			}
+	if (m_timer->Done()){
+		for (int i = 0; i < m_enemies_to_spawn; i++){
+			m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
+			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.6f, 0.6f);
+			m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
+			m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background_sprite.getGlobalBounds().width + 100, rand() % (int)m_background_sprite.getGlobalBounds().height + 100));
+			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().width / 2, m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().height / 2);
+			m_timer->Reset();
+			m_timer->Start();
 		}
+	}
 
-		if (m_slow_kid.size() != 0 && m_projectile.size() != 0)
-		{
-			for (int i = m_slow_kid.size() - 1; i >= 0; i--)
-			{
-				for (int j = m_projectile.size() - 1; j >= 0; j--)
-				{
-					if (Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_projectile[j]->GetPosition(), m_slow_kid[i]->m_radius, m_projectile[j]->m_radius))
-					{
-						//std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
-						//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
-						std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
+	m_player->Update(deltatime, m_global_speed, m_mouse_position);
 
-						delete m_projectile[j]->GetSprite();
-						delete m_projectile[j]->GetCollider();
-						m_projectile.erase(m_projectile.begin() + j);
-
-						m_slow_kid[i]->m_dirtLevel -= 1;
-						if (m_slow_kid[i]->m_dirtLevel <= 0)
-						{
-							delete m_slow_kid[i]->GetSprite();
-							delete m_slow_kid[i]->GetCollider();
-							m_slow_kid.erase(m_slow_kid.begin() + i);
-						}
-						std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
-					}
-				}
-
-			}
-		}
-		{
-			//auto it = m_projectile.begin();
-			//for (auto it = m_projectile.cbegin(); it != m_projectile.cend() /* not hoisted */; /* no increment */)
-			for (int i = 0; i < m_projectile.size();)
-			{
-				auto it = m_projectile.begin();
-				if ((m_projectile[i]->GetPosition().x < m_player->GetPosition().x - 800
-					|| m_projectile[i]->GetPosition().y < m_player->GetPosition().y - 600
-					|| m_projectile[i]->GetPosition().x > m_player->GetPosition().x + 800
-					|| m_projectile[i]->GetPosition().y > m_player->GetPosition().y + 600
-					)// && 1 == 0
-					)
-				{
-					//it.erase(it++);
-					//m_projectile.erase(++it);
-					delete (*it)->GetSprite();
-					delete (*it)->GetCollider();
-					m_projectile.erase(it++);
-				}
-				else
-				{
-					i++;
-				}
-			}
-		}
-
-		m_window.clear(sf::Color(18, 45, 0));
-		m_window.draw(m_background_sprite);
-			
-		for (int i = 0; i < m_projectile.size(); i++)
-		{
-			m_window.draw(*m_projectile[i]->GetSprite());
-		}
-		for (int i = 0; i < m_slow_kid.size(); i++)
-		{
-			m_window.draw(*m_slow_kid[i]->GetSprite());
-		}
-			
-
-			
-
-	/*
+	{
 		auto it = m_projectile.begin();
+		int i = 0;
 		while (it != m_projectile.end())
 		{
-			m_window.draw(*m_projectile[0]->GetSprite());
-		}*/
-		//m_window.setMouseCursorVisible(false);
+			m_projectile[i]->Update(deltatime, m_global_speed, sf::Mouse::getPosition(m_window));
+			++it;
+			i++;
+		}
+	}
+
+	{
+		auto it = m_slow_kid.begin();
+		int i = 0;
+		while (it != m_slow_kid.end())
+		{
+			m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
+			++it;
+			i++;
+		}
+	}
+
+	if (m_slow_kid.size() != 0 && m_projectile.size() != 0)
+	{
+		for (int i = m_slow_kid.size() - 1; i >= 0; i--)
+		{
+			for (int j = m_projectile.size() - 1; j >= 0; j--)
+			{
+				if (Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_projectile[j]->GetPosition(), m_slow_kid[i]->m_radius, m_projectile[j]->m_radius))
+				{
+					//std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
+					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
+					std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
+
+					delete m_projectile[j]->GetSprite();
+					delete m_projectile[j]->GetCollider();
+					m_projectile.erase(m_projectile.begin() + j);
+
+					m_slow_kid[i]->m_dirtLevel -= 1;
+					if (m_slow_kid[i]->m_dirtLevel <= 0)
+					{
+						delete m_slow_kid[i]->GetSprite();
+						delete m_slow_kid[i]->GetCollider();
+						m_slow_kid.erase(m_slow_kid.begin() + i);
+					}
+					std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
+				}
+			}
+
+		}
+	}
+	{
+		//auto it = m_projectile.begin();
+		//for (auto it = m_projectile.cbegin(); it != m_projectile.cend() /* not hoisted */; /* no increment */)
+		for (int i = 0; i < m_projectile.size();)
+		{
+			auto it = m_projectile.begin();
+			if ((m_projectile[i]->GetPosition().x < m_player->GetPosition().x - 800
+				|| m_projectile[i]->GetPosition().y < m_player->GetPosition().y - 600
+				|| m_projectile[i]->GetPosition().x > m_player->GetPosition().x + 800
+				|| m_projectile[i]->GetPosition().y > m_player->GetPosition().y + 600
+				)// && 1 == 0
+				)
+			{
+				//it.erase(it++);
+				//m_projectile.erase(++it);
+				delete (*it)->GetSprite();
+				delete (*it)->GetCollider();
+				m_projectile.erase(it++);
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
+
+	m_window.clear(sf::Color(18, 45, 0));
+	m_window.draw(m_background_sprite);
+			
+	for (int i = 0; i < m_projectile.size(); i++)
+	{
+		m_window.draw(*m_projectile[i]->GetSprite());
+	}
+	for (int i = 0; i < m_slow_kid.size(); i++)
+	{
+		m_window.draw(*m_slow_kid[i]->GetSprite());
+	}
 			
 
-		*m_player_sprite = *m_player->GetSprite();
-		//m_player_sprite.setColor(sf::Color(0x00, 0xAA, 0xAA, 0x88));
-		m_window.draw(*m_player_sprite);
-
-		m_window.draw(*m_heatbar_sprite);
-		m_window.draw(m_frameheatbar_sprite);
-
-		m_window.draw(*m_healthbar_sprite);
-		m_window.draw(m_framehealthbar_sprite);
 			
-		m_window.display();
+
+/*
+	auto it = m_projectile.begin();
+	while (it != m_projectile.end())
+	{
+		m_window.draw(*m_projectile[0]->GetSprite());
+	}*/
+	//m_window.setMouseCursorVisible(false);
+			
+
+	*m_player_sprite = *m_player->GetSprite();
+	//m_player_sprite.setColor(sf::Color(0x00, 0xAA, 0xAA, 0x88));
+	m_window.draw(*m_player_sprite);
+
+	m_window.draw(*m_heatbar_sprite);
+	m_window.draw(m_frameheatbar_sprite);
+
+	m_window.draw(*m_healthbar_sprite);
+	m_window.draw(m_framehealthbar_sprite);
+			
+	m_window.display();
 		
 	return true;	
 };
