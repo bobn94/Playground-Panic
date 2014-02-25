@@ -21,7 +21,7 @@ public:
 	
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime);
+	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view);
 	void Initialize();
 	//void Draw(DrawManager* m_draw_manager);
 	std::string Next();

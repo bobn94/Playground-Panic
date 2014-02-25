@@ -1,15 +1,7 @@
-#include <iostream>
-
-#include <fstream>
 #include "stdafx.h"
-//#include <SDL.h>
+#include <iostream>
+#include <fstream>
 #include <sstream>
-//#include "Level.h"
-//#include "SpriteManager.h"
-//#include "DrawManager.h"
-//#include "GameObject.h"
-//#include "DuckObject.h"
-//#include "Collider.h"
 #include "MenuState.h"
 #include "StateManager.h"
 
@@ -18,13 +10,7 @@ MenuState::MenuState() {
 	m_done = false;
 	m_changetoGameState = false;
 
-	/*auto it = m_objects.begin();
-	while(it != m_objects.end()){
-		delete (*it)->GetSprite();
-		//delete (*it)->GetCollider();
-		delete (*it);
-		++it;
-	}*/
+	
 };
 
 
@@ -37,7 +23,7 @@ void MenuState::Exit() {
 
 };
 
-bool MenuState::Update(float deltatime) {
+bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
 	
 	
 	//m_crosshairPos.x = sf::Mouse::getPosition().x -16;

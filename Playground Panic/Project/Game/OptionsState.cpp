@@ -1,15 +1,7 @@
-#include <iostream>
-
 #include "stdafx.h"
+#include <iostream>
 #include <fstream>
-//#include <SDL.h>
 #include <sstream>
-//#include "Level.h"
-//#include "SpriteManager.h"
-//#include "DrawManager.h"
-//#include "GameObject.h"
-//#include "DuckObject.h"
-//#include "Collider.h"
 #include "OptionsState.h"
 #include "StateManager.h"
 
@@ -19,13 +11,7 @@ OptionsState::OptionsState() {
 	m_resetHighScore = false;
 	m_changetoGameState = false;
 
-	/*auto it = m_objects.begin();
-	while(it != m_objects.end()){
-		delete (*it)->GetSprite();
-		//delete (*it)->GetCollider();
-		delete (*it);
-		++it;
-	}*/
+	
 };
 
 
@@ -38,36 +24,15 @@ void OptionsState::Exit() {
 
 };
 
-bool OptionsState::Update(float deltatime) {
+bool OptionsState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
 	
 	
-	//m_crosshairPos.x = sf::Mouse::getPosition().x -16;
-	//m_crosshairPos.y = sf::Mouse::getPosition().y -16;
-	//m_objects[0]->SetPosition(m_crosshairPos);
-	//m_objects[0]->m_collider->m_position = m_crosshairPos;
+	
 	return !m_done;
 };
 
 void OptionsState::Initialize() {
-	/*SpawnMenuCrosshair(m_sprite_manager);
 	
-	m_BackgroundSprite = m_sprite_manager->Load("Menubackground.png", 0, 0, 1024, 960);
-
-
-	Sprite *sprite = m_sprite_manager->Load("startgamecollider.png", 0, 0, 354, 41);
-	Collider *collider = new Collider;
-	collider->m_position = Vector2(340, 550);
-	collider->m_extention = Vector2(260, 41);
-	m_resethighscoretext = new GameObject(sprite, collider);
-	m_resethighscoretext->SetPosition(Vector2(350, 550));
-
-	sprite = m_sprite_manager->Load("optionscollider.png", 0, 0, 245, 39);
-	collider = new Collider;
-	collider->m_position = Vector2(350, 635);
-	collider->m_extention = Vector2(245, 41);
-	m_gametext = new GameObject(sprite, collider);
-	m_gametext->SetPosition(Vector2(350, 635));
-	*/
 }
 
 /*void OptionsState::Draw(DrawManager* m_draw_manager) {

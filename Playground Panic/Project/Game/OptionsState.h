@@ -1,14 +1,11 @@
 #pragma once
 
+#include "stdafx.h"
 #include <string>
 #include <vector>
 #include <map>
-#include "stdafx.h"
-//#include <SDL_ttf.h>
-//#include "Vector2.h"
 #include "State.h"
-//#include "SpriteManager.h"
-//#include "DrawManager.h"
+
 
 class SpriteManager;
 class Sprite;
@@ -21,7 +18,7 @@ public:
 	
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime);
+	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view);
 	void Initialize();
 	void Draw(DrawManager* m_draw_manager);
 	std::string Next();

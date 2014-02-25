@@ -11,7 +11,7 @@ public:
 	~StateManager();
 
 	 void Attach(State *state);
-	 void Update(float deltatime);
+	 void Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view);
 	 //void Draw(DrawManager* m_draw_manager);
 	 void SetState(const std::string &type);
 	 void ChangeState();
