@@ -35,29 +35,41 @@ void Engine::Run(){
 		mgr.Attach(new MenuState());
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
-		mgr.SetState("GameStateA");
+		mgr.SetState("MenuState");
 		mgr.isRunning = true;
 
-		sf::RenderWindow m_window(sf::VideoMode(1080, 720), "Playground Panic");
+		bool fullscreen = true;
+		if(fullscreen){
+			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic", sf::Style::Fullscreen);
+		}
+		else{
+			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic");
+		}
 		
-		m_view.setSize(sf::Vector2f(m_window.getSize().x, m_window.getSize().y));
+		m_view.setSize(sf::Vector2f(m_window->getSize().x, m_window->getSize().y));
 		m_view.zoom(m_zoom);
-		m_window.setView(m_view);
+		m_window->setView(m_view);
 		while (mgr.IsRunning())
 		{
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
 			
-			mgr.Update(m_deltatime, m_window, m_view);
+			mgr.Update(m_deltatime, *m_window, m_view);
 		
 			sf::Event event;
-			while (m_window.pollEvent(event)){
+			while (m_window->pollEvent(event)){
 				if (event.type == sf::Event::Closed){
-					m_window.close();
+					m_window->close();
 					mgr.isRunning = false;
 				}
-			}
-		
 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
+					mgr.isRunning = false;
+					m_window->close();
+				
+				}
+		
+			}
 		}
 
 	//mgr.~StateManager();

@@ -15,6 +15,41 @@ MenuState::MenuState() {
 
 
 bool MenuState::Enter() {
+	if (!m_background_texture.loadFromFile("../data/textures/Menu_bg.png"))
+	{
+		// This shit shouldn't happen
+	}
+	m_background_texture.setSmooth(true);
+
+	if (!m_start_game_texture.loadFromFile("../data/textures/start_game_btn.png"))
+	{
+		// This shit shouldn't happen
+	}
+	m_start_game_texture.setSmooth(true);
+
+	if (!m_options_texture.loadFromFile("../data/textures/options_btn.png"))
+	{
+		// This shit shouldn't happen
+	}
+	m_options_texture.setSmooth(true);
+
+	if (!m_exit_game_texture.loadFromFile("../data/textures/exit_game_btn.png"))
+	{
+		// This shit shouldn't happen
+	}
+	m_exit_game_texture.setSmooth(true);
+
+	m_background_sprite.setTexture(m_background_texture);
+
+	m_start_game_sprite.setTexture(m_start_game_texture);
+
+	m_options_sprite.setTexture(m_options_texture);
+
+	m_exit_game_sprite.setTexture(m_exit_game_texture);
+
+	m_start_game_sprite.setOrigin(182, 63);
+	m_options_sprite.setOrigin(182, 63);
+	m_exit_game_sprite.setOrigin(182, 63);
 	return true;
 };
 
@@ -24,123 +59,50 @@ void MenuState::Exit() {
 };
 
 bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		system("cls");
+		std::cout << sf::Mouse::getPosition().x - m_window.getPosition().x << " : " << sf::Mouse::getPosition().y - m_window.getPosition().y << std::endl;
+		std::cout << m_start_game_sprite.getPosition().x << " : " << m_start_game_sprite.getPosition().y << std::endl;
+		std::cout << m_options_sprite.getPosition().x << " : " << m_options_sprite.getPosition().y<< std::endl;
+		std::cout << m_exit_game_sprite.getPosition().x << " : " << m_exit_game_sprite.getPosition().y << std::endl;
+		if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_start_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_start_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+			m_next_state =  "GameStateA";
+			return false;
+		}
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_options_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x <= m_options_sprite.getPosition().x + m_options_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_options_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_options_sprite.getPosition().y + m_options_sprite.getOrigin().y * 2){
+			m_next_state =  "OptionsState";
+			return false;
+		}
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_exit_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + m_view.getCenter().x <= m_exit_game_sprite.getPosition().x + m_exit_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_exit_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+			m_window.close();
+		}
+	}
+
+	m_start_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	m_options_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	m_exit_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
 	
+	m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
+	m_start_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5);
+	m_options_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 2);
+	m_exit_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 3);
 	
-	//m_crosshairPos.x = sf::Mouse::getPosition().x -16;
-	//m_crosshairPos.y = sf::Mouse::getPosition().y -16;
-	//m_objects[0]->SetPosition(m_crosshairPos);
-	//m_objects[0]->m_collider->m_position = m_crosshairPos;
-	return !m_done;
+	m_window.clear(sf::Color(18, 45, 0));
+	m_window.draw(m_background_sprite);
+	m_window.draw(m_start_game_sprite);
+	m_window.draw(m_options_sprite);
+	m_window.draw(m_exit_game_sprite);
+	
+	m_window.display();
+
+	return true;
 };
 
 void MenuState::Initialize() {
-	/*SpawnMenuCrosshair(m_sprite_manager);
 	
-	m_BackgroundSprite = m_sprite_manager->Load("Menubackground.png", 0, 0, 1024, 960);
-
-
-	Sprite *sprite = m_sprite_manager->Load("startgamecollider.png", 0, 0, 354, 41);
-	Collider *collider = new Collider;
-	collider->m_position = Vector2(340, 550);
-	collider->m_extention = Vector2(260, 41);
-	m_resethighscoretext = new GameObject(sprite, collider);
-	m_resethighscoretext->SetPosition(Vector2(350, 550));
-
-	sprite = m_sprite_manager->Load("optionscollider.png", 0, 0, 245, 39);
-	collider = new Collider;
-	collider->m_position = Vector2(350, 635);
-	collider->m_extention = Vector2(245, 41);
-	m_gametext = new GameObject(sprite, collider);
-	m_gametext->SetPosition(Vector2(350, 635));
-	*/
 }
 
-/*void OptionsState::Draw(DrawManager* m_draw_manager) {
-	TTF_Init();
-	
-	m_draw_manager->Draw(m_BackgroundSprite, 0, 0);
 
-	
-	TTF_Font* m_font = TTF_OpenFont("../data/fonts/duckhunt.ttf", 250);
-	SDL_Color m_foregroundColor = { 72, 205, 222 };
-	SDL_Color m_backgroundColor = { 0, 0, 0 };
-	SDL_Surface* screen = TTF_RenderText_Shaded(m_font, "Duck", m_foregroundColor, m_backgroundColor);
-	m_draw_manager->Draw(screen, 170, 100);
-	SDL_FreeSurface(screen);
-	screen = TTF_RenderText_Shaded(m_font, "Hunt", m_foregroundColor, m_backgroundColor);
-	m_draw_manager->Draw(screen, 320, 300);
-	SDL_FreeSurface(screen);
-
-
-	SDL_Color m_foregroundColor2 = { 255, 255, 255 };
-	m_font = TTF_OpenFont("../data/fonts/emulogic.ttf", 35);
-	screen = TTF_RenderText_Shaded(m_font, "Reset highscore", m_foregroundColor2, m_backgroundColor);
-	m_draw_manager->Draw(screen, 255, 550);
-	SDL_FreeSurface(screen);
-
-
-	screen = TTF_RenderText_Shaded(m_font, "Start game", m_foregroundColor2, m_backgroundColor);
-	m_draw_manager->Draw(screen, 350, 630);
-	SDL_FreeSurface(screen);
-
-
-	m_draw_manager->Draw(
-		m_resethighscoretext->GetSprite(),
-		m_resethighscoretext->GetPosition().m_x,
-		m_resethighscoretext->GetPosition().m_y);
-
-	m_draw_manager->Draw(
-		m_gametext->GetSprite(),
-		m_gametext->GetPosition().m_x,
-		m_gametext->GetPosition().m_y);
-
-
-	int highscore[10];
-	std::ifstream stream("../data/score/score.txt");
-	if(!stream.is_open()){
-		return;
-	}
-
-
-	std::string row;
-	unsigned int cords_count = 0;
-	stream >> cords_count;
-	std::getline(stream, row);
-	for(unsigned int i = 0; i < cords_count; i++){
-		std::getline(stream, row);
-		std::stringstream ss(row);
-		std::string ch;
-		int score;
-		ss >> ch;
-		ss >> highscore[i];
-	}
-	
-
-
-	std::stringstream hisc;
-
-	hisc <<  highscore[0];
-
-	SDL_Color m_foregroundColor3 = { 64, 228, 48 };
-	screen = TTF_RenderText_Shaded(m_font, "Highscore: ", m_foregroundColor3, m_backgroundColor);
-	m_draw_manager->Draw(screen, 230, 750);
-	SDL_FreeSurface(screen);
-	screen = TTF_RenderText_Shaded(m_font, hisc.str().c_str(), m_foregroundColor3, m_backgroundColor);
-	m_draw_manager->Draw(screen, 630, 750);
-	SDL_FreeSurface(screen);
-
-
-	for(auto i = 0UL; i < m_objects.size(); i++){
-		m_draw_manager->Draw(m_objects[i]->GetSprite(), 
-			m_objects[i]->GetPosition().m_x, 
-			m_objects[i]->GetPosition().m_y);
-
-	}
-
-	
-	TTF_Quit();
-};
-*/
 std::string MenuState::Next() {
 	return m_next_state;
 };

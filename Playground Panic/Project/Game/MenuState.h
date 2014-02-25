@@ -1,14 +1,11 @@
 #pragma once
 
+#include "stdafx.h"
 #include <string>
 #include <vector>
-#include "stdafx.h"
 #include <map>
-//#include <SDL_ttf.h>
-//#include "Vector2.h"
 #include "State.h"
-//#include "SpriteManager.h"
-//#include "DrawManager.h"
+
 
 class SpriteManager;
 class Sprite;
@@ -29,9 +26,10 @@ public:
 
 	bool m_changetoGameState;
 	bool m_changetoOptionsState;
-
-	void SpawnMenuCrosshair(SpriteManager *sprite_manager);
+	
 	bool CheckCrosshairCollision(sf::Vector2u &offset, SpriteManager* sprite_manager);
+
+
 
 private:
 
@@ -48,5 +46,17 @@ private:
 
 	bool m_done;
 	std::string m_next_state;
+
+	sf::Sprite m_background_sprite;
+	sf::Texture m_background_texture;
+
+	sf::Sprite m_start_game_sprite;
+	sf::Texture m_start_game_texture;
+
+	sf::Sprite m_options_sprite;
+	sf::Texture m_options_texture;
+
+	sf::Sprite m_exit_game_sprite;
+	sf::Texture m_exit_game_texture;
 };
 
