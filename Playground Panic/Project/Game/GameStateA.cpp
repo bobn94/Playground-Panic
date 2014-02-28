@@ -352,14 +352,67 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	{
-		auto it = m_slow_kid.begin();
-		int i = 0;
-		while (it != m_slow_kid.end())
+		for(int i = 0; i < m_slow_kid.size(); i++)
 		{
+			for(int j = 0; j < m_slow_kid.size(); j++)
+			{
+				if(i != j)
+				{
+					sf::Vector2f offset;
+					if(Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_slow_kid[j]->GetPosition(), m_slow_kid[i]->m_radius, m_slow_kid[j]->m_radius, offset))
+					{
+						if(offset.x > 0 && offset.y > 0)
+						{
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 8.0f);
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x <= 0 && offset.y <= 0)
+						{
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset * 8.0f);
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x > 0 && offset.y <= 0)
+						{
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x / 8.0f), (offset.y * 8.0f)));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x <= 0 && offset.y > 0)
+						{
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x * 8.0f), (offset.y / 8.0f)));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						
+						/*if(offset.x >= 0 && offset.y >= 0){
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, 1.0f));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x < 0 && offset.y >= 0){
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, 1.0f));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x < 0 && offset.y < 0){
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, -1.0f));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}
+						else if(offset.x >= 0 && offset.y < 0){
+							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, -1.0f));
+							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						}*/
+					}
+					
+					
+				}
+			}
+			/*
+						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 4.0f);
+						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+			*/
 			m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
-			++it;
-			i++;
 		}
+		
+			
+			
+		
 	}
 
 	if (m_slow_kid.size() != 0 && m_projectile.size() != 0)

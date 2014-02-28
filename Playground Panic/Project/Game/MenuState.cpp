@@ -60,20 +60,16 @@ void MenuState::Exit() {
 
 bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-		system("cls");
-		std::cout << sf::Mouse::getPosition().x - m_window.getPosition().x << " : " << sf::Mouse::getPosition().y - m_window.getPosition().y << std::endl;
-		std::cout << m_start_game_sprite.getPosition().x << " : " << m_start_game_sprite.getPosition().y << std::endl;
-		std::cout << m_options_sprite.getPosition().x << " : " << m_options_sprite.getPosition().y<< std::endl;
-		std::cout << m_exit_game_sprite.getPosition().x << " : " << m_exit_game_sprite.getPosition().y << std::endl;
-		if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_start_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_start_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+		
+		if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_start_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_start_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
 			m_next_state =  "GameStateA";
 			return false;
 		}
-		else if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_options_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x <= m_options_sprite.getPosition().x + m_options_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_options_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_options_sprite.getPosition().y + m_options_sprite.getOrigin().y * 2){
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_options_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_options_sprite.getPosition().x + m_options_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_options_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_options_sprite.getPosition().y + m_options_sprite.getOrigin().y * 2){
 			m_next_state =  "OptionsState";
 			return false;
 		}
-		else if(sf::Mouse::getPosition().x - m_window.getPosition().x >= m_exit_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + m_view.getCenter().x <= m_exit_game_sprite.getPosition().x + m_exit_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y >= m_exit_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_exit_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + m_view.getCenter().x + 20 <= m_exit_game_sprite.getPosition().x + m_exit_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_exit_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
 			m_window.close();
 		}
 	}
