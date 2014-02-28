@@ -3,20 +3,37 @@
 #include <cmath>
 
 Collider::Collider()
-	:m_position(0.0f, 0.0f)
-,m_extention(0.0f, 0.0f)
-{
+:m_position(0,0)
+	,m_extention(0,0){
 
 }
 
-Collider::Collider(const sf::Vector2f &position, const sf::Vector2f &extention)
+Collider::Collider(sf::Vector2f position, sf::Vector2f extention)
 	:m_position(position)
 	,m_extention(extention){
 
 	}
 
-bool Collider::Overlap(Collider &other, Collider &self, sf::Vector2f &offset){
-		float A = self.m_extention.x * 0.5f;
+bool Collider::Overlap(sf::Vector2f origo1, sf::Vector2f origo2, float radius1, float radius2, sf::Vector2f &offset){
+	if(sqrt(((origo2.y - origo1.y)*(origo2.y - origo1.y)) + ((origo2.x - origo1.x)*(origo2.x - origo1.x))) < radius1 + radius2){
+		offset.x = (radius1 + radius2) - sqrt(((origo2.y - origo1.y)*(origo2.y - origo1.y)));
+		offset.y = (radius1 + radius2) - sqrt(((origo2.x - origo1.x)*(origo2.x - origo1.x)));
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+bool Collider::Overlap(sf::Vector2f origo1, sf::Vector2f origo2, float radius1, float radius2){
+	if(sqrt(((origo2.y - origo1.y)*(origo2.y - origo1.y)) + ((origo2.x - origo1.x)*(origo2.x - origo1.x))) < radius1 + radius2){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+bool Collider::Overlap(Collider &self, Collider &other, sf::Vector2f &offset){
+	float A = self.m_extention.x * 0.5f;
 		float B = other.m_extention.x * 0.5f;
 		float C = (self.m_position.x + A) - (other.m_position.x + B);
 
@@ -63,12 +80,4 @@ bool Collider::Overlap(Collider &other, Collider &self, sf::Vector2f &offset){
 			}
 		}
 		return false;
-	}
-bool Collider::Overlap(sf::Vector2f origo1, sf::Vector2f origo2, float radius1, float radius2){
-	if(sqrt(((origo2.y - origo1.y)*(origo2.y - origo1.y)) + ((origo2.x - origo1.x)*(origo2.x - origo1.x))) < radius1 + radius2){
-		return true;
-	}
-	else{
-		return false;
-	}
 }
