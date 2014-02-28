@@ -6,6 +6,8 @@
 #include "Sprite.h"
 //#include "AnimatedSprite.h"
 
+#include <iostream>
+
 //using namespace sf;
 
 ProjectileObject::ProjectileObject(sf::Sprite* sprite, float radius, Collider* collider)
@@ -17,12 +19,21 @@ ProjectileObject::ProjectileObject(sf::Sprite* sprite, float radius, Collider* c
 	m_pi = 3.14159265359f;
 }
 
-void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2f target)
+ProjectileObject::~ProjectileObject()
 {
-	m_sprite->setPosition(origin);
-	m_position = origin;
-	m_mouse_position = target;
+	delete m_sprite;
+	delete m_collider;
+}
 
+void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2f target, sf::Vector2f player_position)
+{
+	//m_sprite->setPosition(origin);
+	//m_position = origin;
+	m_mouse_position = target;
+/*
+	float AngleX = origin.x - target.x;
+	float AngleY = origin.y - target.y;
+*/
 	float AngleX = target.x - origin.x;
 	float AngleY = target.y - origin.y;
 
@@ -49,19 +60,43 @@ void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2f target)
 	//Get the angle and change it to deg (SFML need deg)
 	float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
-	if (m_sprite->getPosition().y < target.y)
+	if (m_sprite->getPosition().y < player_position.y)
 	{
-		// - 13
-		m_sprite->setRotation(90 + rotAngle);
-	}
-	else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
-	{
+		//Mouse below player
+		if (m_sprite->getPosition().y < target.y)
+		{
+			//std::cout << "1 -" << std::endl;
+			m_sprite->setRotation(90 - rotAngle);
+		}
+		else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
+		{
+		}
+		//Mouse above player
+		else
+		{
+			//std::cout << "2 -" << std::endl;
+			m_sprite->setRotation(90 - rotAngle);
+		}
 	}
 	else
 	{
-		// - 13
-		m_sprite->setRotation(90 - rotAngle);
+		//Mouse below player
+		if (m_sprite->getPosition().y < target.y)
+		{
+			//std::cout << "3 +" << std::endl;
+			m_sprite->setRotation(90 + rotAngle);
+		}
+		else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
+		{
+		}
+		//Mouse above player
+		else
+		{
+			//std::cout << "4 +" << std::endl;
+			m_sprite->setRotation(90 + rotAngle);
+		}
 	}
+
 }
 
 void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i mousePos) //Remove mousePos unless we do homing
@@ -89,7 +124,6 @@ void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i 
 
 		if (m_sprite->getPosition().y < m_mouse_position.y)
 		{
-			// - 13
 			m_sprite->setRotation(90 + rotAngle);
 		}
 		else if (m_sprite->getPosition().x == m_mouse_position.x && m_sprite->getPosition().y == m_mouse_position.y)
@@ -97,7 +131,6 @@ void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i 
 		}
 		else
 		{
-			// - 13
 			m_sprite->setRotation(90 - rotAngle);
 		}
 	}

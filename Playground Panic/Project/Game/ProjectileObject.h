@@ -15,7 +15,8 @@ class ProjectileObject : public GameObject
 {
 public:
 	ProjectileObject(sf::Sprite* sprite, float radius, Collider* collider = nullptr);
-	void Initialize(sf::Vector2f origin, sf::Vector2f target);
+	~ProjectileObject();
+	void Initialize(sf::Vector2f origin, sf::Vector2f target, sf::Vector2f player_position);
 
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);
 	void Collision(bool hit);

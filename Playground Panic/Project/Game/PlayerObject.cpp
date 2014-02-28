@@ -92,7 +92,6 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 
 	if (m_sprite->getPosition().y < mousePos.y)
 	{
-		// - 13
 		m_sprite->setRotation(90 + rotAngle);
 	}
 	else if (m_sprite->getPosition().x == mousePos.x && m_sprite->getPosition().y == mousePos.y)
@@ -100,10 +99,8 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 	}
 	else
 	{
-		// - 13
 		m_sprite->setRotation(90 - rotAngle);
 	}
-
 
 /*
 	if (m_current_animation != nullptr)

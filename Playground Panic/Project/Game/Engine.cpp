@@ -21,9 +21,6 @@ Engine::~Engine(){
 void Engine::Initialize(){
 	srand((unsigned int) time(0));
 	
-	
-
-	
 
 	/*
 	AnimatedSprite* spritePlayer = m_sprite_manager->Load("../data/animations/player_idle.txt");
@@ -35,29 +32,37 @@ void Engine::Run(){
 		mgr.Attach(new MenuState());
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
-		mgr.SetState("MenuState");
-		mgr.isRunning = true;
+		mgr.SetState("GameStateA");
+		mgr.isRunning = true; 
 
 		bool fullscreen = true;
-		if(fullscreen){
+		if (fullscreen)
+		{
 			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic", sf::Style::Fullscreen);
 		}
-		else{
+		else
+		{
 			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic");
 		}
 		
 		m_view.setSize(sf::Vector2f(m_window->getSize().x, m_window->getSize().y));
 		m_view.zoom(m_zoom);
 		m_window->setView(m_view);
+		m_view.setCenter(-99.0f, -99.0f);
+
 		while (mgr.IsRunning())
 		{
 			m_deltatime = deltaClock.restart().asSeconds() / 1000;
+
+			//system("cls");
 			
 			mgr.Update(m_deltatime, *m_window, m_view);
 		
 			sf::Event event;
-			while (m_window->pollEvent(event)){
-				if (event.type == sf::Event::Closed){
+			while (m_window->pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+				{
 					m_window->close();
 					mgr.isRunning = false;
 				}

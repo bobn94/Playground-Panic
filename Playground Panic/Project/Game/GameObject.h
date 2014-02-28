@@ -5,7 +5,8 @@
 class Collider;
 class Sprite;
 
-class GameObject{
+class GameObject
+{
 	friend class Level;
 	friend class MenuState;
 	friend class OptionsState;

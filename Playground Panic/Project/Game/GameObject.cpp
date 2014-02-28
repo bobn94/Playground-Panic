@@ -12,31 +12,39 @@ GameObject::GameObject(sf::Sprite* sprite, float radius, Collider *collider, int
 {
 	
 }
-	GameObject::GameObject(){
+	GameObject::GameObject()
+	{
 
 	}
-	const sf::Vector2f &GameObject::GetPosition() const {
+	const sf::Vector2f &GameObject::GetPosition() const 
+	{
 		return m_position;
 	}
-	void GameObject::SetPosition(const sf::Vector2f &position){
+	void GameObject::SetPosition(const sf::Vector2f &position)
+	{
 		m_position = position;
 		m_sprite->setPosition(position.x, position.y);
 	}
-	bool GameObject::HasTexture() const{
+	bool GameObject::HasTexture() const
+	{
 		return m_texture;
 	}
-	sf::Texture* GameObject::GetTexture(){
+	sf::Texture* GameObject::GetTexture()
+	{
 		return m_texture;
 	}
 	
-	bool GameObject::HasCollider() const{
+	bool GameObject::HasCollider() const
+	{
 		
 		return m_collider != nullptr;
 	}
-	Collider* GameObject::GetCollider(){
+	Collider* GameObject::GetCollider()
+	{
 		return m_collider;
 	}
 
-	sf::Sprite* GameObject::GetSprite(){
+	sf::Sprite* GameObject::GetSprite()
+	{
 		return m_sprite;
 	}

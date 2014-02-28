@@ -18,7 +18,7 @@ GameStateA::GameStateA(){
 	
 	m_player = nullptr;
 	m_player_collider = nullptr;
-	m_global_speed = 1;
+	m_global_speed = 1.0f;
 	m_player_pss = 100;
 	m_enemies_to_spawn = 0;
 };
@@ -116,7 +116,7 @@ bool GameStateA::Enter() {
 	m_enemies_to_spawn = 1;
 
 	m_timer = new CountdownTimer();
-	m_timer->SetTime(0, 0, 5);
+	m_timer->SetTime(0, 0, 1);
 	m_timer->Reset();
 	m_timer->Start();
 
@@ -128,74 +128,112 @@ bool GameStateA::Enter() {
 	return true;
 };
 
-void GameStateA::Exit() {
-	if (m_player != nullptr)
-	{
-		delete m_player;
-		m_player = nullptr;
-	}
-	if (m_player_collider != nullptr)
-	{
-		delete m_player_collider;
-		m_player_collider = nullptr;
-	}
-	if (m_healthbar_sprite != nullptr)
-	{
-		delete m_healthbar_sprite;
-		m_healthbar_sprite = nullptr;
-	}
-
-	{
-		auto it = m_projectile.begin();
-		while (it != m_projectile.end())
-		{
-			delete (*it)->GetSprite();
-			delete (*it)->GetCollider();
-			delete (*it);
-			++it;
-		}
-		m_projectile.clear();
-		//m_projectile_sprite.clear();
-		//m_projectile_collider.clear();
-	}
-
-	{
-		auto it = m_slow_kid.begin();
-		while (it != m_slow_kid.end())
-		{
-			delete (*it)->GetSprite();
-			delete (*it)->GetCollider();
-			delete (*it);
-			++it;
-		}
-		m_slow_kid.clear();
-	}
-};
-
 bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m_view)
 {
 	m_timer->Update();
 	
-	/*if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
-		|| (m_view.getCenter().x - (m_view.getSize().x * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().width - 1
-		|| (m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
-		|| (m_view.getCenter().y - (m_view.getSize().y * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().height - 1)
+	sf::Vector2f m_view_position = sf::Vector2f(-99.0f, -99.0f);
+
+	if (m_view.getCenter().x == -99 && m_view.getCenter().y == -99)
 	{
-		if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
-			|| (m_view.getCenter().x - (m_view.getSize().x * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().width - 1)
-		{
-			m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
-		}
-		if ((m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
-			|| (m_view.getCenter().y - (m_view.getSize().y * 2)) / 1.4f >= m_background_sprite.getGlobalBounds().height - 1)
-		{
-			m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
-		}
-	}
-	else*/
-	{
+		//std::cout << "Setting view to the player" << std::endl;
 		m_view.setCenter(m_player->GetPosition());
 	}
+	else if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
+		|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().width / 1.4f) - 1
+		|| (m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
+		|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().height / 1.4f) - 1)
+	{
+		if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
+			|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().width / 1.4f) - 1)
+		{
+			//std::cout << "Setting m_view_position.x to m_view's center x" << std::endl;
+			//m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
+			m_view_position.x = m_view.getCenter().x;
+		}
+		if ((m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
+			|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().height / 1.4f) - 1)
+		{
+			//std::cout << "Setting m_view_position.y to m_view's center y" << std::endl;
+			//m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
+			m_view_position.y = m_view.getCenter().y;
+		}
+		
+		//Bug-checks
+		if (m_view_position.x < -98)
+		{
+			//std::cout << "m_view_position.x < -50" << std::endl;
+			m_view.setCenter(m_player->GetPosition().x, m_view_position.y);
+		}
+		else if (m_view_position.y < -98)
+		{
+			//std::cout << "m_view_position.y < -50" << std::endl;
+			m_view.setCenter(m_view_position.x, m_player->GetPosition().y);
+		}
+		else
+		{
+			//std::cout << "Setting view to m_view_position" << std::endl;
+			m_view.setCenter(m_view_position);
+		}
+	}
+	else
+	{
+		//std::cout << "Setting view to the player" << std::endl;
+		m_view.setCenter(m_player->GetPosition());
+	}
+	//std::cout << "m_view_position = " << m_view_position.x << ", " << m_view_position.y << std::endl;
+	//std::cout << "Current position of the view: " << m_view.getCenter().x << ", " << m_view.getCenter().y << std::endl;
+	//std::cout << "Current position of the player: " << m_player->GetPosition().x << ", " << m_player->GetPosition().y << std::endl;
+
+	if (m_player->GetPosition().x > m_view.getSize().x / 2 
+		&& m_player->GetPosition().x + m_view.getSize().x / 2 < m_background_sprite.getGlobalBounds().width)
+	{
+		//std::cout << "Setting view to the player's x" << std::endl;
+		//float meh = m_player->GetPosition().x + m_view.getSize().x / 2, meh2 = m_background_sprite.getGlobalBounds().width;
+		//std::cout << meh << " " << meh2 << std::endl;
+		m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
+	}
+
+	if (m_player->GetPosition().y > m_view.getSize().y / 2
+		&& m_player->GetPosition().y + m_view.getSize().y / 2 < m_background_sprite.getGlobalBounds().height)
+	{
+		//std::cout << "Setting view to the player's x" << std::endl;
+		//float meh = m_player->GetPosition().y + m_view.getSize().y / 2, meh2 = m_background_sprite.getGlobalBounds().height;
+		//std::cout << meh << " " << meh2 << std::endl;
+		m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
+	}
+
+	//if (m_player->GetPosition().x > m_view.getCenter().x 
+	//	&& m_player->GetPosition().x > (m_background_sprite.getGlobalBounds().width / 1.4f) - (m_view.getSize().x / 2) 
+	//	|| m_player->GetPosition().x > m_view.getCenter().x 
+	//	&& m_player->GetPosition().x < (m_background_sprite.getGlobalBounds().width / 1.4f) - (m_view.getSize().x / 2))
+	//	//(m_player->GetPosition().x < m_view.getSize().x / 2
+	//	//&& m_player->GetPosition().x < (m_background_sprite.getTexture()->getSize().x / 1.4f) - ((m_background_sprite.getGlobalBounds().width / 1.4f) - m_player->GetPosition().x)) 
+	//	//|| m_player->GetPosition().x > m_view.getSize().x / 2 
+	//	//&& m_player->GetPosition().x <= (m_background_sprite.getGlobalBounds().width / 1.4f) - ((m_background_sprite.getGlobalBounds().width / 1.4f) - m_player->GetPosition().x)
+	//	//) //Fix other corner
+	//{
+	//	std::cout << "Setting view to the player's x" << std::endl;
+	//	m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
+	//}
+	//if (m_player->GetPosition().y > m_view.getCenter().y && m_player->GetPosition().y > (m_background_sprite.getGlobalBounds().height / 1.4f) - (m_view.getSize().y / 2) || m_player->GetPosition().y > m_view.getCenter().y && m_player->GetPosition().y < (m_background_sprite.getGlobalBounds().height / 1.4f) - (m_view.getSize().y / 2))
+	//{
+	//	std::cout << "Setting view to the player's y" << std::endl;
+	//	m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
+	//}
+	/*if ()
+	{
+		m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
+	}
+	if ()
+	{
+		m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
+	}*/
+
+
+
+	/*std::cout << "Current position of the view: " << m_view.getCenter().x << ", " << m_view.getCenter().y << std::endl;
+	std::cout << "Current position of the player: " << m_player->GetPosition().x << ", " << m_player->GetPosition().y << std::endl;*/
 
 	m_window.setView(m_view);
 			
@@ -227,7 +265,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
 		{
-			m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
+			m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.022f);
 			if (m_player->GetWeaponHeat() < 0)
 			{
 				m_player->SetWeaponHeat(0.0f);
@@ -267,8 +305,10 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
 		m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.6f, 0.6f);
 		m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(8.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))));
-		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f), m_mouse_position);
-				
+		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f)); //128.0f, 10.0f
+		//m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 250.0f), m_mouse_position, m_view.getCenter() - m_view.getSize() / 2.0f);
+		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 250.0f), m_mouse_position, m_player->GetPosition());
+
 		/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
 		m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
 		m_projectile[0]->SetPosition(sf::Vector2f(200.0f, 200.0f));*/
@@ -283,8 +323,10 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 1.0f);
 	}
 
-	if (m_timer->Done()){
-		for (int i = 0; i < m_enemies_to_spawn; i++){
+	if (m_timer->Done())
+	{
+		for (int i = 0; i < m_enemies_to_spawn; i++)
+		{
 			m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
 			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.6f, 0.6f);
 			m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
@@ -292,6 +334,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().width / 2, m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().height / 2);
 			m_timer->Reset();
 			m_timer->Start();
+			//std::cout << "Slow Kid created - " << m_slow_kid.size() << std::endl;
 		}
 	}
 
@@ -331,18 +374,19 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
 					std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
 
-					delete m_projectile[j]->GetSprite();
-					delete m_projectile[j]->GetCollider();
+					//delete m_projectile[j]->GetSprite();
+					//delete m_projectile[j]->GetCollider();
 					m_projectile.erase(m_projectile.begin() + j);
 
 					m_slow_kid[i]->m_dirtLevel -= 1;
 					if (m_slow_kid[i]->m_dirtLevel <= 0)
 					{
-						delete m_slow_kid[i]->GetSprite();
-						delete m_slow_kid[i]->GetCollider();
+						//delete m_slow_kid[i]->GetSprite();
+						//delete m_slow_kid[i]->GetCollider();
 						m_slow_kid.erase(m_slow_kid.begin() + i);
 					}
 					std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
+					std::cout << i << " " << j << std::endl;
 				}
 			}
 
@@ -363,8 +407,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			{
 				//it.erase(it++);
 				//m_projectile.erase(++it);
-				delete (*it)->GetSprite();
-				delete (*it)->GetCollider();
+				//delete (*it)->GetSprite();
+				//delete (*it)->GetCollider();
 				m_projectile.erase(it++);
 			}
 			else
@@ -409,16 +453,55 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_window.draw(m_framehealthbar_sprite);
 			
 	m_window.display();
-		
+
 	return true;	
 };
 
-void GameStateA::Draw(DrawManager* m_draw_manager) {
+void GameStateA::Exit() {
+	if (m_player != nullptr)
+	{
+		delete m_player;
+		m_player = nullptr;
+	}
+	if (m_player_collider != nullptr)
+	{
+		delete m_player_collider;
+		m_player_collider = nullptr;
+	}
+	if (m_healthbar_sprite != nullptr)
+	{
+		delete m_healthbar_sprite;
+		m_healthbar_sprite = nullptr;
+	}
 
+	{
+		auto it = m_projectile.begin();
+		while (it != m_projectile.end())
+		{
+			//delete (*it)->GetSprite();
+			//delete (*it)->GetCollider();
+			delete (*it);
+			++it;
+		}
+		m_projectile.clear();
+		//m_projectile_sprite.clear();
+		//m_projectile_collider.clear();
+	}
+
+	{
+		auto it = m_slow_kid.begin();
+		while (it != m_slow_kid.end())
+		{
+			//delete (*it)->GetSprite();
+			//delete (*it)->GetCollider();
+			delete (*it);
+			++it;
+		}
+		m_slow_kid.clear();
+	}
 };
 
 std::string GameStateA::Next() {
-	
 	return "MenuState";
 };
 
