@@ -35,7 +35,7 @@ void Engine::Run(){
 		mgr.SetState("MenuState");
 		mgr.isRunning = true; 
 
-		bool fullscreen = true;
+		bool fullscreen = false;
 		if (fullscreen)
 		{
 			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic", sf::Style::Fullscreen);
@@ -58,23 +58,7 @@ void Engine::Run(){
 			
 			mgr.Update(m_deltatime, *m_window, m_view);
 		
-			sf::Event event;
-			while (m_window->pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-				{
-					m_window->close();
-					mgr.isRunning = false;
-				}
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				{
-					mgr.isRunning = false;
-					m_window->close();
-				
-				}
-		
-			}
+			
 		}
 
 	//mgr.~StateManager();

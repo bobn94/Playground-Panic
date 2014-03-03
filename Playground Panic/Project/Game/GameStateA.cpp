@@ -257,15 +257,10 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	{
 		m_heatbar_sprite->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
 	}
-	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss){
-		m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.002f);
-		if (m_player->GetWeaponHeat() < 0){
-			m_player->SetWeaponHeat(0.0f);
-		}
-	}
+	
 	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
 		{
-			m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.022f);
+			m_player->SetWeaponHeat(m_player->GetWeaponHeat() - 0.003f);
 			if (m_player->GetWeaponHeat() < 0)
 			{
 				m_player->SetWeaponHeat(0.0f);
@@ -425,7 +420,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 				{
 					//std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
 					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
-					std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
+					//std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
 
 					//delete m_projectile[j]->GetSprite();
 					//delete m_projectile[j]->GetCollider();
@@ -438,8 +433,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 						//delete m_slow_kid[i]->GetCollider();
 						m_slow_kid.erase(m_slow_kid.begin() + i);
 					}
-					std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
-					std::cout << i << " " << j << std::endl;
+					//std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
+					//std::cout << i << " " << j << std::endl;
 				}
 			}
 
@@ -483,7 +478,24 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_window.draw(*m_slow_kid[i]->GetSprite());
 	}
 			
+	sf::Event event;
+			while (m_window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+				{
+					
+					m_window.close();
+					
+				}
 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
+					
+					return false;
+				
+				}
+		
+			}
 			
 
 /*

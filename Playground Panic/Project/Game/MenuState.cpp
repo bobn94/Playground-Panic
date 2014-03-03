@@ -59,6 +59,25 @@ void MenuState::Exit() {
 };
 
 bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
+	
+
+	m_start_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	m_options_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	m_exit_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	
+	//m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
+	m_start_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5);
+	m_options_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 2);
+	m_exit_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 3);
+	
+	m_window.clear(sf::Color(0, 90, 0));
+	//m_window.draw(m_background_sprite);
+	m_window.draw(m_start_game_sprite);
+	m_window.draw(m_options_sprite);
+	m_window.draw(m_exit_game_sprite);
+	
+	m_window.display();
+
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 		
 		if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_start_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_start_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
@@ -73,23 +92,6 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 			m_window.close();
 		}
 	}
-
-	m_start_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
-	m_options_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
-	m_exit_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
-	
-	m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
-	m_start_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5);
-	m_options_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 2);
-	m_exit_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 3);
-	
-	m_window.clear(sf::Color(18, 45, 0));
-	m_window.draw(m_background_sprite);
-	m_window.draw(m_start_game_sprite);
-	m_window.draw(m_options_sprite);
-	m_window.draw(m_exit_game_sprite);
-	
-	m_window.display();
 
 	return true;
 };
