@@ -9,6 +9,7 @@ class CountdownTimer;
 class PlayerObject;
 class ProjectileObject;
 class SlowKid;
+class Animation;
 
 
 class GameStateA : public State {
@@ -63,6 +64,9 @@ private:
 
 	sf::Sprite m_frameheatbar_sprite;
 	sf::Texture m_frameheatbar_texture;
+
+	//Animations:
+	Animation *female_animation;
 
 
 	float m_healthbar;

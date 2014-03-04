@@ -80,6 +80,7 @@ bool GameStateA::Enter() {
 	}
 	m_heatbar_texture.setSmooth(true);
 
+	
 
 	/*
 	float recWidth = 20.0f, recHeight = 15.0f;
@@ -349,7 +350,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	{
 		for(int i = 0; i < m_slow_kid.size(); i++)
 		{
-			for(int j = 0; j < m_slow_kid.size(); j++)
+			for(int j = i; j < m_slow_kid.size(); j++)
 			{
 				if(i != j)
 				{
