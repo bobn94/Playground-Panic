@@ -32,7 +32,7 @@ void Engine::Run(){
 		mgr.Attach(new MenuState());
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
-		mgr.SetState("MenuState");
+		mgr.SetState("GameStateA");
 		mgr.isRunning = true; 
 
 		bool fullscreen = false;

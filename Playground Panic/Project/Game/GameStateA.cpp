@@ -1,21 +1,27 @@
 
 #include "stdafx.h"
 #include <iostream>
-#include "GameObject.h"
+//#include "GameObject.h"
+#include "GameStateA.h"
 #include "PlayerObject.h"
 #include "ProjectileObject.h"
+
 #include "SlowKid.h"
+#include "BikeKid.h"
+#include "ParentUI.h"
+#include "HealthBar.h"
+
 #include "Collider.h"
 #include "CountdownTimer.h"
-#include "HealthBar.h"
+#include "SpriteObject.h"
+
 #include <cmath>
 #include <iostream>
-#include "GameStateA.h"
 //#include "Level.h"
 
 
-GameStateA::GameStateA(){
-	
+GameStateA::GameStateA()
+{	
 	m_player = nullptr;
 	m_player_collider = nullptr;
 	m_global_speed = 1.0f;
@@ -24,8 +30,8 @@ GameStateA::GameStateA(){
 };
 
 
-bool GameStateA::Enter() {
-
+bool GameStateA::Enter() 
+{
 	if (!m_background_texture.loadFromFile("../data/textures/background.png"))
 	{
 		// This shit shouldn't happen
@@ -50,11 +56,17 @@ bool GameStateA::Enter() {
 	}
 	m_crosshair_texture.setSmooth(true);
 
-	if (!m_slow_kid_texture.loadFromFile("../data/textures/SlowChild2.png"))
+	if (!m_slow_kid_texture.loadFromFile("../data/textures/SlowKid.png"))
 	{
 		// Shit happened
 	}
-	m_projectile_texture.setSmooth(true);
+	m_slow_kid_texture.setSmooth(true);
+
+	if (!m_bike_kid_texture.loadFromFile("../data/textures/BikeKid.png"))
+	{
+		// Shit happened
+	}
+	m_bike_kid_texture.setSmooth(true);
 
 	if (!m_framehealthbar_texture.loadFromFile("../data/textures/HealthBar2.png"))
 	{
@@ -80,7 +92,29 @@ bool GameStateA::Enter() {
 	}
 	m_heatbar_texture.setSmooth(true);
 
-	
+	if (!m_indicator_texture.loadFromFile("../data/textures/Indicator.png"))
+	{
+		// Shit happened
+	}
+	m_indicator_texture.setSmooth(true);
+
+	if (!m_parent_ball_texture.loadFromFile("../data/textures/Parent_ball.png"))
+	{
+		// Shit happened
+	}
+	m_parent_ball_texture.setSmooth(true);
+
+	if (!m_parent_bar_texture.loadFromFile("../data/textures/parent_bar.png"))
+	{
+		// Shit happened
+	}
+	m_parent_bar_texture.setSmooth(true);
+
+	if (!m_arrow_texture.loadFromFile("../data/textures/IndicatorChild.png"))
+	{
+		// Shit happened
+	}
+	m_arrow_texture.setSmooth(true);
 
 	/*
 	float recWidth = 20.0f, recHeight = 15.0f;
@@ -90,29 +124,18 @@ bool GameStateA::Enter() {
 	*/
 	//rec->setTexture(&m_player_texture);
 
-	m_background_sprite.setTexture(m_background_texture);
-
-	m_player_sprite = new sf::Sprite(m_player_texture);
-	m_player_sprite->setScale(0.7f, 0.7f);
-	//m_player_sprite.setOrigin(m_player_sprite.getLocalBounds().width / 2, m_player_sprite.getLocalBounds().height / 2);
-	m_player_sprite->setOrigin((m_player_sprite->getLocalBounds().width / 2) - 2, (m_player_sprite->getLocalBounds().height / 2) + 32);
+	m_background = new SpriteObject(&m_background_texture);
 	
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
-	m_player = new PlayerObject(m_player_sprite, float(128.0f), m_player_collider);
+	m_player = new PlayerObject(&m_player_texture, float(128.0f), m_player_collider);
 	m_player->SetPosition(sf::Vector2f(2490.0f, 900.0f));
 
-	m_healthbar_sprite = new sf::Sprite(m_healthbar_texture);
-	m_framehealthbar_sprite.setTexture(m_framehealthbar_texture);
+	m_heatbar = new SpriteObject(&m_heatbar_texture);
+	m_frameheatbar = new SpriteObject(&m_frameheatbar_texture);
+	m_healthbar = new SpriteObject(&m_healthbar_texture);
+	m_framehealthbar = new SpriteObject(&m_framehealthbar_texture);
 
-	m_healthbar_sprite = new sf::Sprite(m_healthbar_texture);
-	m_heatbar_sprite = new sf::Sprite(m_heatbar_texture);
-
-	m_crosshair_sprite = new sf::Sprite(m_crosshair_texture);
-
-	m_framehealthbar_sprite.setTexture(m_framehealthbar_texture);
-	m_frameheatbar_sprite.setTexture(m_frameheatbar_texture);
-	m_heatbar_sprite->setPosition(0, 40);
-	m_frameheatbar_sprite.setPosition(0, 40);
+	m_parent_bar = new SpriteObject(&m_parent_bar_texture);
 
 	m_enemies_to_spawn = 1;
 
@@ -141,22 +164,20 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_view.setCenter(m_player->GetPosition());
 	}
 	else if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
-		|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().width / 1.4f) - 1
+		|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background->GetSprite()->getGlobalBounds().width / 1.4f) - 1
 		|| (m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
-		|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().height / 1.4f) - 1)
+		|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background->GetSprite()->getGlobalBounds().height / 1.4f) - 1)
 	{
 		if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
-			|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().width / 1.4f) - 1)
+			|| (m_view.getCenter().x + (m_view.getSize().x / 2)) / 1.4f >= (m_background->GetSprite()->getGlobalBounds().width / 1.4f) - 1)
 		{
 			//std::cout << "Setting m_view_position.x to m_view's center x" << std::endl;
-			//m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
 			m_view_position.x = m_view.getCenter().x;
 		}
 		if ((m_view.getCenter().y - (m_view.getSize().y / 2)) / 1.4f <= 1
-			|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background_sprite.getGlobalBounds().height / 1.4f) - 1)
+			|| (m_view.getCenter().y + (m_view.getSize().y / 2)) / 1.4f >= (m_background->GetSprite()->getGlobalBounds().height / 1.4f) - 1)
 		{
 			//std::cout << "Setting m_view_position.y to m_view's center y" << std::endl;
-			//m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
 			m_view_position.y = m_view.getCenter().y;
 		}
 		
@@ -187,7 +208,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	//std::cout << "Current position of the player: " << m_player->GetPosition().x << ", " << m_player->GetPosition().y << std::endl;
 
 	if (m_player->GetPosition().x > m_view.getSize().x / 2 
-		&& m_player->GetPosition().x + m_view.getSize().x / 2 < m_background_sprite.getGlobalBounds().width)
+		&& m_player->GetPosition().x + m_view.getSize().x / 2 < m_background->GetSprite()->getGlobalBounds().width)
 	{
 		//std::cout << "Setting view to the player's x" << std::endl;
 		//float meh = m_player->GetPosition().x + m_view.getSize().x / 2, meh2 = m_background_sprite.getGlobalBounds().width;
@@ -196,7 +217,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	if (m_player->GetPosition().y > m_view.getSize().y / 2
-		&& m_player->GetPosition().y + m_view.getSize().y / 2 < m_background_sprite.getGlobalBounds().height)
+		&& m_player->GetPosition().y + m_view.getSize().y / 2 < m_background->GetSprite()->getGlobalBounds().height)
 	{
 		//std::cout << "Setting view to the player's x" << std::endl;
 		//float meh = m_player->GetPosition().y + m_view.getSize().y / 2, meh2 = m_background_sprite.getGlobalBounds().height;
@@ -204,46 +225,19 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
 	}
 
-	//if (m_player->GetPosition().x > m_view.getCenter().x 
-	//	&& m_player->GetPosition().x > (m_background_sprite.getGlobalBounds().width / 1.4f) - (m_view.getSize().x / 2) 
-	//	|| m_player->GetPosition().x > m_view.getCenter().x 
-	//	&& m_player->GetPosition().x < (m_background_sprite.getGlobalBounds().width / 1.4f) - (m_view.getSize().x / 2))
-	//	//(m_player->GetPosition().x < m_view.getSize().x / 2
-	//	//&& m_player->GetPosition().x < (m_background_sprite.getTexture()->getSize().x / 1.4f) - ((m_background_sprite.getGlobalBounds().width / 1.4f) - m_player->GetPosition().x)) 
-	//	//|| m_player->GetPosition().x > m_view.getSize().x / 2 
-	//	//&& m_player->GetPosition().x <= (m_background_sprite.getGlobalBounds().width / 1.4f) - ((m_background_sprite.getGlobalBounds().width / 1.4f) - m_player->GetPosition().x)
-	//	//) //Fix other corner
-	//{
-	//	std::cout << "Setting view to the player's x" << std::endl;
-	//	m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
-	//}
-	//if (m_player->GetPosition().y > m_view.getCenter().y && m_player->GetPosition().y > (m_background_sprite.getGlobalBounds().height / 1.4f) - (m_view.getSize().y / 2) || m_player->GetPosition().y > m_view.getCenter().y && m_player->GetPosition().y < (m_background_sprite.getGlobalBounds().height / 1.4f) - (m_view.getSize().y / 2))
-	//{
-	//	std::cout << "Setting view to the player's y" << std::endl;
-	//	m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
-	//}
-	/*if ()
-	{
-		m_view.setCenter(m_player->GetPosition().x, m_view.getCenter().y);
-	}
-	if ()
-	{
-		m_view.setCenter(m_view.getCenter().x, m_player->GetPosition().y);
-	}*/
-
-
-
 	/*std::cout << "Current position of the view: " << m_view.getCenter().x << ", " << m_view.getCenter().y << std::endl;
 	std::cout << "Current position of the player: " << m_player->GetPosition().x << ", " << m_player->GetPosition().y << std::endl;*/
 
 	m_window.setView(m_view);
 			
 	m_mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 2.0f)) / 1.4f;
-			
-	m_healthbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
-	m_framehealthbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2));
-	m_heatbar_sprite->setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
-	m_frameheatbar_sprite.setPosition(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2));
+	
+
+	m_healthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
+	m_framehealthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
+	m_heatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
+	m_frameheatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
+	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 800 - (m_view.getSize().y / 2)));
 
 	if(m_player->GetCurrentHealth() > m_player->GetMaxHealth())
 	{
@@ -251,12 +245,12 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
 	{
-		m_healthbar_sprite->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
+		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
 	}
 
 	if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
 	{
-		m_heatbar_sprite->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
+		m_heatbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
 	}
 	
 	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
@@ -298,16 +292,9 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 	{
-		m_projectile_sprite.push_back(new sf::Sprite(m_projectile_texture));
-		m_projectile_sprite[m_projectile_sprite.size() - 1]->setScale(0.6f, 0.6f);
-		m_projectile.push_back(new ProjectileObject(m_projectile_sprite[m_projectile_sprite.size() - 1], float(8.0f), new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))));
+		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f)/*, new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))*/));
 		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f)); //128.0f, 10.0f
-		//m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 250.0f), m_mouse_position, m_view.getCenter() - m_view.getSize() / 2.0f);
 		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 250.0f), m_mouse_position, m_player->GetPosition());
-
-		/*m_projectile.push_back(new ProjectileObject(&m_projectile_sprite_temp, &m_projectile_texture, nullptr));
-		m_projectile[0]->Initialize(m_player->GetSprite()->getPosition(), sf::Mouse::getPosition(m_window));
-		m_projectile[0]->SetPosition(sf::Vector2f(200.0f, 200.0f));*/
 
 		m_player_pst.restart();
 		//m_player_pss = 10000000;
@@ -321,13 +308,29 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	if (m_timer->Done())
 	{
+		int special = 1;
 		for (int i = 0; i < m_enemies_to_spawn; i++)
 		{
-			m_slow_kid_sprite.push_back(new sf::Sprite(m_slow_kid_texture));
-			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setScale(0.6f, 0.6f);
-			m_slow_kid.push_back(new SlowKid(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
-			m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background_sprite.getGlobalBounds().width + 100, rand() % (int)m_background_sprite.getGlobalBounds().height + 100));
-			m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->setOrigin(m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().width / 2, m_slow_kid_sprite[m_slow_kid_sprite.size() - 1]->getLocalBounds().height / 2);
+			//Read from a textfile into an object?
+			if (rand() % 2 == 1)
+			{
+				m_slow_kid.push_back(new SlowKid(&m_slow_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0));
+				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+				m_enemies.push_back(m_slow_kid[m_slow_kid.size() - 1]);
+			}
+			else
+			{
+				//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
+				m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0));
+				m_bike_kid[m_bike_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+				m_enemies.push_back(m_bike_kid[m_bike_kid.size() - 1]);
+			}
+
+			if (m_enemies[m_enemies.size() - 1]->GetSpecial())
+			{
+				m_parentUI.push_back(new ParentUI(&m_arrow_texture, &m_indicator_texture, &m_parent_ball_texture));
+			}
+
 			m_timer->Reset();
 			m_timer->Start();
 			//std::cout << "Slow Kid created - " << m_slow_kid.size() << std::endl;
@@ -335,6 +338,18 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	m_player->Update(deltatime, m_global_speed, m_mouse_position);
+
+	{
+		int j = 0;
+		for (int i = 0; i < m_slow_kid.size(); i++)
+		{
+			if (m_slow_kid[i]->GetSpecial())
+			{
+				m_parentUI[j]->Update(m_window, m_view, m_player->GetPosition(), m_slow_kid[i]->GetPosition());
+				j++;
+			}
+		}
+	}
 
 	{
 		auto it = m_projectile.begin();
@@ -348,36 +363,39 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	{
-		for(int i = 0; i < m_slow_kid.size(); i++)
+		for(int i = 0; i < m_enemies.size(); i++)
 		{
-			for(int j = i; j < m_slow_kid.size(); j++)
+			for(int j = 0; j < m_enemies.size(); j++)
 			{
 				if(i != j)
 				{
 					sf::Vector2f offset;
-					if(Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_slow_kid[j]->GetPosition(), m_slow_kid[i]->m_radius, m_slow_kid[j]->m_radius, offset))
+					if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_enemies[j]->GetPosition(), m_enemies[i]->GetRadius(), m_enemies[j]->GetRadius(), offset))
 					{
-						if(offset.x > 0 && offset.y > 0)
+						//if (!m_enemies[j]->IsHit())
 						{
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 8.0f);
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+							//m_enemies[j]->SetHit(true);
+							if (offset.x > 0 && offset.y > 0)
+							{
+								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset / 20.0f);
+								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
+							}
+							else if (offset.x <= 0 && offset.y <= 0)
+							{
+								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset * 20.0f);
+								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
+							}
+							else if (offset.x > 0 && offset.y <= 0)
+							{
+								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x / 20.0f), (offset.y * 20.0f)));
+								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
+							}
+							else if (offset.x <= 0 && offset.y > 0)
+							{
+								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x * 20.0f), (offset.y / 20.0f)));
+								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
+							}
 						}
-						else if(offset.x <= 0 && offset.y <= 0)
-						{
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset * 8.0f);
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
-						}
-						else if(offset.x > 0 && offset.y <= 0)
-						{
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x / 8.0f), (offset.y * 8.0f)));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
-						}
-						else if(offset.x <= 0 && offset.y > 0)
-						{
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x * 8.0f), (offset.y / 8.0f)));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
-						}
-						
 						/*if(offset.x >= 0 && offset.y >= 0){
 							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, 1.0f));
 							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
@@ -403,42 +421,67 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 4.0f);
 						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
 			*/
+			//m_enemies[i]->SetHit(true);
+		}
+		for (int i = 0; i < m_slow_kid.size(); i++)
+		{
 			m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
 		}
-		
-			
+		for (int i = 0; i < m_bike_kid.size(); i++)
+		{
+			m_bike_kid[i]->Update(deltatime, m_global_speed, m_player, m_bike_kid[i]->GetPosition(), m_player->GetPosition());
+		}
 			
 		
 	}
 
-	if (m_slow_kid.size() != 0 && m_projectile.size() != 0)
+	if (m_enemies.size() != 0 && m_projectile.size() != 0)
 	{
-		for (int i = m_slow_kid.size() - 1; i >= 0; i--)
+		int k = 0;
+		for (int i = m_enemies.size() - 1; i >= 0; i--)
 		{
 			for (int j = m_projectile.size() - 1; j >= 0; j--)
 			{
-				if (Collisions->Overlap(m_slow_kid[i]->GetPosition(), m_projectile[j]->GetPosition(), m_slow_kid[i]->m_radius, m_projectile[j]->m_radius))
+				if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_projectile[j]->GetPosition(), m_enemies[i]->GetRadius(), m_projectile[j]->GetRadius()))
 				{
-					//std::cout << m_slow_kid[i]->GetPosition().x << "-" << m_slow_kid[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
+					//std::cout << m_enemies[i]->GetPosition().x << "-" << m_enemies[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
 					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
-					//std::cout << "Before: " << m_slow_kid.size() << " " << m_projectile.size() << " After: ";
+					//std::cout << "Before: " << m_enemies.size() << " " << m_projectile.size() << " After: ";
 
-					//delete m_projectile[j]->GetSprite();
-					//delete m_projectile[j]->GetCollider();
 					m_projectile.erase(m_projectile.begin() + j);
 
-					m_slow_kid[i]->m_dirtLevel -= 1;
-					if (m_slow_kid[i]->m_dirtLevel <= 0)
+					m_enemies[i]->SetDirt(m_enemies[i]->GetDirt() - 1);
+					if (m_enemies[i]->GetDirt() <= 0)
 					{
-						//delete m_slow_kid[i]->GetSprite();
-						//delete m_slow_kid[i]->GetCollider();
-						m_slow_kid.erase(m_slow_kid.begin() + i);
+						//delete m_enemies[i]->GetSprite();
+						//delete m_enemies[i]->GetCollider();
+						m_parentUI.erase(m_parentUI.begin() + k);
+						m_enemies.erase(m_enemies.begin() + i);
+
+						////Remove this and alter it into Enemy.cpp
+						//for (int j = 0; j < m_slow_kid.size(); j++)
+						//{
+						//	if (m_slow_kid[j]->GetSprite() == nullptr)
+						//	{
+						//		delete m_slow_kid[j];
+						//	}
+						//}
+						//for (int j = 0; j < m_bike_kid.size(); j++)
+						//{
+						//	if (m_bike_kid[j]->GetSprite() == nullptr)
+						//	{
+						//		delete m_bike_kid[j];
+						//	}
+						//}
 					}
-					//std::cout << m_slow_kid.size() << " " << m_projectile.size() << std::endl;
+					//std::cout << m_enemies.size() << " " << m_projectile.size() << std::endl;
 					//std::cout << i << " " << j << std::endl;
 				}
 			}
-
+			if (m_enemies[i]->GetSpecial())
+			{
+				k++;
+			}
 		}
 	}
 	{
@@ -454,10 +497,6 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 				)// && 1 == 0
 				)
 			{
-				//it.erase(it++);
-				//m_projectile.erase(++it);
-				//delete (*it)->GetSprite();
-				//delete (*it)->GetCollider();
 				m_projectile.erase(it++);
 			}
 			else
@@ -468,56 +507,56 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	m_window.clear(sf::Color(18, 45, 0));
-	m_window.draw(m_background_sprite);
-			
+	m_background->Draw(&m_window);
+		
+
 	for (int i = 0; i < m_projectile.size(); i++)
 	{
-		m_window.draw(*m_projectile[i]->GetSprite());
+		//m_window.draw(*m_projectile[i]->GetSprite());
+		m_projectile[i]->Draw(&m_window);
 	}
-	for (int i = 0; i < m_slow_kid.size(); i++)
+	for (int i = 0; i < m_enemies.size(); i++)
 	{
-		m_window.draw(*m_slow_kid[i]->GetSprite());
+		//m_window.draw(*m_enemies[i]->GetSprite());
+		m_enemies[i]->Draw(&m_window);
 	}
 			
 	sf::Event event;
-			while (m_window.pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-				{
-					
-					m_window.close();
-					
-				}
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				{
-					
-					return false;
-				
-				}
-		
-			}
-			
-
-/*
-	auto it = m_projectile.begin();
-	while (it != m_projectile.end())
+	while (m_window.pollEvent(event))
 	{
-		m_window.draw(*m_projectile[0]->GetSprite());
-	}*/
+		if (event.type == sf::Event::Closed)
+		{
+			m_window.close();
+			return false;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+					
+			return false;
+				
+		}
+		
+	}
+		
 	//m_window.setMouseCursorVisible(false);
 			
+	m_player->Draw(&m_window);
 
-	*m_player_sprite = *m_player->GetSprite();
-	//m_player_sprite.setColor(sf::Color(0x00, 0xAA, 0xAA, 0x88));
-	m_window.draw(*m_player_sprite);
+	m_heatbar->Draw(&m_window);
+	m_frameheatbar->Draw(&m_window);
+	m_healthbar->Draw(&m_window);
+	m_framehealthbar->Draw(&m_window);
+	///////////////////////////////////////////////////////////Change
+	m_parent_bar->Draw(&m_window);
 
-	m_window.draw(*m_heatbar_sprite);
-	m_window.draw(m_frameheatbar_sprite);
-
-	m_window.draw(*m_healthbar_sprite);
-	m_window.draw(m_framehealthbar_sprite);
-			
+	if (m_parentUI.size() > 0)
+	{
+		for (int j = 0; j<m_parentUI.size(); j++)
+		{
+			m_parentUI[j]->Draw(m_window);
+		}
+	}
 	m_window.display();
 
 	return true;	
@@ -534,12 +573,13 @@ void GameStateA::Exit() {
 		delete m_player_collider;
 		m_player_collider = nullptr;
 	}
-	if (m_healthbar_sprite != nullptr)
-	{
-		delete m_healthbar_sprite;
-		m_healthbar_sprite = nullptr;
-	}
 
+	if (m_healthbar != nullptr)
+	{
+		delete m_healthbar;
+		m_healthbar = nullptr;
+	}
+	
 	{
 		auto it = m_projectile.begin();
 		while (it != m_projectile.end())
@@ -565,6 +605,21 @@ void GameStateA::Exit() {
 		}
 		m_slow_kid.clear();
 	}
+
+	/*delete &m_background_texture;
+	delete &m_player_texture;
+	delete &m_projectile_texture;
+	delete &m_crosshair_texture;
+	delete &m_slow_kid_texture;
+	delete &m_bike_kid_texture;
+	delete &m_framehealthbar_texture;
+	delete &m_healthbar_texture;
+	delete &m_frameheatbar_texture;
+	delete &m_heatbar_texture;
+	delete &m_indicator_texture;
+	delete &m_parent_ball_texture;
+	delete &m_parent_bar_texture;
+	delete &m_arrow_texture;*/
 };
 
 std::string GameStateA::Next() {

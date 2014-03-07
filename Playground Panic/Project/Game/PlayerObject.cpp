@@ -9,8 +9,8 @@
 
 //using namespace sf;
 
-PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
-: GameObject(sprite, radius, collider)
+PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collider)
+: GameObject(texture, radius, collider)
 {
 	m_speed = 70000;
 	m_org_speed = m_speed;
@@ -23,6 +23,8 @@ PlayerObject::PlayerObject(sf::Sprite* sprite, float radius, Collider* collider)
 	m_weapon_max_heat = 46;
 	m_Overheat = false;
 
+	m_sprite->setScale(0.7f, 0.7f);
+	m_sprite->setOrigin((m_sprite->getLocalBounds().width / 2) - 2, (m_sprite->getLocalBounds().height / 2) + 32);
 }
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mousePos)

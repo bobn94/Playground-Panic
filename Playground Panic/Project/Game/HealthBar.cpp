@@ -5,11 +5,15 @@ HealthBar::HealthBar()
 {
 }
 
-HealthBar::HealthBar(sf::Sprite* sprite) : GameObject(sprite){
-
+HealthBar::HealthBar(sf::Texture* texture) : GameObject(texture)
+{
 }
 HealthBar::~HealthBar()
 {
+	if (m_sprite != nullptr)
+	{
+		delete m_sprite;
+	}
 }
 
 int HealthBar::Health()

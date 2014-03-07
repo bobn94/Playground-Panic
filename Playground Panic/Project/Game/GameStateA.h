@@ -9,7 +9,13 @@ class CountdownTimer;
 class PlayerObject;
 class ProjectileObject;
 class SlowKid;
-class Animation;
+class BikeKid;
+class Enemy;
+class SpriteObject;
+class ParentUI;
+class Arrow;
+class Indicator;
+class ParentBall;
 
 
 class GameStateA : public State {
@@ -23,53 +29,60 @@ public:
 	bool IsType(const std::string &type);
 
 private:
-	Collider* Collisions;
-	
-	
+	Collider* Collisions; //Do we ever use this? I'll probably check later
 	sf::Vector2f m_mouse_position;
 
-	sf::Sprite m_background_sprite;
+	SpriteObject* m_background;
 	sf::Texture m_background_texture;
 
 	//StateManager * mgr;
 	CountdownTimer* m_timer;
 	PlayerObject * m_player;
 	Collider * m_player_collider;
-	sf::Sprite *m_player_sprite;
 	sf::Texture m_player_texture;
 
 	std::vector<ProjectileObject*> m_projectile;
-	std::vector<sf::Sprite*> m_projectile_sprite;
 	sf::Texture m_projectile_texture;
 	std::vector<Collider*> m_projectile_collider;
 
+	std::vector<Enemy*> m_enemies;
+
 	std::vector<SlowKid*> m_slow_kid;
-	std::vector<sf::Sprite*> m_slow_kid_sprite;
 	sf::Texture m_slow_kid_texture;
 	std::vector<Collider*> m_slow_kid_collider;
 
-	sf::Sprite m_framehealthbar_sprite;
+	std::vector<ParentUI*> m_parentUI;
+	std::map<ParentUI*, SlowKid*>mm_special_kid;
+	sf::Texture m_parent_ball_texture;
+	sf::Texture m_arrow_texture;
+	sf::Texture m_indicator_texture;
+
+	SpriteObject *m_parent_bar;
+	sf::Texture m_parent_bar_texture;
+
+	std::vector<BikeKid*> m_bike_kid;
+	sf::Texture m_bike_kid_texture;
+	std::vector<Collider*> m_bike_kid_collider;
+
+	SpriteObject *m_framehealthbar;
 	sf::Texture m_framehealthbar_texture;
 
-	sf::Sprite *m_crosshair_sprite;
+	SpriteObject *m_crosshair;
 	sf::Texture m_crosshair_texture;
 
-	sf::Sprite *m_healthbar_sprite;
+	SpriteObject *m_healthbar;
 	sf::Texture m_healthbar_texture;
+
+	SpriteObject *m_heatbar;
+	sf::Texture m_heatbar_texture;
+
+	SpriteObject *m_frameheatbar;
+	sf::Texture m_frameheatbar_texture;
 
 	CountdownTimer* m_levelup_timer;
 
-	sf::Sprite *m_heatbar_sprite;
-	sf::Texture m_heatbar_texture;
 
-	sf::Sprite m_frameheatbar_sprite;
-	sf::Texture m_frameheatbar_texture;
-
-	//Animations:
-	Animation *female_animation;
-
-
-	float m_healthbar;
+	float m_healthbar_amount;
 
 	sf::Clock m_player_pst;
 	//Time between projectile-spawns

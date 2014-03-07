@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "SlowKid.h"
+#include "BikeKid.h"
 #include "Collider.h"
 #include "PlayerObject.h"
 #include "CountdownTimer.h"
 #include <iostream>
 
-SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special) : Enemy(texture, radius, special)
+BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special) : Enemy(texture, radius, special)
 {
 	m_pi = 3.14159265359f;
 	m_dirtLevel = 6;
@@ -18,11 +18,11 @@ SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special)
 	m_sprite->setScale(0.6f, 0.6f);
 	m_sprite->setOrigin(m_sprite->getLocalBounds().width / 2, m_sprite->getLocalBounds().height / 2);
 }
-	
-SlowKid::SlowKid(sf::Vector2f spawn_pos){
-	m_pi = 3.14159265359f;		
+
+BikeKid::BikeKid(sf::Vector2f spawn_pos){
+	m_pi = 3.14159265359f;
 }
-SlowKid::~SlowKid(){
+BikeKid::~BikeKid(){
 	if (m_sprite != nullptr)
 	{
 		delete m_sprite;
@@ -34,10 +34,10 @@ SlowKid::~SlowKid(){
 		m_collider = nullptr;
 	}
 }
-void SlowKid::SetSprite(){
-		
+void BikeKid::SetSprite(){
+
 }
-void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, sf::Vector2f origin, sf::Vector2f target){
+void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, sf::Vector2f origin, sf::Vector2f target){
 	m_sprite->setPosition(origin);
 	m_position = origin;
 	m_player_position = target;
@@ -50,22 +50,22 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	float DirectionX = AngleX / vectorLength;
 	float DirectionY = AngleY / vectorLength;
 	m_velocity = sf::Vector2f(DirectionX * m_speed, DirectionY * m_speed);
-	if(vectorLength >= 55 && vectorLength <= 600)
+	if (vectorLength >= 55 && vectorLength <= 600)
 	{
 		m_sprite->move(m_velocity * deltatime * global_speed);
 
 		sf::Vector2f m_origin = m_sprite->getPosition();
 
-	//Calculate the direction vector
+		//Calculate the direction vector
 		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
 
-	//Calculate the length^2
+		//Calculate the length^2
 		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
 
-	//Change the mag to 1 (you dont need the y for getting the angle
+		//Change the mag to 1 (you dont need the y for getting the angle
 		dirVec.x = (dirVec.x) / magSquare;
 
-	//Get the angle and change it to deg (SFML need deg)
+		//Get the angle and change it to deg (SFML need deg)
 		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
 		if (m_sprite->getPosition().y < player->GetPosition().y)
@@ -81,12 +81,12 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		}
 
 
-	/*
+		/*
 		if (m_current_animation != nullptr)
 		{
-			m_current_animation->Update(deltatime);
+		m_current_animation->Update(deltatime);
 		}
-	*/
+		*/
 
 		m_position = m_sprite->getPosition();
 
@@ -95,22 +95,22 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 			m_collider->m_position = m_sprite->getPosition();
 		}
 	}
-	else if(vectorLength <= 10)
+	else if (vectorLength <= 10)
 	{
 		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
 
-	//Calculate the length^2
+		//Calculate the length^2
 		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
 
-	//Change the mag to 1 (you dont need the y for getting the angle
+		//Change the mag to 1 (you dont need the y for getting the angle
 		dirVec.x = (dirVec.x) / magSquare;
 
-	//Get the angle and change it to deg (SFML need deg)
+		//Get the angle and change it to deg (SFML need deg)
 		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
 		if (m_sprite->getPosition().y < player->GetPosition().y)
 		{
-		// - 13
+			// - 13
 			m_sprite->setRotation(90 + rotAngle);
 		}
 		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
@@ -121,39 +121,39 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 			// - 13
 			m_sprite->setRotation(90 - rotAngle);
 		}
-		if(m_attack_timer->Done()){
+		if (m_attack_timer->Done()){
 			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
-			if(player->GetCurrentHealth() > player->GetMaxHealth()){
+			if (player->GetCurrentHealth() > player->GetMaxHealth()){
 				player->SetCurrentHealth(player->GetMaxHealth());
 			}
 			//std::cout << player->GetCurrentHealth();
 			m_attack_timer->Reset();
 			m_attack_timer->Start();
 		}
-		
+
 	}
-	if(vectorLength <= 55){
-		if(m_attack_timer->Done()){
-		player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
-		if(player->GetCurrentHealth() > player->GetMaxHealth()){
-			player->SetCurrentHealth(player->GetMaxHealth());
+	if (vectorLength <= 55){
+		if (m_attack_timer->Done()){
+			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
+			if (player->GetCurrentHealth() > player->GetMaxHealth()){
+				player->SetCurrentHealth(player->GetMaxHealth());
+			}
+			//std::cout << player->GetCurrentHealth();
+			m_attack_timer->Reset();
+			m_attack_timer->Start();
 		}
-		//std::cout << player->GetCurrentHealth();
-		m_attack_timer->Reset();
-		m_attack_timer->Start();
 	}
-	}
-	if(m_dirtLevel < 0){
+	if (m_dirtLevel < 0){
 		m_dirtLevel = 0;
 	}
 }
 
-bool SlowKid::IsHit()
+bool BikeKid::IsHit()
 {
 	return m_hit;
 }
 
-void SlowKid::SetHit(bool hit)
+void BikeKid::SetHit(bool hit)
 {
 	m_hit = hit;
 }

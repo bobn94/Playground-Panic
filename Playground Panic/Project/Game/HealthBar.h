@@ -17,7 +17,7 @@ public:
 	HealthBar();
 	~HealthBar();
 	void HealthBar::SetSprite();
-	HealthBar(sf::Sprite* sprite);
+	HealthBar(sf::Texture* texture);
 	int Health();
 	float m_healthfull;
 	//void Update(float deltatime);

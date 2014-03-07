@@ -10,13 +10,16 @@
 
 //using namespace sf;
 
-ProjectileObject::ProjectileObject(sf::Sprite* sprite, float radius, Collider* collider)
-: GameObject(sprite, radius, collider)
+ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, Collider* collider)
+: GameObject(texture, radius, collider)
 {
 	m_speed = 1000000;
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
+	
+	m_sprite = new sf::Sprite(*m_texture);
+	m_sprite->setScale(0.6f, 0.6f);
 }
 
 ProjectileObject::~ProjectileObject()

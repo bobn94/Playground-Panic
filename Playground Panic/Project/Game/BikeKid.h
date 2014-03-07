@@ -7,12 +7,12 @@ class PlayerObject;
 class CountdownTimer;
 
 
-class SlowKid : public Enemy
+class BikeKid : public Enemy
 {
 public:
-	SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special);
-	SlowKid(sf::Vector2f spawn_pos);
-	~SlowKid();
+	BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special);
+	BikeKid(sf::Vector2f spawn_pos);
+	~BikeKid();
 	void SetSprite();
 	void Update(float deltatime, float global_speed, PlayerObject* player, sf::Vector2f origin, sf::Vector2f target);
 	bool IsHit();
