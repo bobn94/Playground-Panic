@@ -7,10 +7,10 @@ class Enemy : public GameObject
 {
 public:
 	Enemy();
-	Enemy(sf::Texture* texture, float radius, bool special);
+	Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture);
 	virtual ~Enemy();
 	bool GetCanShoot();
-	int GetDirt();
+	float GetDirt();
 	void SetDirt(int dirt);
 	float GetSpeed();
 	bool GetSpecial();
@@ -18,6 +18,6 @@ public:
 protected:
 	bool m_canShoot;
 	bool m_special;
-	int m_dirtLevel;
+	float m_dirtLevel;
 	float m_speed;
 };

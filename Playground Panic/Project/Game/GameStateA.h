@@ -46,6 +46,10 @@ private:
 	std::vector<Collider*> m_projectile_collider;
 
 	std::vector<Enemy*> m_enemies;
+	
+	sf::Texture m_player_dirt_texture;
+	sf::Texture m_slow_kid_dirt_texture;
+	sf::Texture m_bike_kid_dirt_texture;
 
 	std::vector<SlowKid*> m_slow_kid;
 	sf::Texture m_slow_kid_texture;

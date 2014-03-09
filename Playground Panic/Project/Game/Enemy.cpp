@@ -6,7 +6,7 @@ Enemy::Enemy()
 	//I don't want this one here ._.
 }
 
-Enemy::Enemy(sf::Texture* texture, float radius, bool special) : GameObject(texture, radius)
+Enemy::Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture) : GameObject(texture, radius, dirt_texture)
 {
 	m_special = special;
 	if (m_special == true)
@@ -34,7 +34,7 @@ bool Enemy::GetCanShoot(){
 	return m_canShoot;
 }
 
-int Enemy::GetDirt(){
+float Enemy::GetDirt(){
 	return m_dirtLevel;
 }
 

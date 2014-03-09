@@ -5,7 +5,7 @@
 #include "CountdownTimer.h"
 #include <iostream>
 
-BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special) : Enemy(texture, radius, special)
+BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture) : Enemy(texture, radius, special, dirt_texture)
 {
 	m_pi = 3.14159265359f;
 	m_dirtLevel = 6;
@@ -17,6 +17,9 @@ BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special)
 
 	m_sprite->setScale(0.6f, 0.6f);
 	m_sprite->setOrigin(m_sprite->getLocalBounds().width / 2, m_sprite->getLocalBounds().height / 2);
+
+	m_dirt_sprite1->setScale(0.6f, 0.6f);
+	m_dirt_sprite1->setOrigin(m_dirt_sprite1->getLocalBounds().width / 2, m_dirt_sprite1->getLocalBounds().height / 2);
 }
 
 BikeKid::BikeKid(sf::Vector2f spawn_pos){
@@ -71,6 +74,8 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		if (m_sprite->getPosition().y < player->GetPosition().y)
 		{
 			m_sprite->setRotation(90 + rotAngle);
+			m_dirt_sprite1->setRotation(90 + rotAngle);
+			m_dirt_sprite1->setColor(sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
 		{
@@ -78,6 +83,8 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		else
 		{
 			m_sprite->setRotation(90 - rotAngle);
+			m_dirt_sprite1->setRotation(90 - rotAngle);
+			m_dirt_sprite1->setColor(sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 
 
@@ -112,6 +119,8 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		{
 			// - 13
 			m_sprite->setRotation(90 + rotAngle);
+			m_dirt_sprite1->setRotation(90 + rotAngle);
+			m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
 		{
@@ -120,6 +129,8 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		{
 			// - 13
 			m_sprite->setRotation(90 - rotAngle);
+			m_dirt_sprite1->setRotation(90 - rotAngle);
+			m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 		if (m_attack_timer->Done()){
 			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
@@ -145,6 +156,9 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	}
 	if (m_dirtLevel < 0){
 		m_dirtLevel = 0;
+	}
+	if (m_dirt_sprite1 != nullptr){
+		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
 	}
 }
 

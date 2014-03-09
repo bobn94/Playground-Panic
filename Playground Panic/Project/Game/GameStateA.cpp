@@ -73,6 +73,24 @@ bool GameStateA::Enter()
 		// Shit happened
 	}
 	m_framehealthbar_texture.setSmooth(true);
+	
+	if (!m_player_dirt_texture.loadFromFile("../data/textures/Dirt sprites/Playerfemaledirt3.png"))
+	{
+		// Shit happened
+	}
+	m_player_dirt_texture.setSmooth(true);
+
+	if (!m_slow_kid_dirt_texture.loadFromFile("../data/textures/Dirt sprites/enemy slow kid dirt 3.png"))
+	{
+		// Shit happened
+	}
+	m_slow_kid_dirt_texture.setSmooth(true);
+
+	if (!m_bike_kid_dirt_texture.loadFromFile("../data/textures/Dirt sprites/Enemy bike kid dirt 3.png"))
+	{
+		// Shit happened
+	}
+	m_bike_kid_dirt_texture.setSmooth(true);
 
 	if (!m_healthbar_texture.loadFromFile("../data/textures/spr_healthbar.png"))
 	{
@@ -127,7 +145,7 @@ bool GameStateA::Enter()
 	m_background = new SpriteObject(&m_background_texture);
 	
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
-	m_player = new PlayerObject(&m_player_texture, float(128.0f), m_player_collider);
+	m_player = new PlayerObject(&m_player_texture, float(128.0f), m_player_collider, &m_player_dirt_texture);
 	m_player->SetPosition(sf::Vector2f(2490.0f, 900.0f));
 
 	m_heatbar = new SpriteObject(&m_heatbar_texture);
@@ -314,14 +332,14 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			//Read from a textfile into an object?
 			if (rand() % 2 == 1)
 			{
-				m_slow_kid.push_back(new SlowKid(&m_slow_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0));
+				m_slow_kid.push_back(new SlowKid(&m_slow_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0, &m_slow_kid_dirt_texture));
 				m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
 				m_enemies.push_back(m_slow_kid[m_slow_kid.size() - 1]);
 			}
 			else
 			{
 				//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
-				m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0));
+				m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0, &m_bike_kid_dirt_texture));
 				m_bike_kid[m_bike_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
 				m_enemies.push_back(m_bike_kid[m_bike_kid.size() - 1]);
 			}

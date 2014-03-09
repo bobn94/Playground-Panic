@@ -9,8 +9,8 @@
 
 //using namespace sf;
 
-PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collider)
-: GameObject(texture, radius, collider)
+PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collider, sf::Texture* dirt_texture)
+	: GameObject(texture, radius, dirt_texture, collider)
 {
 	m_speed = 70000;
 	m_org_speed = m_speed;
@@ -25,6 +25,9 @@ PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collide
 
 	m_sprite->setScale(0.7f, 0.7f);
 	m_sprite->setOrigin((m_sprite->getLocalBounds().width / 2) - 2, (m_sprite->getLocalBounds().height / 2) + 32);
+
+	m_dirt_sprite1->setScale(0.7f, 0.7f);
+	m_dirt_sprite1->setOrigin((m_dirt_sprite1->getLocalBounds().width / 2) - 2, (m_dirt_sprite1->getLocalBounds().height / 2) + 32);
 }
 
 void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mousePos)
@@ -95,13 +98,19 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 	if (m_sprite->getPosition().y < mousePos.y)
 	{
 		m_sprite->setRotation(90 + rotAngle);
+		m_dirt_sprite1->setRotation(90 + rotAngle);
+		m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetCurrentHealth()/GetMaxHealth()))));
 	}
 	else if (m_sprite->getPosition().x == mousePos.x && m_sprite->getPosition().y == mousePos.y)
 	{
+
 	}
 	else
 	{
 		m_sprite->setRotation(90 - rotAngle);
+		m_dirt_sprite1->setRotation(90 - rotAngle);
+		m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetCurrentHealth()/GetMaxHealth()))));
+			
 	}
 
 /*
@@ -116,6 +125,10 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 	if (HasCollider())
 	{
 		m_collider->m_position = m_sprite->getPosition();
+	}
+
+	if (m_dirt_texture != nullptr){
+		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
 	}
 }
 /*

@@ -11,7 +11,7 @@
 //using namespace sf;
 
 ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, Collider* collider)
-: GameObject(texture, radius, collider)
+: GameObject(texture, radius, nullptr, collider)
 {
 	m_speed = 1000000;
 	m_org_speed = m_speed;

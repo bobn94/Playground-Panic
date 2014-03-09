@@ -10,7 +10,7 @@ class CountdownTimer;
 class SlowKid : public Enemy
 {
 public:
-	SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special);
+	SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture);
 	SlowKid(sf::Vector2f spawn_pos);
 	~SlowKid();
 	void SetSprite();

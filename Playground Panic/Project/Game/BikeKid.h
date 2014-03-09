@@ -10,7 +10,7 @@ class CountdownTimer;
 class BikeKid : public Enemy
 {
 public:
-	BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special);
+	BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture);
 	BikeKid(sf::Vector2f spawn_pos);
 	~BikeKid();
 	void SetSprite();
