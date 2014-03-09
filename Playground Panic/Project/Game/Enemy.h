@@ -8,7 +8,7 @@ class Enemy : public GameObject
 public:
 	Enemy();
 	Enemy(sf::Texture* texture, float radius, bool special);
-	~Enemy();
+	virtual ~Enemy();
 	bool GetCanShoot();
 	int GetDirt();
 	void SetDirt(int dirt);

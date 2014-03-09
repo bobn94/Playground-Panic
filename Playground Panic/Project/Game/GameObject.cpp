@@ -18,6 +18,11 @@ GameObject::GameObject()
 
 }
 
+GameObject::~GameObject()
+{
+
+}
+
 const sf::Vector2f &GameObject::GetPosition() const 
 {
 	return m_position;

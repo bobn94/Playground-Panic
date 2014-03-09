@@ -13,6 +13,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(sf::Texture* texture, float radius = 32, Collider *collider = nullptr, int flag = 0);
+	virtual ~GameObject();
 
 	const sf::Vector2f &GetPosition() const;
 	void SetPosition(const sf::Vector2f &position);

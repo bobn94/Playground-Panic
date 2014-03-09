@@ -5,6 +5,7 @@
 ParentBall::ParentBall(sf::Texture * ball, sf::Color color)
 {
 	this->setTexture(*ball);
+	this->setColor(color);
 	ball_x = 0;
 }
 

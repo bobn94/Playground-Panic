@@ -5,6 +5,7 @@
 Indicator::Indicator(sf::Texture * indicator, sf::Color color)
 {
 	this->setTexture(*indicator);
+	this->setColor(color);
 }
 Indicator::~Indicator()
 {

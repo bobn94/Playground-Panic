@@ -11,9 +11,11 @@
 ParentUI::ParentUI(sf::Texture *arrow, sf::Texture *indicator, sf::Texture *ball)
 : SpriteObject(arrow)
 {
-	m_arrow = new Arrow(arrow, sf::Color(255, 255, 255, 255));
-	m_indicator = new Indicator(indicator, sf::Color(255, 255, 255, 255));
-	m_parent_ball = new ParentBall(ball, sf::Color(255, 255, 255, 255));
+	m_color = sf::Color(rand() % 256, rand() % 256, rand() % 256, 255);
+
+	m_arrow = new Arrow(arrow, m_color);
+	m_indicator = new Indicator(indicator, m_color);
+	m_parent_ball = new ParentBall(ball, m_color);
 }
 
 ParentUI::~ParentUI()

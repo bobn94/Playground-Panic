@@ -293,8 +293,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 	{
 		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f)/*, new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))*/));
-		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(128.0f, 10.0f)); //128.0f, 10.0f
-		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(128.0f, 250.0f), m_mouse_position, m_player->GetPosition());
+		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(53.0f, -35.0f)); //128.0f, 10.0f
+		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(53.0f, 300.0f), m_mouse_position, m_player->GetPosition());
 
 		m_player_pst.restart();
 		//m_player_pss = 10000000;
@@ -339,13 +339,13 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	m_player->Update(deltatime, m_global_speed, m_mouse_position);
 
-	{
+	{//////////Uppdaterad
 		int j = 0;
-		for (int i = 0; i < m_slow_kid.size(); i++)
+		for (int i = 0; i < m_enemies.size(); i++)
 		{
-			if (m_slow_kid[i]->GetSpecial())
+			if (m_enemies[i]->GetSpecial())
 			{
-				m_parentUI[j]->Update(m_window, m_view, m_player->GetPosition(), m_slow_kid[i]->GetPosition());
+				m_parentUI[j]->Update(m_window, m_view, m_player->GetPosition(), m_enemies[i]->GetPosition());
 				j++;
 			}
 		}
@@ -449,14 +449,20 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 					//std::cout << "Before: " << m_enemies.size() << " " << m_projectile.size() << " After: ";
 
 					m_projectile.erase(m_projectile.begin() + j);
+					//delete m_projectile[j];
 
 					m_enemies[i]->SetDirt(m_enemies[i]->GetDirt() - 1);
 					if (m_enemies[i]->GetDirt() <= 0)
 					{
 						//delete m_enemies[i]->GetSprite();
 						//delete m_enemies[i]->GetCollider();
-						m_parentUI.erase(m_parentUI.begin() + k);
+						if (m_enemies[i]->GetSpecial())
+						{
+							m_parentUI.erase(m_parentUI.begin() + k);
+							//delete m_parentUI[k];
+						}
 						m_enemies.erase(m_enemies.begin() + i);
+						//delete m_enemies[i];
 
 						////Remove this and alter it into Enemy.cpp
 						//for (int j = 0; j < m_slow_kid.size(); j++)
