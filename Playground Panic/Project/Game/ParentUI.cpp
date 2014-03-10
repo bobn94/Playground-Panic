@@ -39,7 +39,7 @@ ParentUI::~ParentUI()
 void ParentUI::Update(sf::RenderWindow &window, sf::View &view, sf::Vector2f player_pos, sf::Vector2f enemy_pos)
 {
 	m_arrow->Update(enemy_pos);
-	m_indicator->Update(player_pos);
+	m_indicator->Update(player_pos, enemy_pos);
 	m_parent_ball->Update(window, view);
 }
 

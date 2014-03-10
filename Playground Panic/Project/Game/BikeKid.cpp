@@ -8,8 +8,8 @@
 BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture) : Enemy(texture, radius, special, dirt_texture)
 {
 	m_pi = 3.14159265359f;
-	m_dirtLevel = 6;
-	m_speed = 150000.0f;
+	m_dirtLevel = 4;
+	m_speed = 180000.0f;
 	m_attack_timer = new CountdownTimer();
 	m_attack_timer->SetTime(0, 0, atkTimer);
 	m_attack_timer->Start();
@@ -53,7 +53,7 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	float DirectionX = AngleX / vectorLength;
 	float DirectionY = AngleY / vectorLength;
 	m_velocity = sf::Vector2f(DirectionX * m_speed, DirectionY * m_speed);
-	if (vectorLength >= 55 && vectorLength <= 600)
+	if (vectorLength >= 55 && vectorLength <= 800)
 	{
 		m_sprite->move(m_velocity * deltatime * global_speed);
 

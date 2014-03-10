@@ -25,7 +25,7 @@ GameStateA::GameStateA()
 	m_player = nullptr;
 	m_player_collider = nullptr;
 	m_global_speed = 1.0f;
-	m_player_pss = 100;
+	m_player_pss = 300;
 	m_enemies_to_spawn = 0;
 };
 
@@ -158,7 +158,7 @@ bool GameStateA::Enter()
 	m_enemies_to_spawn = 1;
 
 	m_timer = new CountdownTimer();
-	m_timer->SetTime(0, 0, 1);
+	m_timer->SetTime(0, 0, 3);
 	m_timer->Reset();
 	m_timer->Start();
 
@@ -255,7 +255,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_framehealthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
 	m_heatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
 	m_frameheatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
-	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 800 - (m_view.getSize().y / 2)));
+	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 150 + (m_view.getSize().y / 2)));
 
 	if(m_player->GetCurrentHealth() > m_player->GetMaxHealth())
 	{
@@ -326,7 +326,9 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	if (m_timer->Done())
 	{
-		int special = 1;
+		m_timer->SetTime(0, 0, 30);
+		m_enemies_to_spawn = rand() % 10 + 5;
+		int special = m_enemies_to_spawn / 4;
 		for (int i = 0; i < m_enemies_to_spawn; i++)
 		{
 			//Read from a textfile into an object?
@@ -453,6 +455,11 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		
 	}
 
+	if (m_enemies.size() != m_slow_kid.size() + m_bike_kid.size())
+	{
+		std::cout << "Shit's about to go down" << std::endl;
+	}
+
 	if (m_enemies.size() != 0 && m_projectile.size() != 0)
 	{
 		int k = 0;
@@ -472,8 +479,21 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 					m_enemies[i]->SetDirt(m_enemies[i]->GetDirt() - 1);
 					if (m_enemies[i]->GetDirt() <= 0)
 					{
-						//delete m_enemies[i]->GetSprite();
-						//delete m_enemies[i]->GetCollider();
+						for (int l = m_slow_kid.size() - 1; l >= 0; l--)
+						{
+							if (m_slow_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
+							{
+								m_slow_kid.erase(m_slow_kid.begin() + l);
+							}
+						}
+						for (int l = m_bike_kid.size() - 1; l >= 0; l--)
+						{
+							if (m_bike_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
+							{
+								m_bike_kid.erase(m_bike_kid.begin() + l);
+							}
+						}
+						
 						if (m_enemies[i]->GetSpecial())
 						{
 							m_parentUI.erase(m_parentUI.begin() + k);
@@ -556,7 +576,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-					
+			m_window.close();
 			return false;
 				
 		}
@@ -571,7 +591,6 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_frameheatbar->Draw(&m_window);
 	m_healthbar->Draw(&m_window);
 	m_framehealthbar->Draw(&m_window);
-	///////////////////////////////////////////////////////////Change
 	m_parent_bar->Draw(&m_window);
 
 	if (m_parentUI.size() > 0)
@@ -582,6 +601,11 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		}
 	}
 	m_window.display();
+	
+	std::cout << m_enemies.size() << " ";
+	std::cout << m_slow_kid.size() << " ";
+	std::cout << m_bike_kid.size() << " ";
+	std::cout << m_projectile.size() << std::endl;
 
 	return true;	
 };

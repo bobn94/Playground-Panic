@@ -59,11 +59,11 @@ void MenuState::Exit() {
 };
 
 bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
-	
+	m_view.setCenter(m_view.getCenter());
 
-	m_start_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
-	m_options_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
-	m_exit_game_sprite.setScale(m_window.getSize().x / 1920.0f, m_window.getSize().y / 1080.0f);
+	m_start_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
+	m_options_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
+	m_exit_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	
 	//m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
 	m_start_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5);
@@ -80,15 +80,27 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 		
-		if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_start_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_start_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+		if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_start_game_sprite.getPosition().x 
+			&& sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_start_game_sprite.getPosition().y 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
+		{
 			m_next_state =  "GameStateA";
 			return false;
 		}
-		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_options_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_options_sprite.getPosition().x + m_options_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_options_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_options_sprite.getPosition().y + m_options_sprite.getOrigin().y * 2){
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_options_sprite.getPosition().x 
+			&& sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_options_sprite.getPosition().x + m_options_sprite.getOrigin().x * 2 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_options_sprite.getPosition().y 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_options_sprite.getPosition().y + m_options_sprite.getOrigin().y * 2){
 			m_next_state =  "OptionsState";
 			return false;
 		}
-		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_exit_game_sprite.getPosition().x && sf::Mouse::getPosition().x - m_window.getPosition().x + m_view.getCenter().x + 20 <= m_exit_game_sprite.getPosition().x + m_exit_game_sprite.getOrigin().x * 2 && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_exit_game_sprite.getPosition().y && sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2){
+		else if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_exit_game_sprite.getPosition().x 
+			&& sf::Mouse::getPosition().x - m_window.getPosition().x + m_view.getCenter().x + 20 
+			<= m_exit_game_sprite.getPosition().x + m_exit_game_sprite.getOrigin().x * 2 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_exit_game_sprite.getPosition().y 
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
+		{
 			m_window.close();
 		}
 	}
