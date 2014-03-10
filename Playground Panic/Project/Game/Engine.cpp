@@ -35,7 +35,7 @@ void Engine::Run(){
 		mgr.SetState("GameStateA");
 		mgr.isRunning = true; 
 
-		bool fullscreen = false;
+		bool fullscreen = true;
 		if (fullscreen)
 		{
 			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic", sf::Style::Fullscreen);

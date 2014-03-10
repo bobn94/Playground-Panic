@@ -45,6 +45,7 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	m_position = origin;
 	m_player_position = target;
 	m_attack_timer->Update();
+	m_dirt_sprite1->setColor(sf::Color(255, 255, 255, (255 * (GetDirt() / 6))));
 	float AngleX = target.x - origin.x;
 	float AngleY = target.y - origin.y;
 
@@ -75,7 +76,6 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		{
 			m_sprite->setRotation(90 + rotAngle);
 			m_dirt_sprite1->setRotation(90 + rotAngle);
-			m_dirt_sprite1->setColor(sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
 		{
@@ -84,7 +84,6 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		{
 			m_sprite->setRotation(90 - rotAngle);
 			m_dirt_sprite1->setRotation(90 - rotAngle);
-			m_dirt_sprite1->setColor(sf::Color(255,255,255,(255 * (GetDirt()/6))));
 		}
 
 

@@ -583,7 +583,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		
 	}
 		
-	//m_window.setMouseCursorVisible(false);
+	m_window.setMouseCursorVisible(false);
 			
 	m_player->Draw(&m_window);
 
