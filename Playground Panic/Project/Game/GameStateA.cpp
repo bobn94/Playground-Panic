@@ -382,77 +382,65 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		}
 	}
 
+	for(int i = 0; i < m_enemies.size(); i++)
 	{
-		for(int i = 0; i < m_enemies.size(); i++)
+		for(int j = 0; j < m_enemies.size(); j++)
 		{
-			for(int j = 0; j < m_enemies.size(); j++)
+			if(i != j)
 			{
-				if(i != j)
+				sf::Vector2f offset;
+				if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_enemies[j]->GetPosition(), m_enemies[i]->GetRadius(), m_enemies[j]->GetRadius(), offset))
 				{
-					sf::Vector2f offset;
-					if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_enemies[j]->GetPosition(), m_enemies[i]->GetRadius(), m_enemies[j]->GetRadius(), offset))
+					//if (!m_enemies[j]->IsHit())
 					{
-						//if (!m_enemies[j]->IsHit())
+						//m_enemies[j]->SetHit(true);
+						if (offset.x > 0 && offset.y > 0)
 						{
-							//m_enemies[j]->SetHit(true);
-							if (offset.x > 0 && offset.y > 0)
-							{
-								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset / 20.0f);
-								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
-							}
-							else if (offset.x <= 0 && offset.y <= 0)
-							{
-								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset * 20.0f);
-								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
-							}
-							else if (offset.x > 0 && offset.y <= 0)
-							{
-								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x / 20.0f), (offset.y * 20.0f)));
-								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
-							}
-							else if (offset.x <= 0 && offset.y > 0)
-							{
-								m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x * 20.0f), (offset.y / 20.0f)));
-								m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
-							}
+							m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset / 20.0f);
+							m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
 						}
-						/*if(offset.x >= 0 && offset.y >= 0){
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, 1.0f));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						else if (offset.x <= 0 && offset.y <= 0)
+						{
+							m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + offset * 20.0f);
+							m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
 						}
-						else if(offset.x < 0 && offset.y >= 0){
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, 1.0f));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						else if (offset.x > 0 && offset.y <= 0)
+						{
+							m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x / 20.0f), (offset.y * 20.0f)));
+							m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
 						}
-						else if(offset.x < 0 && offset.y < 0){
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, -1.0f));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+						else if (offset.x <= 0 && offset.y > 0)
+						{
+							m_enemies[j]->GetSprite()->setPosition(m_enemies[j]->GetSprite()->getPosition() + sf::Vector2f((offset.x * 20.0f), (offset.y / 20.0f)));
+							m_enemies[j]->SetPosition(m_enemies[j]->GetSprite()->getPosition());
 						}
-						else if(offset.x >= 0 && offset.y < 0){
-							m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, -1.0f));
-							m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
-						}*/
 					}
-					
-					
-				}
-			}
-			/*
-						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 4.0f);
+					/*if(offset.x >= 0 && offset.y >= 0){
+						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, 1.0f));
 						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
-			*/
-			//m_enemies[i]->SetHit(true);
+					}
+					else if(offset.x < 0 && offset.y >= 0){
+						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, 1.0f));
+						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+					}
+					else if(offset.x < 0 && offset.y < 0){
+						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(-1.0f, -1.0f));
+						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+					}
+					else if(offset.x >= 0 && offset.y < 0){
+						m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + sf::Vector2f(1.0f, -1.0f));
+						m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+					}*/
+				}
+					
+					
+			}
 		}
-		for (int i = 0; i < m_slow_kid.size(); i++)
-		{
-			m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
-		}
-		for (int i = 0; i < m_bike_kid.size(); i++)
-		{
-			m_bike_kid[i]->Update(deltatime, m_global_speed, m_player, m_bike_kid[i]->GetPosition(), m_player->GetPosition());
-		}
-			
-		
+		/*
+					m_slow_kid[j]->GetSprite()->setPosition(m_slow_kid[j]->GetSprite()->getPosition() + offset / 4.0f);
+					m_slow_kid[j]->SetPosition(m_slow_kid[j]->GetSprite()->getPosition());
+		*/
+		//m_enemies[i]->SetHit(true);
 	}
 
 	if (m_enemies.size() != m_slow_kid.size() + m_bike_kid.size())
@@ -460,11 +448,16 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		std::cout << "Shit's about to go down" << std::endl;
 	}
 
-	if (m_enemies.size() != 0 && m_projectile.size() != 0)
+	if (m_enemies.size() > 0 && m_projectile.size() > 0)
 	{
-		int k = 0;
+		int k = -1;
 		for (int i = m_enemies.size() - 1; i >= 0; i--)
 		{
+			if (m_enemies[i]->GetSpecial())
+			{
+				k++;
+			}
+
 			for (int j = m_projectile.size() - 1; j >= 0; j--)
 			{
 				if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_projectile[j]->GetPosition(), m_enemies[i]->GetRadius(), m_projectile[j]->GetRadius()))
@@ -473,6 +466,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
 					//std::cout << "Before: " << m_enemies.size() << " " << m_projectile.size() << " After: ";
 
+					delete m_projectile[j];
 					m_projectile.erase(m_projectile.begin() + j);
 					//delete m_projectile[j];
 
@@ -483,6 +477,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 						{
 							if (m_slow_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
 							{
+								//delete m_slow_kid[l];
 								m_slow_kid.erase(m_slow_kid.begin() + l);
 							}
 						}
@@ -490,64 +485,48 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 						{
 							if (m_bike_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
 							{
+								//delete m_bike_kid[l];
 								m_bike_kid.erase(m_bike_kid.begin() + l);
 							}
 						}
 						
 						if (m_enemies[i]->GetSpecial())
 						{
+							delete m_parentUI[k];
 							m_parentUI.erase(m_parentUI.begin() + k);
-							//delete m_parentUI[k];
 						}
+						delete m_enemies[i];
 						m_enemies.erase(m_enemies.begin() + i);
 						//delete m_enemies[i];
-
-						////Remove this and alter it into Enemy.cpp
-						//for (int j = 0; j < m_slow_kid.size(); j++)
-						//{
-						//	if (m_slow_kid[j]->GetSprite() == nullptr)
-						//	{
-						//		delete m_slow_kid[j];
-						//	}
-						//}
-						//for (int j = 0; j < m_bike_kid.size(); j++)
-						//{
-						//	if (m_bike_kid[j]->GetSprite() == nullptr)
-						//	{
-						//		delete m_bike_kid[j];
-						//	}
-						//}
 					}
 					//std::cout << m_enemies.size() << " " << m_projectile.size() << std::endl;
 					//std::cout << i << " " << j << std::endl;
 				}
 			}
-			if (m_enemies[i]->GetSpecial())
-			{
-				k++;
-			}
 		}
 	}
+
+	for (int i = m_projectile.size() - 1; i >= 0; i--)
 	{
-		//auto it = m_projectile.begin();
-		//for (auto it = m_projectile.cbegin(); it != m_projectile.cend() /* not hoisted */; /* no increment */)
-		for (int i = 0; i < m_projectile.size();)
+		if ((m_projectile[i]->GetPosition().x < m_player->GetPosition().x - 800
+			|| m_projectile[i]->GetPosition().y < m_player->GetPosition().y - 600
+			|| m_projectile[i]->GetPosition().x > m_player->GetPosition().x + 800
+			|| m_projectile[i]->GetPosition().y > m_player->GetPosition().y + 600
+			)// && 1 == 0
+			)
 		{
-			auto it = m_projectile.begin();
-			if ((m_projectile[i]->GetPosition().x < m_player->GetPosition().x - 800
-				|| m_projectile[i]->GetPosition().y < m_player->GetPosition().y - 600
-				|| m_projectile[i]->GetPosition().x > m_player->GetPosition().x + 800
-				|| m_projectile[i]->GetPosition().y > m_player->GetPosition().y + 600
-				)// && 1 == 0
-				)
-			{
-				m_projectile.erase(it++);
-			}
-			else
-			{
-				i++;
-			}
+			delete m_projectile[i];
+			m_projectile.erase(m_projectile.begin() + i);
 		}
+	}
+
+	for (int i = 0; i < m_slow_kid.size(); i++)
+	{
+		m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_player->GetPosition());
+	}
+	for (int i = 0; i < m_bike_kid.size(); i++)
+	{
+		m_bike_kid[i]->Update(deltatime, m_global_speed, m_player, m_bike_kid[i]->GetPosition(), m_player->GetPosition());
 	}
 
 	m_window.clear(sf::Color(18, 45, 0));
@@ -583,7 +562,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		
 	}
 		
-	m_window.setMouseCursorVisible(false);
+	//m_window.setMouseCursorVisible(false);
 			
 	m_player->Draw(&m_window);
 

@@ -21,8 +21,6 @@ public:
 private:
 	float m_pi;
 	CountdownTimer* m_attack_timer;
-	sf::Sprite *m_slow_kid_sprite;
-	sf::Texture *m_slow_kid_texture;
 	sf::Vector2f m_velocity;
 	sf::Vector2f m_player_position;
 
