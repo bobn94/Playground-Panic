@@ -109,7 +109,7 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 	{
 		m_sprite->setRotation(90 - rotAngle);
 		m_dirt_sprite1->setRotation(90 - rotAngle);
-		m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetCurrentHealth()/GetMaxHealth()))));
+		m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetCurrentHealth() / GetMaxHealth()))));
 			
 	}
 
@@ -127,7 +127,8 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 		m_collider->m_position = m_sprite->getPosition();
 	}
 
-	if (m_dirt_texture != nullptr){
+	if (m_dirt_texture != nullptr)
+	{
 		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
 	}
 }

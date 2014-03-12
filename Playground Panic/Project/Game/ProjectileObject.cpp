@@ -10,16 +10,20 @@
 
 //using namespace sf;
 
-ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, Collider* collider)
+ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, int type, Collider* collider)
 : GameObject(texture, radius, nullptr, collider)
 {
+	m_type = type;
 	m_speed = 1000000;
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
 	
 	m_sprite = new sf::Sprite(*m_texture);
-	m_sprite->setScale(0.6f, 0.6f);
+	if (m_type == 0)
+	{
+		m_sprite->setScale(0.6f, 0.6f);
+	}
 }
 
 ProjectileObject::~ProjectileObject()
@@ -169,4 +173,9 @@ int ProjectileObject::GetMiddle(int width)
 {
 	int temp = width / 2;
 	return m_position.x + temp;
+}
+
+int ProjectileObject::GetType()
+{
+	return m_type;
 }

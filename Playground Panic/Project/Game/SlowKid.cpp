@@ -14,6 +14,7 @@ SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special,
 	m_attack_timer->SetTime(0, 0, atkTimer);
 	m_attack_timer->Start();
 	m_hit = false;
+	m_canShoot = false;
 
 	m_sprite->setScale(0.6f, 0.6f);
 	m_sprite->setOrigin(m_sprite->getLocalBounds().width / 2, m_sprite->getLocalBounds().height / 2);

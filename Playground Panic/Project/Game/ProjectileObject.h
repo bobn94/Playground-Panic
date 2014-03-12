@@ -14,20 +14,21 @@ class AnimatedSprite;
 class ProjectileObject : public GameObject
 {
 public:
-	ProjectileObject(sf::Texture* texture, float radius, Collider* collider = nullptr);
+	ProjectileObject(sf::Texture* texture, float radius, int type = 0, Collider* collider = nullptr);
 	~ProjectileObject();
 	void Initialize(sf::Vector2f origin, sf::Vector2f target, sf::Vector2f player_position);
 
 	void Update(float deltatime, float global_speed, sf::Vector2i mousePos);
 	void Collision(bool hit);
 	int GetMiddle(int width);
-
+	int GetType();
 	void AddAnimation(const std::string &name, AnimatedSprite *sprite);
 
 protected:
 	int m_speed;
 	int m_org_speed;
 	float m_pi;
+	int m_type; //0 = player, 1 = enemy
 	/*sf::Vector2f m_position;
 	sf::Vector2f m_target;*/
 	sf::Vector2f m_velocity;

@@ -87,6 +87,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Arrow.h" />
     <ClInclude Include="BikeKid.h" />
     <ClInclude Include="Collider.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="BikeKid.cpp" />
     <ClCompile Include="Collider.cpp" />

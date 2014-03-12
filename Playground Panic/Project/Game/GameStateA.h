@@ -67,6 +67,8 @@ private:
 	std::vector<BikeKid*> m_bike_kid;
 	sf::Texture m_bike_kid_texture;
 	std::vector<Collider*> m_bike_kid_collider;
+	sf::Texture m_projectile_mud_texture;
+
 
 	SpriteObject *m_framehealthbar;
 	sf::Texture m_framehealthbar_texture;
@@ -91,6 +93,10 @@ private:
 	sf::Clock m_player_pst;
 	//Time between projectile-spawns
 	sf::Int32 m_player_pss;
+
+	sf::Clock m_enemy_pst;
+	//Time between projectile-spawns
+	sf::Int32 m_enemy_pss;
 
 	sf::Clock m_health_pst;
 	//Time between projectile-spawns

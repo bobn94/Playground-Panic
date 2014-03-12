@@ -20,4 +20,5 @@ protected:
 	bool m_special;
 	float m_dirtLevel;
 	float m_speed;
+	bool m_hit; //Fix this for enemy-collision
 };

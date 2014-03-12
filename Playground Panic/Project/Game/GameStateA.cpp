@@ -26,6 +26,7 @@ GameStateA::GameStateA()
 	m_player_collider = nullptr;
 	m_global_speed = 1.0f;
 	m_player_pss = 300;
+	m_enemy_pss = 100;
 	m_enemies_to_spawn = 0;
 };
 
@@ -49,6 +50,12 @@ bool GameStateA::Enter()
 		// Shit happened
 	}
 	m_projectile_texture.setSmooth(true);
+
+	if (!m_projectile_mud_texture.loadFromFile("../data/textures/mud1.png"))
+	{
+		// Shit happened
+	}
+	m_projectile_mud_texture.setSmooth(true);
 
 	if (!m_crosshair_texture.loadFromFile("../data/textures/crosshair.png"))
 	{
@@ -310,7 +317,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 	{
-		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f)/*, new Collider(m_projectile_sprite[m_projectile_sprite.size() - 1]->getPosition(), sf::Vector2f(16.0f, 16.0f))*/));
+		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f), 0));
 		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(53.0f, -35.0f)); //128.0f, 10.0f
 		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(53.0f, 300.0f), m_mouse_position, m_player->GetPosition());
 
@@ -322,6 +329,23 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			m_player->SetOverheat(true);
 		}
 		m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 1.0f);
+	}
+
+	if (m_enemies.size() > 0)
+	{
+		//std::cout << m_enemy_pst.getElapsedTime().asMilliseconds() * (m_enemies.size() / 50.0f) << " > " << m_enemy_pss << std::endl;
+		if (m_enemy_pst.getElapsedTime().asMilliseconds() * (m_enemies.size() / 70.0f) > m_enemy_pss)
+		{
+			int enemy = rand() % m_enemies.size();
+			if (m_enemies[enemy]->GetCanShoot())
+			{
+				m_projectile.push_back(new ProjectileObject(&m_projectile_mud_texture, float(8.0f), 1));
+				m_projectile[m_projectile.size() - 1]->SetPosition(m_enemies[enemy]->GetSprite()->getTransform().transformPoint(53.0f, -35.0f));
+				m_projectile[m_projectile.size() - 1]->Initialize(m_enemies[enemy]->GetSprite()->getTransform().transformPoint(53.0f, 300.0f), m_player->GetPosition(), m_enemies[enemy]->GetPosition());
+			}
+
+			m_enemy_pst.restart();
+		}
 	}
 
 	if (m_timer->Done())
@@ -359,7 +383,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	m_player->Update(deltatime, m_global_speed, m_mouse_position);
 
-	{//////////Uppdaterad
+	{
 		int j = 0;
 		for (int i = 0; i < m_enemies.size(); i++)
 		{
@@ -384,7 +408,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	for(int i = 0; i < m_enemies.size(); i++)
 	{
-		for(int j = 0; j < m_enemies.size(); j++)
+		for(int j = i; j < m_enemies.size(); j++)
 		{
 			if(i != j)
 			{
@@ -448,6 +472,24 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		std::cout << "Shit's about to go down" << std::endl;
 	}
 
+	if (m_projectile.size() > 0) //This is against my principles, so much redundancy
+	{
+		for (int j = m_projectile.size() - 1; j >= 0; j--)
+		{
+			if (m_projectile[j]->GetType() < 0 && Collisions->Overlap(m_player->GetPosition(), m_projectile[j]->GetPosition(), m_player->GetRadius(), m_projectile[j]->GetRadius()))
+			{
+				//std::cout << m_player->GetPosition().x << "-" << m_player->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
+				//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
+				//std::cout << "Before: " << m_enemies.size() << " " << m_projectile.size() << " After: ";
+
+				delete m_projectile[j];
+				m_projectile.erase(m_projectile.begin() + j);
+
+				m_player->SetCurrentHealth(m_player->GetCurrentHealth() + 1.0f);
+			}
+		}
+	}
+
 	if (m_enemies.size() > 0 && m_projectile.size() > 0)
 	{
 		int k = -1;
@@ -460,7 +502,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 			for (int j = m_projectile.size() - 1; j >= 0; j--)
 			{
-				if (Collisions->Overlap(m_enemies[i]->GetPosition(), m_projectile[j]->GetPosition(), m_enemies[i]->GetRadius(), m_projectile[j]->GetRadius()))
+				if (m_projectile[j]->GetType() == 0 && Collisions->Overlap(m_enemies[i]->GetPosition(), m_projectile[j]->GetPosition(), m_enemies[i]->GetRadius(), m_projectile[j]->GetRadius()))
 				{
 					//std::cout << m_enemies[i]->GetPosition().x << "-" << m_enemies[i]->GetPosition().y << " " << m_projectile[j]->GetPosition().x << "-" << m_projectile[j]->GetPosition().y << std::endl;
 					//m_projectile[j]->SetPosition(sf::Vector2f(-999.0f, -999.0f));
@@ -581,10 +623,10 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	m_window.display();
 	
-	std::cout << m_enemies.size() << " ";
-	std::cout << m_slow_kid.size() << " ";
-	std::cout << m_bike_kid.size() << " ";
-	std::cout << m_projectile.size() << std::endl;
+	//std::cout << m_enemies.size() << " ";
+	//std::cout << m_slow_kid.size() << " ";
+	//std::cout << m_bike_kid.size() << " ";
+	//std::cout << m_projectile.size() << std::endl;
 
 	return true;	
 };
