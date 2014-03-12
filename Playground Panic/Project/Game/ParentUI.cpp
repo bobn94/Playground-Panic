@@ -8,14 +8,14 @@
 #include <random>
 #include <iostream>
 
-ParentUI::ParentUI(sf::Texture *arrow, sf::Texture *indicator, sf::Texture *ball)
+ParentUI::ParentUI(sf::Texture *arrow, sf::Texture *indicator, sf::Texture *ball, sf::View *view)
 : SpriteObject(arrow)
 {
 	m_color = sf::Color(rand() % 256, rand() % 256, rand() % 256, 255);
 
 	m_arrow = new Arrow(arrow, m_color);
 	m_indicator = new Indicator(indicator, m_color);
-	m_parent_ball = new ParentBall(ball, m_color);
+	m_parent_ball = new ParentBall(ball, m_color, view);
 }
 
 ParentUI::~ParentUI()
