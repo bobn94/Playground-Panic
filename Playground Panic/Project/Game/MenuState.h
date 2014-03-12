@@ -18,7 +18,7 @@ public:
 	
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view);
+	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level);
 	void Initialize();
 	//void Draw(DrawManager* m_draw_manager);
 	std::string Next();
@@ -32,8 +32,6 @@ public:
 
 
 private:
-
-
 	sf::Vector2u m_crosshairPos;
 	Sprite* m_BackgroundSprite;
 	std::vector<GameObject*> m_objects;

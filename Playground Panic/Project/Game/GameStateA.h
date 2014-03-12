@@ -24,13 +24,14 @@ public:
 
 	bool Enter();
 	void Exit();
-	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view);
+	bool Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level);
 	std::string Next();
 	bool IsType(const std::string &type);
-
 private:
 	Collider* Collisions; //Do we ever use this? I'll probably check later
 	sf::Vector2f m_mouse_position;
+	
+	std::string m_next_state;
 
 	SpriteObject* m_background;
 	sf::Texture m_background_texture;
@@ -111,5 +112,11 @@ private:
 	//sf::Time deltaTime;
 	
 	int m_enemies_to_spawn;
+
+	int m_special_to_spawn;
+
+	bool m_first_run;
+
+	bool m_continue;
 };
 

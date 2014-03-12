@@ -10,7 +10,7 @@
 #include "BikeKid.h"
 #include "ParentUI.h"
 #include "HealthBar.h"
-
+#include "Level.h"
 #include "Collider.h"
 #include "CountdownTimer.h"
 #include "SpriteObject.h"
@@ -173,19 +173,25 @@ bool GameStateA::Enter()
 	m_levelup_timer->SetTime(0, 0, 15);
 	m_levelup_timer->Reset();
 	m_levelup_timer->Start();
-
+	m_first_run = true;
+	m_continue = true;
 	return true;
 };
 
-bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m_view)
+bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m_view, Level& level)
 {
+	if(m_first_run)
+	{
+		m_enemies_to_spawn = level.GetKidsToSpawn() + level.GetSpecialToSpawn();
+		m_special_to_spawn = level.GetSpecialToSpawn();
+		m_first_run = false;
+	}
 	m_timer->Update();
 	
 	sf::Vector2f m_view_position = sf::Vector2f(-99.0f, -99.0f);
 
 	if (m_view.getCenter().x == -99 && m_view.getCenter().y == -99)
 	{
-		//std::cout << "Setting view to the player" << std::endl;
 		m_view.setCenter(m_player->GetPosition());
 	}
 	else if ((m_view.getCenter().x - (m_view.getSize().x / 2)) / 1.4f <= 1
@@ -290,20 +296,6 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if (m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat()){
 		m_player->SetOverheat(false);
 	}
-	if (m_levelup_timer->Done())
-	{
-		if (m_enemies_to_spawn < 10)
-		{
-			m_enemies_to_spawn += 1;
-			m_levelup_timer->Reset();
-			m_levelup_timer->Start();
-			std::cout << m_enemies_to_spawn << std::endl;
-		}
-		else
-		{
-			m_levelup_timer->Stop();
-		}
-	}
 
 	if(m_player->GetCurrentHealth() == m_player->GetMaxHealth())
 	{
@@ -347,10 +339,57 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			m_enemy_pst.restart();
 		}
 	}
-
-	if (m_timer->Done())
+	if(m_enemies_to_spawn > 0 || m_special_to_spawn > 0){
+		if (m_timer->Done())
+		{
+			m_timer->SetTime(0, 0, 1);
+			if(m_enemies_to_spawn > 0){
+				//Read from a textfile into an object?
+				if (rand() % 2 == 1)
+				{
+					m_slow_kid.push_back(new SlowKid(&m_slow_kid_texture, float(32.0f), rand() % 4 + 3, false, &m_slow_kid_dirt_texture));
+					m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+					m_enemies.push_back(m_slow_kid[m_slow_kid.size() - 1]);
+				}
+				else
+				{
+						//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
+				
+					m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, false, &m_bike_kid_dirt_texture));
+					m_bike_kid[m_bike_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+					m_enemies.push_back(m_bike_kid[m_bike_kid.size() - 1]);
+				}
+				m_enemies_to_spawn -= 1;
+				
+				//std::cout << "Slow Kid created - " << m_slow_kid.size() << std::endl;
+				
+			}
+			else if(m_special_to_spawn > 0){
+				if (rand() % 2 == 1)
+				{
+					m_slow_kid.push_back(new SlowKid(&m_slow_kid_texture, float(32.0f), rand() % 4 + 3, true, &m_slow_kid_dirt_texture));
+					m_slow_kid[m_slow_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+					m_enemies.push_back(m_slow_kid[m_slow_kid.size() - 1]);
+				}
+				else
+				{
+						//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
+				
+					m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, true, &m_bike_kid_dirt_texture));
+					m_bike_kid[m_bike_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
+					m_enemies.push_back(m_bike_kid[m_bike_kid.size() - 1]);
+				}
+				m_parentUI.push_back(new ParentUI(&m_arrow_texture, &m_indicator_texture, &m_parent_ball_texture, &m_view));
+				m_special_to_spawn -= 1;
+				
+			}
+			m_timer->Reset();
+			m_timer->Start();
+		}
+	}
+	/*if (m_timer->Done())
 	{
-		m_timer->SetTime(0, 0, 30);
+		m_timer->SetTime(0, 0, 3);
 		m_enemies_to_spawn = rand() % 10 + 5;
 		int special = m_enemies_to_spawn / 4;
 		for (int i = 0; i < m_enemies_to_spawn; i++)
@@ -364,7 +403,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			}
 			else
 			{
-				//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f)))*/, float(32.0f), rand() % 4 + 3));
+				//m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture/*, new Collider(sf::Vector2f((rand()%800 + 100 - m_window.getPosition().x), (rand()%500 + 100 - m_window.getPosition().y)), sf::Vector2f(128.0f, 128.0f))), float(32.0f), rand() % 4 + 3));
+				
 				m_bike_kid.push_back(new BikeKid(&m_bike_kid_texture, float(32.0f), rand() % 4 + 3, special-- > 0, &m_bike_kid_dirt_texture));
 				m_bike_kid[m_bike_kid.size() - 1]->SetPosition(sf::Vector2f(rand() % (int)m_background->GetSprite()->getGlobalBounds().width + 400, rand() % (int)m_background->GetSprite()->getGlobalBounds().height + 400));
 				m_enemies.push_back(m_bike_kid[m_bike_kid.size() - 1]);
@@ -372,7 +412,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 			if (m_enemies[m_enemies.size() - 1]->GetSpecial())
 			{
-				m_parentUI.push_back(new ParentUI(&m_arrow_texture, &m_indicator_texture, &m_parent_ball_texture));
+				m_parentUI.push_back(new ParentUI(&m_arrow_texture, &m_indicator_texture, &m_parent_ball_texture, &m_view));
 			}
 
 			m_timer->Reset();
@@ -380,7 +420,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			//std::cout << "Slow Kid created - " << m_slow_kid.size() << std::endl;
 		}
 	}
-
+	*/
 	m_player->Update(deltatime, m_global_speed, m_mouse_position);
 
 	{
@@ -536,6 +576,11 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 						{
 							delete m_parentUI[k];
 							m_parentUI.erase(m_parentUI.begin() + k);
+							if(m_parentUI.size() == 0){
+								level.NextDay();
+								m_next_state =  "UpgradeState";
+								m_continue = false;
+							}
 						}
 						delete m_enemies[i];
 						m_enemies.erase(m_enemies.begin() + i);
@@ -628,7 +673,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	//std::cout << m_bike_kid.size() << " ";
 	//std::cout << m_projectile.size() << std::endl;
 
-	return true;	
+	return m_continue;	
 };
 
 void GameStateA::Exit() {
@@ -692,7 +737,7 @@ void GameStateA::Exit() {
 };
 
 std::string GameStateA::Next() {
-	return "MenuState";
+	return m_next_state;
 };
 
 bool GameStateA::IsType(const std::string &type) {

@@ -99,6 +99,7 @@
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Indicator.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="OptionsState.h" />
     <ClInclude Include="ParentBall.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UppgradeState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -126,6 +128,7 @@
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Indicator.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="OptionsState.cpp" />
@@ -141,6 +144,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UppgradeState.cpp" />
     <ClCompile Include="Vervivevev.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

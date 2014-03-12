@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <iostream>
 #include "UppgradeState.h"
 
 UpgradeState::UpgradeState(){
@@ -8,7 +9,7 @@ UpgradeState::UpgradeState(){
 bool UpgradeState::Enter(){
 	if (!m_continue_btn_texture.loadFromFile("../data/textures/continue_btn.png"))
 	{
-		// This shit shouldn't happen
+		std::cout << "Loading Error";
 	}
 	m_continue_btn_texture.setSmooth(true);
 	
@@ -19,9 +20,20 @@ bool UpgradeState::Enter(){
 void UpgradeState::Exit(){
 
 }
-bool UpgradeState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view){
-	m_continue_btn_sprite.setPosition(m_window.getSize().x / 2, m_window.getSize().y);
+bool UpgradeState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level){
+	m_continue_btn_sprite.setPosition(1080 / 2, m_window.getSize().y / 2);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
+		sf::Texture loading;
+			if (!loading.loadFromFile("../data/textures/Loading.png"))
+			{
+				// This shit shouldn't happen
+			}
+
+			sf::Sprite load_sprite(loading);
+			load_sprite.setPosition(m_window.getSize().x / 2 - load_sprite.getLocalBounds().width / 2, m_window.getSize().y / 1.5 - load_sprite.getLocalBounds().width / 2);
+			m_window.clear(sf::Color(0, 90, 0));
+			m_window.draw(load_sprite);
+			m_window.display();
 		m_next_state =  "GameStateA";
 		return false;
 	}

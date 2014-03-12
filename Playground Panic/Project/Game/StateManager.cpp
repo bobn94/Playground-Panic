@@ -19,9 +19,9 @@ void StateManager::Attach(State *state) {
 	m_states.push_back(state);
 };
 
-void StateManager::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
+void StateManager::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level) {
 	if(m_current == nullptr) { return; };
-	if(!m_current->Update(deltatime, m_window, m_view)) {
+	if(!m_current->Update(deltatime, m_window, m_view, level)) {
 		ChangeState();
 	};
 };

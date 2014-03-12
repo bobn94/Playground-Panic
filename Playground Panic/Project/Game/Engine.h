@@ -3,8 +3,10 @@
 #include "GameStateA.h"
 #include "OptionsState.h"
 #include "MenuState.h"
+#include "UppgradeState.h"
 #include "stdafx.h"
 #include "CountdownTimer.h"
+#include "Level.h"
 
 class HealthBar;
 class PlayerObject;
@@ -25,5 +27,6 @@ private:
 	sf::Clock deltaClock;
 	sf::RenderWindow* m_window;
 	sf::View m_view;
+	Level m_level;
 	float m_zoom;
 };

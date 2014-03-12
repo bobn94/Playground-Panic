@@ -7,6 +7,7 @@
 #include "Collider.h"
 #include "CountdownTimer.h"
 #include "HealthBar.h"
+#include "Level.h"
 #include <cmath>
 #include <iostream>
 
@@ -32,7 +33,8 @@ void Engine::Run(){
 		mgr.Attach(new MenuState());
 		mgr.Attach(new GameStateA());
 		mgr.Attach(new OptionsState());
-		mgr.SetState("GameStateA");
+		mgr.Attach(new UpgradeState());
+		mgr.SetState("MenuState");
 		mgr.isRunning = true; 
 
 		bool fullscreen = false;
@@ -56,7 +58,7 @@ void Engine::Run(){
 
 			//system("cls");
 			
-			mgr.Update(m_deltatime, *m_window, m_view);
+			mgr.Update(m_deltatime, *m_window, m_view, m_level);
 		
 			
 		}
