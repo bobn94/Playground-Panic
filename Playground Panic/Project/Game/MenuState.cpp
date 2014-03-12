@@ -57,7 +57,7 @@ void MenuState::Exit() {
 
 };
 
-bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view) {
+bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level) {
 	m_view.setCenter(m_view.getCenter());
 
 	m_start_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);

@@ -13,7 +13,7 @@ class ParentUI : public SpriteObject
 
 {
 public:
-	ParentUI::ParentUI(sf::Texture *arrow, sf::Texture *indicator, sf::Texture *ball);
+	ParentUI::ParentUI(sf::Texture *arrow, sf::Texture *indicator, sf::Texture *ball, sf::View *view);
 	~ParentUI();
 	void Update(sf::RenderWindow &window, sf::View &view, sf::Vector2f player_pos, sf::Vector2f enemy_pos);
 

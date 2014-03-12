@@ -27,11 +27,11 @@ int Level::GetWeek()
 int Level::GetKidsToSpawn()
 {
 	if(m_week > 1){
-		m_kid_amount = (2 + (m_day * 3) - 5) + 5 + (12 * (m_week - 1));
+		m_kid_amount = (2 + ((m_day - 1) * 3) - 5) + 5 + (12 * (m_week - 1));
 	}
 	else
 	{
-		m_kid_amount = (2 + (m_day * 3) - 4);
+		m_kid_amount = (2 + ((m_day - 1) * 3) - 4);
 	}
 	return m_kid_amount;
 }
@@ -44,6 +44,6 @@ int Level::GetSpecialToSpawn()
 	{
 		m_kid_amount = (2 + (m_day * 3) - 4);
 	}
-	m_special_amount = m_kid_amount / 3;
+	m_special_amount = m_kid_amount / 3 + 1;
 	return m_special_amount;
 }
