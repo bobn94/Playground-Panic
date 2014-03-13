@@ -719,6 +719,15 @@ void GameStateA::Exit() {
 		}
 		m_slow_kid.clear();
 	}
+	
+	m_projectile.clear();
+	
+	m_enemies.clear();
+	
+	m_slow_kid.clear();
+
+	m_bike_kid.clear();
+	
 
 	/*delete &m_background_texture;
 	delete &m_player_texture;

@@ -7,7 +7,8 @@ ParentBall::ParentBall(sf::Texture * ball, sf::Color color, sf::View *view)
 	m_distance = 0.0f;
 	this->setTexture(*ball);
 	this->setColor(color);
-	this->setPosition(view->getCenter().x - (view->getSize().x / 2), view->getCenter().y - 60 + (view->getSize().y / 2));
+	this->setOrigin(this->getLocalBounds().width / 2, this->getLocalBounds().height / 2);
+	this->setPosition(view->getCenter().x - (view->getSize().x / 2), view->getCenter().y - 60 + (view->getSize().y / 3));
 	//ball_x = 0;
 	//randomvariable = ( rand() % 2)/1000;
 }
@@ -29,13 +30,13 @@ void ParentBall::Update(sf::RenderWindow &window, sf::View &view)
 		- this->getPosition())
 		);*/
 	
-	m_distance += 0.70f;//+ randomvariable;
-	if(m_distance <= 700.0f)
+	m_distance += 0.1f;//+ randomvariable;
+	if(m_distance <= 860.0f)
 	{
-	this->setPosition(view.getCenter().x - (view.getSize().x / 2) + m_distance, view.getCenter().y + 800 - (view.getSize().y / 2));
+	this->setPosition(view.getCenter().x - (view.getSize().x / 2) + m_distance, view.getCenter().y + 937 - (view.getSize().y / 2));
 	}
 	else {
-		this->setPosition(view.getCenter().x - (view.getSize().x / 2) + 700, view.getCenter().y + 800 - (view.getSize().y / 2));
+		this->setPosition(view.getCenter().x - (view.getSize().x / 2) + 860, view.getCenter().y + 937 - (view.getSize().y / 2));
 	}
 //this->move(0.1f, 0.0f);
 };

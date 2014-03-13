@@ -65,9 +65,9 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 	m_exit_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	
 	//m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
-	m_start_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5);
-	m_options_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 2);
-	m_exit_game_sprite.setPosition(m_window.getSize().x / 2,  m_window.getSize().y / 5 * 3);
+	m_start_game_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 3 - m_start_game_sprite.getLocalBounds().width / 2 );
+	m_options_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 2 - m_start_game_sprite.getLocalBounds().width / 2 );
+	m_exit_game_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 1.5 - m_start_game_sprite.getLocalBounds().width / 2 );
 	
 	m_window.clear(sf::Color(0, 90, 0));
 	//m_window.draw(m_background_sprite);
