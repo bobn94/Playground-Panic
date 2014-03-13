@@ -46,9 +46,9 @@ bool MenuState::Enter() {
 
 	m_exit_game_sprite.setTexture(m_exit_game_texture);
 
-	m_start_game_sprite.setOrigin(182, 63);
-	m_options_sprite.setOrigin(182, 63);
-	m_exit_game_sprite.setOrigin(182, 63);
+	m_start_game_sprite.setOrigin(m_start_game_sprite.getLocalBounds().width / 2, m_start_game_sprite.getLocalBounds().height / 2);
+	m_options_sprite.setOrigin(m_options_sprite.getLocalBounds().width / 2, m_options_sprite.getLocalBounds().height / 2);
+	m_exit_game_sprite.setOrigin(m_exit_game_sprite.getLocalBounds().width / 2, m_exit_game_sprite.getLocalBounds().height / 2);
 	return true;
 };
 

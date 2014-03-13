@@ -35,7 +35,7 @@ void Engine::Run(){
 		mgr.Attach(new OptionsState());
 		mgr.Attach(new UpgradeState());
 		mgr.SetState("MenuState");
-		mgr.isRunning = true; 
+		mgr.isRunning = true;
 
 		bool fullscreen = false;
 		if (fullscreen)

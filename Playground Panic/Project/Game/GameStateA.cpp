@@ -75,7 +75,7 @@ bool GameStateA::Enter()
 	}
 	m_bike_kid_texture.setSmooth(true);
 
-	if (!m_framehealthbar_texture.loadFromFile("../data/textures/HealthBar2.png"))
+	if (!m_framehealthbar_texture.loadFromFile("../data/textures/Dirt bar border.png"))
 	{
 		// Shit happened
 	}
@@ -99,19 +99,19 @@ bool GameStateA::Enter()
 	}
 	m_bike_kid_dirt_texture.setSmooth(true);
 
-	if (!m_healthbar_texture.loadFromFile("../data/textures/spr_healthbar.png"))
+	if (!m_healthbar_texture.loadFromFile("../data/textures/Dirt bar.png"))
 	{
 		// Shit happened
 	}
 	m_healthbar_texture.setSmooth(true);
 
-	if (!m_frameheatbar_texture.loadFromFile("../data/textures/HealthBar2.png"))
+	if (!m_frameheatbar_texture.loadFromFile("../data/textures/Temperature border.png"))
 	{
 		// Shit happened
 	}
 	m_frameheatbar_texture.setSmooth(true);
 
-	if (!m_heatbar_texture.loadFromFile("../data/textures/spr_healthbar.png"))
+	if (!m_heatbar_texture.loadFromFile("../data/textures/temperature bar.png"))
 	{
 		// Shit happened
 	}
@@ -129,7 +129,7 @@ bool GameStateA::Enter()
 	}
 	m_parent_ball_texture.setSmooth(true);
 
-	if (!m_parent_bar_texture.loadFromFile("../data/textures/parent_bar.png"))
+	if (!m_parent_bar_texture.loadFromFile("../data/textures/parent meter.png"))
 	{
 		// Shit happened
 	}
@@ -161,7 +161,7 @@ bool GameStateA::Enter()
 	m_framehealthbar = new SpriteObject(&m_framehealthbar_texture);
 
 	m_parent_bar = new SpriteObject(&m_parent_bar_texture);
-
+	m_parent_bar->GetSprite()->setScale(0.643f, 1);
 	m_enemies_to_spawn = 1;
 
 	m_timer = new CountdownTimer();
@@ -180,10 +180,20 @@ bool GameStateA::Enter()
 
 bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m_view, Level& level)
 {
+	if(m_window.getSize().x == 1080){
+		m_parent_bar->GetSprite()->setScale(0.643f, 1);
+	}
 	if(m_first_run)
 	{
 		m_enemies_to_spawn = level.GetKidsToSpawn() + level.GetSpecialToSpawn();
 		m_special_to_spawn = level.GetSpecialToSpawn();
+
+		if(m_window.getSize().x == 1080){
+			m_parent_bar->GetSprite()->setScale(0.643f, 1);
+		}
+
+		m_heatbar->GetSprite()->setScale(0.726f, 0.726f);
+
 		m_first_run = false;
 	}
 	m_timer->Update();
@@ -268,7 +278,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_framehealthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
 	m_heatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
 	m_frameheatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
-	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 150 + (m_view.getSize().y / 2)));
+	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 131 + (m_view.getSize().y / 2)));
 
 	if(m_player->GetCurrentHealth() > m_player->GetMaxHealth())
 	{
@@ -276,12 +286,12 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	if(10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
 	{
-		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), 40));	
+		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10*m_player->GetCurrentHealth(), m_healthbar->GetSprite()->getLocalBounds().height));	
 	}
 
 	if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
 	{
-		m_heatbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), 40));
+		m_heatbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), m_heatbar->GetSprite()->getLocalBounds().height));
 	}
 	
 	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
@@ -342,7 +352,12 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if(m_enemies_to_spawn > 0 || m_special_to_spawn > 0){
 		if (m_timer->Done())
 		{
-			m_timer->SetTime(0, 0, 1);
+			if(m_enemies_to_spawn = 0){
+				m_timer->SetTime(0, 0, 2);
+			}
+			else{
+				m_timer->SetTime(0, 0, 1);
+			}
 			if(m_enemies_to_spawn > 0){
 				//Read from a textfile into an object?
 				if (rand() % 2 == 1)
@@ -652,12 +667,15 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	//m_window.setMouseCursorVisible(false);
 			
 	m_player->Draw(&m_window);
-
-	m_heatbar->Draw(&m_window);
 	m_frameheatbar->Draw(&m_window);
-	m_healthbar->Draw(&m_window);
+	m_heatbar->Draw(&m_window);
 	m_framehealthbar->Draw(&m_window);
 	m_parent_bar->Draw(&m_window);
+	
+	
+	m_healthbar->Draw(&m_window);
+	
+	
 
 	if (m_parentUI.size() > 0)
 	{

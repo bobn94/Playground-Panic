@@ -20,25 +20,14 @@ ParentBall::~ParentBall()
 
 void ParentBall::Update(sf::RenderWindow &window, sf::View &view)
 {
-	std::cout << this->getPosition().x << ", " << 
-		this->getPosition().y << " - " << (sf::Vector2f(view.getCenter().x - (view.getSize().x / 2), view.getCenter().y + 800 - (view.getSize().y / 2))
-		- this->getPosition()).x << ", " << (sf::Vector2f(view.getCenter().x - (view.getSize().x / 2), view.getCenter().y + 800 - (view.getSize().y / 2))
-		- this->getPosition()).y << std::endl;
-	/*this->setPosition(
-		this->getPosition() + sf::Vector2f(1.0f, 0.0f) 
-		+ (sf::Vector2f(view.getCenter().x - (view.getSize().x / 2), view.getCenter().y - 60 + (view.getSize().y / 2))
-		- this->getPosition())
-		);*/
-	
-	m_distance += 0.1f;//+ randomvariable;
+	m_distance += 0.01f;
 	if(m_distance <= 860.0f)
 	{
-	this->setPosition(view.getCenter().x - (view.getSize().x / 2) + m_distance, view.getCenter().y + 937 - (view.getSize().y / 2));
+		this->setPosition(view.getCenter().x - (view.getSize().x / 2) + m_distance, view.getCenter().y - 100 + (view.getSize().y / 2));
 	}
 	else {
-		this->setPosition(view.getCenter().x - (view.getSize().x / 2) + 860, view.getCenter().y + 937 - (view.getSize().y / 2));
+		this->setPosition(view.getCenter().x - (view.getSize().x / 2) + 860, view.getCenter().y - 100 + (view.getSize().y / 2));
 	}
-//this->move(0.1f, 0.0f);
 };
 
 void ParentBall::Initialize()
