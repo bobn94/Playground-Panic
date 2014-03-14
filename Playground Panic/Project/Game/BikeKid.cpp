@@ -9,7 +9,7 @@ BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special,
 {
 	m_pi = 3.14159265359f;
 	m_dirtLevel = 4;
-	m_speed = 180000.0f;
+	m_speed = 190000.0f;
 	m_attack_timer = new CountdownTimer();
 	m_attack_timer->SetTime(0, 0, atkTimer);
 	m_attack_timer->Start();
@@ -41,10 +41,11 @@ BikeKid::~BikeKid(){
 void BikeKid::SetSprite(){
 
 }
-void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, sf::Vector2f origin, sf::Vector2f target){
+void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, sf::Vector2f origin, sf::Vector2f target)
+{
 	m_sprite->setPosition(origin);
 	m_position = origin;
-	m_player_position = target;
+	m_player_position = target; //Seems useless
 	m_attack_timer->Update();
 	m_dirt_sprite1->setColor(sf::Color(255, 255, 255, (255 * (GetDirt() / 6))));
 	float AngleX = target.x - origin.x;
@@ -55,14 +56,15 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	float DirectionX = AngleX / vectorLength;
 	float DirectionY = AngleY / vectorLength;
 	m_velocity = sf::Vector2f(DirectionX * m_speed, DirectionY * m_speed);
-	if (vectorLength >= 55 && vectorLength <= 800)
+
+	if (vectorLength >= 55 && vectorLength <= 1000 || m_dirtLevel <= 0 && vectorLength >= 5)
 	{
 		m_sprite->move(m_velocity * deltatime * global_speed);
 
 		sf::Vector2f m_origin = m_sprite->getPosition();
 
 		//Calculate the direction vector
-		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
+		sf::Vector2f dirVec = sf::Vector2f(target.x - origin.x, target.y - origin.y);
 
 		//Calculate the length^2
 		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
@@ -73,12 +75,12 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		//Get the angle and change it to deg (SFML need deg)
 		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
-		if (m_sprite->getPosition().y < player->GetPosition().y)
+		if (m_sprite->getPosition().y < target.y)
 		{
 			m_sprite->setRotation(90 + rotAngle);
 			m_dirt_sprite1->setRotation(90 + rotAngle);
 		}
-		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
+		else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
 		{
 		}
 		else
@@ -102,9 +104,13 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 			m_collider->m_position = m_sprite->getPosition();
 		}
 	}
+	else if (m_dirtLevel <= 0)
+	{
+		m_on_target = true;
+	}
 	else if (vectorLength <= 10)
 	{
-		sf::Vector2f dirVec = sf::Vector2f(player->GetPosition().x - origin.x, player->GetPosition().y - origin.y);
+		sf::Vector2f dirVec = sf::Vector2f(target.x - origin.x, target.y - origin.y);
 
 		//Calculate the length^2
 		float magSquare = std::sqrt((dirVec.x * dirVec.x) + (dirVec.y * dirVec.y));
@@ -115,26 +121,27 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		//Get the angle and change it to deg (SFML need deg)
 		float rotAngle = std::acos(dirVec.x) * (180 / m_pi);
 
-		if (m_sprite->getPosition().y < player->GetPosition().y)
+		if (m_sprite->getPosition().y < target.y)
 		{
-			// - 13
 			m_sprite->setRotation(90 + rotAngle);
 			m_dirt_sprite1->setRotation(90 + rotAngle);
-			m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetDirt()/6))));
+			m_dirt_sprite1->setColor(sf::Color(255, 255, 255, (255 * (GetDirt() / 6))));
 		}
-		else if (m_sprite->getPosition().x == player->GetPosition().x && m_sprite->getPosition().y == player->GetPosition().y)
+		else if (m_sprite->getPosition().x == target.x && m_sprite->getPosition().y == target.y)
 		{
 		}
 		else
 		{
-			// - 13
 			m_sprite->setRotation(90 - rotAngle);
 			m_dirt_sprite1->setRotation(90 - rotAngle);
-			m_dirt_sprite1->setColor( sf::Color(255,255,255,(255 * (GetDirt()/6))));
+			m_dirt_sprite1->setColor(sf::Color(255, 255, 255, (255 * (GetDirt() / 6))));
 		}
-		if (m_attack_timer->Done()){
+
+		if (m_attack_timer->Done() && m_dirtLevel > 0)
+		{
 			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
-			if (player->GetCurrentHealth() > player->GetMaxHealth()){
+			if (player->GetCurrentHealth() > player->GetMaxHealth())
+			{
 				player->SetCurrentHealth(player->GetMaxHealth());
 			}
 			//std::cout << player->GetCurrentHealth();
@@ -143,8 +150,10 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 		}
 
 	}
-	if (vectorLength <= 55){
-		if (m_attack_timer->Done()){
+	if (vectorLength <= 55 && m_dirtLevel > 0)
+	{
+		if (m_attack_timer->Done())
+		{
 			player->SetCurrentHealth(player->GetCurrentHealth() + 1.0f);
 			if (player->GetCurrentHealth() > player->GetMaxHealth()){
 				player->SetCurrentHealth(player->GetMaxHealth());
@@ -154,10 +163,12 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 			m_attack_timer->Start();
 		}
 	}
-	if (m_dirtLevel < 0){
+	if (m_dirtLevel < 0)
+	{
 		m_dirtLevel = 0;
 	}
-	if (m_dirt_sprite1 != nullptr){
+	if (m_dirt_sprite1 != nullptr)
+	{
 		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
 	}
 }

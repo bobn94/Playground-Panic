@@ -20,7 +20,7 @@ PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collide
 	m_currentHP = 0;
 	
 	m_weapon_heat = 0;
-	m_weapon_max_heat = 46;
+	m_weapon_max_heat = 53;
 	m_Overheat = false;
 
 	m_sprite->setScale(0.7f, 0.7f);

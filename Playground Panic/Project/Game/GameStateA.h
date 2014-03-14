@@ -30,7 +30,7 @@ public:
 private:
 	Collider* Collisions; //Do we ever use this? I'll probably check later
 	sf::Vector2f m_mouse_position;
-	
+
 	std::string m_next_state;
 
 	SpriteObject* m_background;
@@ -47,7 +47,7 @@ private:
 	std::vector<Collider*> m_projectile_collider;
 
 	std::vector<Enemy*> m_enemies;
-	
+
 	sf::Texture m_player_dirt_texture;
 	sf::Texture m_slow_kid_dirt_texture;
 	sf::Texture m_bike_kid_dirt_texture;
@@ -86,8 +86,13 @@ private:
 	SpriteObject *m_frameheatbar;
 	sf::Texture m_frameheatbar_texture;
 
+	SpriteObject *m_clear;
+	sf::Texture m_clear_texture;
+
 	CountdownTimer* m_levelup_timer;
 
+	sf::Vector2f m_point_house;
+	sf::Vector2f m_point_street;
 
 	float m_healthbar_amount;
 
@@ -96,21 +101,22 @@ private:
 	sf::Int32 m_player_pss;
 
 	sf::Clock m_enemy_pst;
-	//Time between projectile-spawns
 	sf::Int32 m_enemy_pss;
 
 	sf::Clock m_health_pst;
-	//Time between projectile-spawns
 	sf::Int32 m_health_pss;
+
+	sf::Clock m_end_time;
+	sf::Int32 m_end_pause;
 
 	//Temporary
 	sf::RectangleShape * rec;
-	
+
 	float m_global_speed;
 
-	
+
 	//sf::Time deltaTime;
-	
+
 	int m_enemies_to_spawn;
 
 	int m_special_to_spawn;

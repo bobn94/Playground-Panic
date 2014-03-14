@@ -13,6 +13,7 @@ Enemy::Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt
 	{
 		//std::cout << "SpecialKid" << std::endl;
 	}
+	m_on_target = false;
 }
 
 Enemy::~Enemy()
@@ -49,4 +50,14 @@ float Enemy::GetSpeed(){
 bool Enemy::GetSpecial()
 {
 	return m_special;
+}
+
+bool Enemy::OnTarget()
+{
+	return m_on_target;
+}
+
+void Enemy::OnTarget(bool bl)
+{
+	m_on_target = bl;
 }

@@ -13,8 +13,10 @@ Indicator::~Indicator()
 {
 }
 
-void Indicator::Update(sf::Vector2f player_pos, sf::Vector2f enemy_pos)
+void Indicator::Update(sf::Vector2f player_pos, sf::Vector2f enemy_pos, sf::Color color)
 {
+	m_color = color;
+	this->setColor(color);
 	this->setPosition(player_pos);
 	
 	float AngleX = enemy_pos.x - player_pos.x;

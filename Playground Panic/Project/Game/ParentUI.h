@@ -25,6 +25,9 @@ public:
 
 	ParentBall GetBall();
 
+	sf::Color GetColor();
+	void SetColor(sf::Color color);
+
 	void Initialize();
 	//std::map<sf::Sprite*, SlowKid*>mm_Special_kids;
 

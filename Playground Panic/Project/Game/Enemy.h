@@ -14,6 +14,8 @@ public:
 	void SetDirt(int dirt);
 	float GetSpeed();
 	bool GetSpecial();
+	bool OnTarget();
+	void OnTarget(bool bl);
 
 protected:
 	bool m_canShoot;
@@ -21,4 +23,6 @@ protected:
 	float m_dirtLevel;
 	float m_speed;
 	bool m_hit; //Fix this for enemy-collision
+	sf::Vector2f m_target;
+	bool m_on_target;
 };

@@ -13,7 +13,8 @@ MenuState::MenuState() {
 };
 
 
-bool MenuState::Enter() {
+bool MenuState::Enter()
+{
 	if (!m_background_texture.loadFromFile("../data/textures/Menu_bg.png"))
 	{
 		// This shit shouldn't happen
@@ -52,23 +53,47 @@ bool MenuState::Enter() {
 	return true;
 };
 
-void MenuState::Exit() {
+void MenuState::Exit()
+{
 
 
 };
 
-bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level) {
-	m_view.setCenter(m_view.getCenter());
+bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_view, Level& level)
+{
+	sf::Event event;
+	while (m_window.pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			m_window.close();
+			return false;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		m_window.close();
+		return false;
+	}
+
+
+	m_view.setCenter(m_view.getSize().x / 2, m_view.getSize().y / 2);
+	m_window.setView(m_view);
 
 	m_start_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	m_options_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	m_exit_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	
 	//m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
-	m_start_game_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 3 - m_start_game_sprite.getLocalBounds().width / 2 );
+	/*m_start_game_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 3 - m_start_game_sprite.getLocalBounds().width / 2 );
 	m_options_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 2 - m_start_game_sprite.getLocalBounds().width / 2 );
 	m_exit_game_sprite.setPosition(m_view.getSize().x / 2 - m_start_game_sprite.getLocalBounds().width / 2, m_view.getSize().y / 1.5 - m_start_game_sprite.getLocalBounds().width / 2 );
-	
+	*/
+	m_start_game_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 3);
+	m_options_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 2);
+	m_exit_game_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 1.5);
+
+
 	m_window.clear(sf::Color(0, 90, 0));
 	//m_window.draw(m_background_sprite);
 	m_window.draw(m_start_game_sprite);
@@ -77,12 +102,14 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 	
 	m_window.display();
 
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+	{
 		
 		if(sf::Mouse::getPosition().x - m_window.getPosition().x + 20 >= m_start_game_sprite.getPosition().x 
-			&& sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2 
+			&& sf::Mouse::getPosition().x - m_window.getPosition().x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getGlobalBounds().width * 2 
 			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 >= m_start_game_sprite.getPosition().y 
-			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
+			&& sf::Mouse::getPosition().y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getGlobalBounds().height * 2
+			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 		{
 			sf::Texture loading;
 			if (!loading.loadFromFile("../data/textures/Loading.png"))
