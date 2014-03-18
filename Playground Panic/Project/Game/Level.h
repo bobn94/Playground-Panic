@@ -11,6 +11,7 @@ public:
 	int GetWeek();
 	int GetKidsToSpawn();
 	int GetSpecialToSpawn();
+	int m_score;
 private:
 	int m_day;
 	int m_week;

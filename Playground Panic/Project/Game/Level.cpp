@@ -5,6 +5,7 @@
 Level::Level(){
 	m_day = 1;
 	m_week = 1;
+	m_score = 0;
 }
 void Level::NextDay()
 {
