@@ -37,10 +37,10 @@ void Engine::Run(){
 		mgr.SetState("MenuState");
 		mgr.isRunning = true;
 
-		bool fullscreen = true;
+		bool fullscreen = false;
 		if (fullscreen)
 		{
-			m_window = new sf::RenderWindow(sf::VideoMode(1080, 720), "Playground Panic", sf::Style::Fullscreen);
+			m_window = new sf::RenderWindow(sf::VideoMode(1920, 1080), "Playground Panic", sf::Style::Fullscreen);
 		}
 		else
 		{
@@ -54,7 +54,7 @@ void Engine::Run(){
 
 		while (mgr.IsRunning())
 		{
-			m_deltatime = deltaClock.restart().asSeconds() / 1000;
+			m_deltatime = static_cast<float>(deltaClock.restart().asSeconds()) / 1000;
 
 			//system("cls");
 			

@@ -9,7 +9,7 @@ Level::Level(){
 }
 void Level::NextDay()
 {
-	if(m_day >= 5){
+	if (m_day >= 5){
 		m_day = 1;
 		++m_week;
 	}
@@ -27,7 +27,7 @@ int Level::GetWeek()
 }
 int Level::GetKidsToSpawn()
 {
-	if(m_week > 1){
+	if (m_week > 1){
 		m_kid_amount = (2 + ((m_day - 1) * 3) - 5) + 5 + (12 * (m_week - 1));
 	}
 	else
@@ -38,7 +38,7 @@ int Level::GetKidsToSpawn()
 }
 int Level::GetSpecialToSpawn()
 {
-	if(m_week > 1){
+	if (m_week > 1){
 		m_kid_amount = (2 + (m_day * 3) - 5) + 5 + (12 * (m_week - 1));
 	}
 	else

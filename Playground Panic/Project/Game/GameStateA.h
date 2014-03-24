@@ -64,6 +64,8 @@ private:
 
 	SpriteObject *m_parent_bar;
 	sf::Texture m_parent_bar_texture;
+	SpriteObject *m_uibg;
+	sf::Texture m_uibg_texture;
 
 	std::vector<BikeKid*> m_bike_kid;
 	sf::Texture m_bike_kid_texture;

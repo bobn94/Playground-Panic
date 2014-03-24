@@ -137,6 +137,12 @@ bool GameStateA::Enter()
 	}
 	m_parent_bar_texture.setSmooth(true);
 
+	if (!m_uibg_texture.loadFromFile("../data/textures/UI base.png"))
+	{
+		// Shit happened
+	}
+	m_uibg_texture.setSmooth(true);
+
 	if (!m_arrow_texture.loadFromFile("../data/textures/IndicatorChild.png"))
 	{
 		// Shit happened
@@ -170,6 +176,7 @@ bool GameStateA::Enter()
 
 	m_parent_bar = new SpriteObject(&m_parent_bar_texture);
 	m_parent_bar->GetSprite()->setScale(0.643f, 1);
+	m_uibg = new SpriteObject(&m_uibg_texture);
 
 	m_clear = new SpriteObject(&m_clear_texture);
 	m_clear->GetSprite()->setColor(sf::Color::Transparent);
@@ -224,6 +231,23 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 		m_heatbar->GetSprite()->setScale(0.726f, 0.726f);
 		m_end_pause = -1;
+		m_end_time.restart();
+
+		if (m_window.getSize().x == 1080)
+		{
+			m_parent_bar->GetSprite()->setScale(0.643f, 0.643f);
+			m_uibg->GetSprite()->setScale(0.643f, 0.643f);
+			m_framehealthbar->GetSprite()->setScale(0.643f, 0.643f);
+			m_frameheatbar->GetSprite()->setScale(0.643f, 0.643f);
+			m_heatbar->GetSprite()->setScale(0.466818f, 0.466818f);
+			m_healthbar->GetSprite()->setScale(0.643f, 0.643f);
+		}
+		else
+		{
+			m_heatbar->GetSprite()->setScale(0.726f, 0.726f);
+			m_frameheatbar->GetSprite()->setScale(0.643f, 0.643f);
+		}
+
 
 		m_first_run = false;
 	}
@@ -304,17 +328,18 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 	m_mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 2.0f)) / 1.4f;
 
-	std::cout << m_parentUI.size() << std::endl;
+	/*std::cout << m_parentUI.size() << std::endl;
 	for (int i = 0; i < m_parentUI.size(); i++)
 	{
 		std::cout << m_parentUI[i]->GetColor().r << ", " << m_parentUI[i]->GetColor().g << ", " << m_parentUI[i]->GetColor().b << std::endl;
-	}
+	}*/
 
-	m_healthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
-	m_framehealthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - (m_view.getSize().y / 2)));
-	m_heatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
-	m_frameheatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y + 40 - (m_view.getSize().y / 2)));
-	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 131 + (m_view.getSize().y / 2)));
+	m_healthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 153 + (m_view.getSize().y / 2)));
+	m_framehealthbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 153 + (m_view.getSize().y / 2)));
+	m_heatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 113 + (m_view.getSize().y / 2)));
+	m_frameheatbar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 113 + (m_view.getSize().y / 2)));
+	m_parent_bar->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 73 + (m_view.getSize().y / 2)));
+	m_uibg->SetPosition(sf::Vector2f(m_view.getCenter().x - (m_view.getSize().x / 2), m_view.getCenter().y - 131 + (m_view.getSize().y / 2)));
 	m_clear->SetPosition(sf::Vector2f(m_player->GetPosition().x, m_player->GetPosition().y - 300));
 
 	if (m_player->GetCurrentHealth() > m_player->GetMaxHealth())
@@ -323,12 +348,12 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	if (10 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 10)
 	{
-		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetCurrentHealth(), m_healthbar->GetSprite()->getLocalBounds().height));
+		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10.0f * m_player->GetCurrentHealth(), m_healthbar->GetSprite()->getLocalBounds().height));
 	}
 
 	if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 10)
 	{
-		m_heatbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 10 * m_player->GetWeaponHeat(), m_heatbar->GetSprite()->getLocalBounds().height));
+		m_heatbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 11.5f * m_player->GetWeaponHeat(), m_heatbar->GetSprite()->getLocalBounds().height));
 	}
 
 	if (m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss)
@@ -357,8 +382,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 	{
 		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f), 0));
-		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(53.0f, -35.0f)); //128.0f, 10.0f
-		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(53.0f, 300.0f), m_mouse_position, m_player->GetPosition());
+		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(65.0f, -35.0f)); //128.0f, 10.0f
+		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(65.0f, 300.0f), m_mouse_position, m_player->GetPosition());
 
 		m_player_pst.restart();
 		//m_player_pss = 10000000;
@@ -454,7 +479,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		{
 			if (m_enemies[i]->GetSpecial())
 			{
-				m_parentUI[j]->Update(m_window, m_view, m_player->GetPosition(), m_enemies[i]->GetPosition());
+				m_parentUI[j]->Update(deltatime, m_global_speed, m_window, m_view, m_player->GetPosition(), m_enemies[i]->GetPosition());
 				j++;
 			}
 		}
@@ -568,11 +593,22 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 
 					m_enemies[i]->SetDirt(m_enemies[i]->GetDirt() - 1);
 
-					if (m_enemies[i]->GetDirt() == 0 && m_parentUI.size() == 1 && m_special_to_spawn == 0)
+					if (m_special_to_spawn == 0)
 					{
-						m_clear->GetSprite()->setColor(sf::Color::White);
-						m_end_pause = 5000;
-						m_end_time.restart();
+						bool okay = true;
+						for (int k = 0; k < m_enemies.size(); k++)
+						{
+							if (m_enemies[k]->GetSpecial() == 1 && m_enemies[k]->GetDirt() > 0)
+							{
+								okay = false;
+							}
+						}
+						if (okay)
+						{
+							m_clear->GetSprite()->setColor(sf::Color::White);
+							m_end_pause = 5000;
+							m_end_time.restart();
+						}
 					}
 				}
 			}
@@ -604,7 +640,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			if (m_slow_kid[i]->GetSpecial() && m_slow_kid[i]->GetDirt() <= 0)
 			{
 				m_slow_kid[i]->Update(deltatime, m_global_speed, m_player, m_slow_kid[i]->GetPosition(), m_point_street);
-				m_parentUI[k]->SetColor(sf::Color(sf::Color::Transparent));
+				m_parentUI[k]->SetColor(sf::Color(0, 0, 0, 0));
 			}
 			else if (m_slow_kid[i]->GetDirt() <= 0)
 			{
@@ -629,7 +665,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			if (m_bike_kid[i]->GetSpecial() && m_bike_kid[i]->GetDirt() <= 0)
 			{
 				m_bike_kid[i]->Update(deltatime, m_global_speed, m_player, m_bike_kid[i]->GetPosition(), m_point_street);
-				m_parentUI[k]->SetColor(sf::Color(sf::Color::Transparent));
+				m_parentUI[k]->SetColor(sf::Color::Transparent);
 			}
 			else if (m_bike_kid[i]->GetDirt() <= 0)
 			{
@@ -643,20 +679,28 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	{
-		int k = -1;
+		int k = m_parentUI.size();
 		for (int i = m_enemies.size() - 1; i >= 0; i--)
 		{
 			if (m_enemies[i]->GetSpecial())
 			{
-				k++;
+				k--;
 			}
 
 			if (m_enemies[i]->OnTarget() && m_enemies[i]->GetDirt() <= 0 || m_end_time.getElapsedTime().asMilliseconds() > m_end_pause && m_end_pause != -1)
 			{
+				if (m_enemies[i]->GetSpecial())
+				{
+					delete m_parentUI[k];
+					m_parentUI.erase(m_parentUI.begin() + k);
+				}
+				
 				for (int l = m_slow_kid.size() - 1; l >= 0; l--)
 				{
 					if (m_slow_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
 					{
+						level.m_score += 10;
+
 						//delete m_slow_kid[l];
 						m_slow_kid.erase(m_slow_kid.begin() + l);
 					}
@@ -665,21 +709,18 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 				{
 					if (m_bike_kid[l]->GetPosition() == m_enemies[i]->GetPosition())
 					{
+						level.m_score += 15;
+
 						//delete m_bike_kid[l];
 						m_bike_kid.erase(m_bike_kid.begin() + l);
 					}
 				}
 
-				if (m_enemies[i]->GetSpecial())
-				{
-					delete m_parentUI[k];
-					m_parentUI.erase(m_parentUI.begin() + k);
-				}
 				delete m_enemies[i];
 				m_enemies.erase(m_enemies.begin() + i);
 				//delete m_enemies[i];
 
-				if (m_parentUI.size() == 0 || m_end_time.getElapsedTime().asMilliseconds() > m_end_pause && m_end_pause != -1)
+				if (m_parentUI.size() == 0 || m_end_time.getElapsedTime().asMilliseconds() > m_end_pause && m_end_pause != -1 && m_special_to_spawn > 0 )
 				{
 					level.NextDay();
 					m_next_state = "UpgradeState";
@@ -707,6 +748,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	//m_window.setMouseCursorVisible(false);
 
 	m_player->Draw(&m_window);
+	m_uibg->Draw(&m_window);
 	m_frameheatbar->Draw(&m_window);
 	m_heatbar->Draw(&m_window);
 	m_framehealthbar->Draw(&m_window);
@@ -753,27 +795,114 @@ void GameStateA::Exit() {
 		auto it = m_projectile.begin();
 		while (it != m_projectile.end())
 		{
-			//delete (*it)->GetSprite();
-			//delete (*it)->GetCollider();
-			delete (*it);
+			if (*it != nullptr)
+			{
+				delete (*it);
+				*it = nullptr;
+			}
 			++it;
 		}
 		m_projectile.clear();
-		//m_projectile_sprite.clear();
-		//m_projectile_collider.clear();
 	}
 
 	{
 		auto it = m_slow_kid.begin();
 		while (it != m_slow_kid.end())
 		{
-			//delete (*it)->GetSprite();
-			//delete (*it)->GetCollider();
-			delete (*it);
+			if (*it != nullptr)
+			{
+				delete (*it);
+				*it = nullptr;
+			}
 			++it;
 		}
 		m_slow_kid.clear();
 	}
+
+	{
+		auto it = m_bike_kid.begin();
+		while (it != m_bike_kid.end())
+		{
+			if (*it != nullptr)
+			{
+				delete (*it);
+				*it = nullptr;
+			}
+			++it;
+		}
+		m_bike_kid.clear();
+	}
+
+	{
+	/*	auto it = m_enemies.begin();
+		while (it != m_enemies.end())
+		{
+			if (*it != nullptr)
+			{
+				delete (*it);
+				*it = nullptr;
+			}
+			++it;
+		}*/
+		m_enemies.clear();
+	}
+
+	{
+		auto it = m_parentUI.begin();
+		while (it != m_parentUI.end())
+		{
+			if (*it != nullptr)
+			{
+				delete (*it);
+				*it = nullptr;
+			}
+			++it;
+		}
+		m_parentUI.clear();
+	}
+
+	if (m_heatbar != nullptr)
+	{
+		delete m_heatbar;
+		m_heatbar = nullptr;
+	}
+
+	if (m_framehealthbar != nullptr)
+	{
+		delete m_framehealthbar;
+		m_framehealthbar = nullptr;
+	}
+
+	if (m_uibg != nullptr)
+	{
+		delete m_uibg;
+		m_uibg = nullptr;
+	}
+
+	/*if (m_crosshair != nullptr)
+	{
+	delete m_crosshair;
+	m_crosshair = nullptr;
+	}*/
+
+	if (m_frameheatbar != nullptr)
+	{
+		delete m_frameheatbar;
+		m_frameheatbar = nullptr;
+	}
+
+	if (m_levelup_timer != nullptr)
+	{
+		delete m_levelup_timer;
+		m_levelup_timer = nullptr;
+	}
+
+	if (m_timer != nullptr)
+	{
+		delete m_timer;
+		m_timer = nullptr;
+	}
+
 
 	/*delete &m_background_texture;
 	delete &m_player_texture;

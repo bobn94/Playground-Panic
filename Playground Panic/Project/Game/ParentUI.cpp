@@ -36,12 +36,12 @@ ParentUI::~ParentUI()
 		m_parent_ball = nullptr;
 	}
 }
-void ParentUI::Update(sf::RenderWindow &window, sf::View &view, sf::Vector2f player_pos, sf::Vector2f enemy_pos)
+void ParentUI::Update(float deltatime, float global_speed, sf::RenderWindow &window, sf::View &view, sf::Vector2f player_pos, sf::Vector2f enemy_pos)
 {
 
 	m_arrow->Update(enemy_pos, m_color);
 	m_indicator->Update(player_pos, enemy_pos, m_color);
-	m_parent_ball->Update(window, view, m_color);
+	m_parent_ball->Update(deltatime, global_speed, window, view, m_color);
 }
 
 void ParentUI::Draw(sf::RenderWindow &window)
