@@ -10,8 +10,8 @@
 
 //using namespace sf;
 
-ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, int type, Collider* collider)
-: GameObject(texture, radius, nullptr, collider)
+ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, std::string filepath, int type)
+: GameObject(texture, radius, nullptr, filepath, type)
 {
 	m_type = type;
 	m_speed = 1000000;
@@ -29,7 +29,7 @@ ProjectileObject::ProjectileObject(sf::Texture* texture, float radius, int type,
 ProjectileObject::~ProjectileObject()
 {
 	delete m_sprite;
-	delete m_collider;
+	//delete m_collider;
 }
 
 void ProjectileObject::Initialize(sf::Vector2f origin, sf::Vector2f target, sf::Vector2f player_position)
@@ -142,21 +142,17 @@ void ProjectileObject::Update(float deltatime, float global_speed, sf::Vector2i 
 		}
 	}
 
-	/*
-	if (m_current_animation != nullptr)
+	if (m_animated)
 	{
-	m_current_animation->Update(deltatime);
+		UpdateFrame(deltatime);
 	}
-	*/
-
-	//m_sprite->setPosition(m_mouse_position.x, m_mouse_position.y);
 
 	m_position = m_sprite->getPosition();
 
-	if (HasCollider())
+	/*if (HasCollider())
 	{
 		m_collider->m_position = m_sprite->getPosition();
-	}
+	}*/
 }
 /*
 void ProjectileObject::AddAnimation(const std::string &name, AnimatedSprite *sprite)

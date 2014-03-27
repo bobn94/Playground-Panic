@@ -32,18 +32,53 @@ private:
 	sf::Vector2f m_mouse_position;
 
 	std::string m_next_state;
+	/////////////////////////////////////SOUND
+
+	sf::SoundBuffer steam_buffer;
+	sf::Sound steam_sound;
+
+	sf::SoundBuffer kids_booing_buffer;
+	sf::Sound kids_booing_sound;
+
+	sf::SoundBuffer insane_guy_buffer;
+	sf::Sound insane_guy_sound;
+
+	sf::SoundBuffer YAY_buffer;
+	sf::Sound sound_YAY;
+
+	sf::Sound kid_oof;
+	sf::SoundBuffer kid_oof_buffer;
+
+	sf::Sound mud_hit;
+	sf::SoundBuffer mud_hit_buffer;
+
+	sf::Sound soundshoot1;
+	sf::SoundBuffer shoot1;
+
+	sf::Sound soundkidhit;
+	sf::SoundBuffer splashkid;
+
+	sf::Music music;
+	//////////////////////////////////////
+
+	SpriteObject *m_varning;
+	sf::Texture m_varning_texture;
 
 	SpriteObject* m_background;
 	sf::Texture m_background_texture;
+	SpriteObject* m_background_overlay;
+	sf::Texture m_background_overlay_texture;
 
 	//StateManager * mgr;
 	CountdownTimer* m_timer;
 	PlayerObject * m_player;
 	Collider * m_player_collider;
 	sf::Texture m_player_texture;
+	std::string m_player_female_walk_path;
 
 	std::vector<ProjectileObject*> m_projectile;
 	sf::Texture m_projectile_texture;
+	std::string m_projectile_path;
 	std::vector<Collider*> m_projectile_collider;
 
 	std::vector<Enemy*> m_enemies;
@@ -54,7 +89,14 @@ private:
 
 	std::vector<SlowKid*> m_slow_kid;
 	sf::Texture m_slow_kid_texture;
+	std::string m_slow_kid_path;
 	std::vector<Collider*> m_slow_kid_collider;
+
+	std::vector<BikeKid*> m_bike_kid;
+	sf::Texture m_bike_kid_texture;
+	std::string m_bike_kid_path;
+	std::vector<Collider*> m_bike_kid_collider;
+	sf::Texture m_projectile_mud_texture;
 
 	std::vector<ParentUI*> m_parentUI;
 	std::map<ParentUI*, SlowKid*>mm_special_kid;
@@ -66,12 +108,6 @@ private:
 	sf::Texture m_parent_bar_texture;
 	SpriteObject *m_uibg;
 	sf::Texture m_uibg_texture;
-
-	std::vector<BikeKid*> m_bike_kid;
-	sf::Texture m_bike_kid_texture;
-	std::vector<Collider*> m_bike_kid_collider;
-	sf::Texture m_projectile_mud_texture;
-
 
 	SpriteObject *m_framehealthbar;
 	sf::Texture m_framehealthbar_texture;
@@ -111,8 +147,11 @@ private:
 	sf::Clock m_end_time;
 	sf::Int32 m_end_pause;
 
-	//Temporary
-	sf::RectangleShape * rec;
+	sf::Clock m_blink_pst;
+	sf::Int32 m_blink_pss;
+	bool m_varning_shit_happens;
+
+	std::vector<Collider*> m_map_colliders;
 
 	float m_global_speed;
 

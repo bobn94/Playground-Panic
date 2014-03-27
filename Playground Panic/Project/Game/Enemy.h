@@ -7,7 +7,7 @@ class Enemy : public GameObject
 {
 public:
 	Enemy();
-	Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture);
+	Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture, std::string filepath = "");
 	virtual ~Enemy();
 	bool GetCanShoot();
 	float GetDirt();

@@ -96,7 +96,7 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UppgradeState.h">
+    <ClInclude Include="UpgradeState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,7 +179,7 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UppgradeState.cpp">
+    <ClCompile Include="UpgradeState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

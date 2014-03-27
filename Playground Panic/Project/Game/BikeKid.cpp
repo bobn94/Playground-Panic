@@ -5,7 +5,7 @@
 #include "CountdownTimer.h"
 #include <iostream>
 
-BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture) : Enemy(texture, radius, special, dirt_texture)
+BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture, std::string filepath) : Enemy(texture, radius, special, dirt_texture, filepath)
 {
 	m_pi = 3.14159265359f;
 	m_dirtLevel = 4;
@@ -32,11 +32,11 @@ BikeKid::~BikeKid(){
 		delete m_sprite;
 		m_sprite = nullptr;
 	}
-	if (m_collider != nullptr)
+	/*if (m_collider != nullptr)
 	{
 		delete m_collider;
 		m_collider = nullptr;
-	}
+	}*/
 }
 void BikeKid::SetSprite(){
 
@@ -99,10 +99,10 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 
 		m_position = m_sprite->getPosition();
 
-		if (HasCollider())
+		/*if (HasCollider())
 		{
 			m_collider->m_position = m_sprite->getPosition();
-		}
+		}*/
 	}
 	else if (m_dirtLevel <= 0)
 	{
@@ -170,6 +170,13 @@ void BikeKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	if (m_dirt_sprite1 != nullptr)
 	{
 		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
+		m_dirt_sprite1->setOrigin(m_dirt_sprite1->getGlobalBounds().width / 2, m_dirt_sprite1->getGlobalBounds().height / 2);
+	}
+	m_sprite->setOrigin(m_sprite->getGlobalBounds().width / 2, m_sprite->getGlobalBounds().height / 2);
+
+	if (m_animated)
+	{
+		UpdateFrame(deltatime);
 	}
 }
 

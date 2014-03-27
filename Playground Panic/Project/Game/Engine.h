@@ -3,7 +3,7 @@
 #include "GameStateA.h"
 #include "OptionsState.h"
 #include "MenuState.h"
-#include "UppgradeState.h"
+#include "UpgradeState.h"
 #include "stdafx.h"
 #include "CountdownTimer.h"
 #include "Level.h"

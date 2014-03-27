@@ -61,19 +61,26 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 	m_view.setCenter(m_view.getSize().x / 2, m_view.getSize().y / 2);
 	m_window.setView(m_view);
 
-
+	if (m_window.getSize().x < 1200.0f)
+	{
+		m_background_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
+	}
+	else
+	{
+		m_background_sprite.setScale(1.4f, 1.4f);
+	}
 	m_start_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	m_options_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 	m_exit_game_sprite.setScale(m_window.getSize().x / 1080.0f, m_window.getSize().y / 720.0f);
 
-	//m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
-	m_start_game_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 3);
-	m_options_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 2);
-	m_exit_game_sprite.setPosition(m_view.getCenter().x, m_view.getSize().y / 1.5);
+	m_background_sprite.setPosition(m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2);
+	m_start_game_sprite.setPosition(m_view.getCenter().x / 2, m_view.getSize().y / 2);
+	m_options_sprite.setPosition(m_view.getCenter().x / 2, m_view.getSize().y / 1.5);
+	m_exit_game_sprite.setPosition(m_view.getCenter().x / 2, m_view.getSize().y / 1.2);
 
 
 	m_window.clear(sf::Color(0, 90, 0));
-	//m_window.draw(m_background_sprite);
+	m_window.draw(m_background_sprite);
 	m_window.draw(m_start_game_sprite);
 	m_window.draw(m_options_sprite);
 	m_window.draw(m_exit_game_sprite);
@@ -114,17 +121,13 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 			&& mouse_position.y + 30 >= m_start_game_sprite.getPosition().y
 			&& mouse_position.y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
 		{
-			sf::Texture loading;
-			if (!loading.loadFromFile("../data/textures/Loading.png"))
-			{
-				// This shit shouldn't happen
-			}
 
-			sf::Sprite load_sprite(loading);
-			load_sprite.setPosition(m_window.getSize().x / 2 - load_sprite.getLocalBounds().width / 2, m_window.getSize().y / 1.5 - load_sprite.getLocalBounds().width / 2);
-			m_window.clear(sf::Color(0, 90, 0));
-			m_window.draw(load_sprite);
-			m_window.display();
+			//sf::Sprite load_sprite(loading);
+			//load_sprite.setPosition(m_window.getSize().x / 2 - load_sprite.getLocalBounds().width / 2, m_window.getSize().y / 1.5 - load_sprite.getLocalBounds().width / 2);
+			/*m_window.clear(sf::Color(0, 90, 0));
+			m_window.draw(m_background_sprite);
+			m_window.display();*/
+
 			m_next_state = "GameStateA";
 			return false;
 		}
@@ -149,16 +152,19 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 	return true;
 };
 
-void MenuState::Initialize() {
+void MenuState::Initialize() 
+{
 
 }
 
 
-std::string MenuState::Next() {
+std::string MenuState::Next() 
+{
 	return m_next_state;
 };
 
-bool MenuState::IsType(const std::string &type) {
+bool MenuState::IsType(const std::string &type)
+{
 	return type.compare("MenuState") == 0;
 };
 

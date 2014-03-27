@@ -9,8 +9,8 @@
 
 //using namespace sf;
 
-PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collider, sf::Texture* dirt_texture)
-	: GameObject(texture, radius, dirt_texture, collider)
+PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collider, sf::Texture* dirt_texture, std::string filepath = "")
+: GameObject(texture, radius, dirt_texture, filepath)
 {
 	m_speed = 70000;
 	m_org_speed = m_speed;
@@ -122,14 +122,19 @@ void PlayerObject::Update(float deltatime, float global_speed, sf::Vector2f mous
 
 	m_position = m_sprite->getPosition();
 
-	if (HasCollider())
+	/*if (HasCollider())
 	{
 		m_collider->m_position = m_sprite->getPosition();
-	}
+	}*/
 
 	if (m_dirt_texture != nullptr)
 	{
 		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
+	}
+
+	if (m_animated)
+	{
+		UpdateFrame(deltatime);
 	}
 }
 /*

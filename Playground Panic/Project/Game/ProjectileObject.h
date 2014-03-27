@@ -14,7 +14,7 @@ class AnimatedSprite;
 class ProjectileObject : public GameObject
 {
 public:
-	ProjectileObject(sf::Texture* texture, float radius, int type = 0, Collider* collider = nullptr);
+	ProjectileObject(sf::Texture* texture, float radius, std::string filepath = "", int type = 0);
 	~ProjectileObject();
 	void Initialize(sf::Vector2f origin, sf::Vector2f target, sf::Vector2f player_position);
 

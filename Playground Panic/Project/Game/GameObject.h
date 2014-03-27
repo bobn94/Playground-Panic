@@ -12,8 +12,13 @@ class GameObject
 	friend class OptionsState;
 public:
 	GameObject();
-	GameObject(sf::Texture* texture, float radius = 32, sf::Texture* dirt_texture = nullptr, Collider *collider = nullptr, int flag = 0);
+	GameObject(sf::Texture* texture, float radius = 32, sf::Texture* dirt_texture = nullptr, std::string filepath = "", int flag = 0);
 	virtual ~GameObject();
+
+	struct Frame {
+		float duration;
+		int x, y, width, height;
+	};
 
 	const sf::Vector2f &GetPosition() const;
 	void SetPosition(const sf::Vector2f &position);
@@ -24,8 +29,14 @@ public:
 	sf::Sprite* GetSprite();
 	//sf::Shape* HasShape();
 	float GetRadius();
+	void LoadAnimation(std::string path, sf::Texture* texture2);
+	void UpdateFrame(float deltatime);
 
 	void Draw(sf::RenderWindow *window);
+
+private:
+	float m_time;
+	int m_current_frame;
 
 protected:
 	sf::Vector2f m_position;
@@ -36,4 +47,6 @@ protected:
 	sf::Sprite* m_dirt_sprite1;
 	sf::Sprite* m_sprite;
 	float m_radius;
+	std::vector<Frame> m_animation;
+	bool m_animated;
 };

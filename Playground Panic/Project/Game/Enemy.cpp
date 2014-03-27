@@ -6,7 +6,7 @@ Enemy::Enemy()
 	//I don't want this one here ._.
 }
 
-Enemy::Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture) : GameObject(texture, radius, dirt_texture)
+Enemy::Enemy(sf::Texture* texture, float radius, bool special, sf::Texture* dirt_texture, std::string filepath) : GameObject(texture, radius, dirt_texture, filepath)
 {
 	m_special = special;
 	if (m_special == true)
@@ -23,11 +23,11 @@ Enemy::~Enemy()
 		delete m_sprite;
 		m_sprite = nullptr;
 	}
-	if (m_collider != nullptr)
+	/*if (m_collider != nullptr)
 	{
 		delete m_collider;
 		m_collider = nullptr;
-	}
+	}*/
 	//delete this;
 }
 

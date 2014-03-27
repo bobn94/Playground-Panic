@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "SpriteObject.h"
 
-SpriteObject::SpriteObject(sf::Texture* texture) : GameObject(texture)
+SpriteObject::SpriteObject(sf::Texture* texture, std::string filepath) : GameObject(texture, 0.0f, nullptr, filepath = "")
 {
 	m_sprite = new sf::Sprite(*m_texture);
 }
@@ -15,9 +15,17 @@ SpriteObject::~SpriteObject()
 		delete m_sprite;
 		m_sprite = nullptr;
 	}
-	if (m_collider != nullptr)
+	//if (m_collider != nullptr)
+	//{
+	//	delete m_collider;
+	//	m_collider = nullptr;
+	//}
+}
+
+void SpriteObject::Update(float deltatime)
+{
+	if (m_animated)
 	{
-		delete m_collider;
-		m_collider = nullptr;
+		UpdateFrame(deltatime);
 	}
 }

@@ -5,7 +5,7 @@
 #include "CountdownTimer.h"
 #include <iostream>
 
-SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture) : Enemy(texture, radius, special, dirt_texture)
+SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special, sf::Texture* dirt_texture, std::string filepath) : Enemy(texture, radius, special, dirt_texture, filepath)
 {
 	m_pi = 3.14159265359f;
 	m_dirtLevel = 6;
@@ -17,10 +17,10 @@ SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special,
 	m_canShoot = false;
 
 	m_sprite->setScale(0.6f, 0.6f);
-	m_sprite->setOrigin(m_sprite->getLocalBounds().width / 2, m_sprite->getLocalBounds().height / 2);
+	m_sprite->setOrigin(m_sprite->getGlobalBounds().width / 2, m_sprite->getGlobalBounds().height / 2);
 	
 	m_dirt_sprite1->setScale(0.6f, 0.6f);
-	m_dirt_sprite1->setOrigin(m_dirt_sprite1->getLocalBounds().width / 2, m_dirt_sprite1->getLocalBounds().height / 2);
+	m_dirt_sprite1->setOrigin(m_dirt_sprite1->getGlobalBounds().width / 2, m_dirt_sprite1->getGlobalBounds().height / 2);
 }
 	
 SlowKid::SlowKid(sf::Vector2f spawn_pos){
@@ -32,11 +32,11 @@ SlowKid::~SlowKid(){
 		delete m_sprite;
 		m_sprite = nullptr;
 	}
-	if (m_collider != nullptr)
+	/*if (m_collider != nullptr)
 	{
 		delete m_collider;
 		m_collider = nullptr;
-	}
+	}*/
 }
 void SlowKid::SetSprite(){
 		
@@ -99,10 +99,10 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 
 		m_position = m_sprite->getPosition();
 
-		if (HasCollider())
+	/*	if (HasCollider())
 		{
 			m_collider->m_position = m_sprite->getPosition();
-		}
+		}*/
 	}
 	else if (m_dirtLevel <= 0)
 	{
@@ -169,7 +169,17 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	}
 	if (m_dirt_sprite1 != nullptr)
 	{
-		m_dirt_sprite1->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y);
+		m_dirt_sprite1->setPosition(m_sprite->getTransform().transformPoint(-5.0f, -50.0f));
+
+		m_dirt_sprite1->setOrigin(m_dirt_sprite1->getGlobalBounds().width / 2, m_dirt_sprite1->getGlobalBounds().height / 2);
+	}
+	m_sprite->setOrigin(m_sprite->getGlobalBounds().width / 2, m_sprite->getGlobalBounds().height / 2);
+
+	if (m_animated)
+	{
+		UpdateFrame(deltatime);
+		std::cout << m_sprite->getTextureRect().left << m_sprite->getTextureRect().top 
+			<< m_sprite->getTextureRect().height << m_sprite->getTextureRect().width << std::endl;
 	}
 }
 
