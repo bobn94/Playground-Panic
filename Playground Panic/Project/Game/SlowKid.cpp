@@ -21,12 +21,19 @@ SlowKid::SlowKid(sf::Texture* texture, float radius, int atkTimer, bool special,
 	
 	m_dirt_sprite1->setScale(0.6f, 0.6f);
 	m_dirt_sprite1->setOrigin(m_dirt_sprite1->getGlobalBounds().width / 2, m_dirt_sprite1->getGlobalBounds().height / 2);
+	if (m_animated)
+	{
+		m_sprite->setTextureRect(sf::IntRect(0, 0, 0, 0));
+	}
 }
 	
-SlowKid::SlowKid(sf::Vector2f spawn_pos){
+SlowKid::SlowKid(sf::Vector2f spawn_pos)
+{
 	m_pi = 3.14159265359f;		
 }
-SlowKid::~SlowKid(){
+
+SlowKid::~SlowKid()
+{
 	if (m_sprite != nullptr)
 	{
 		delete m_sprite;
@@ -169,7 +176,8 @@ void SlowKid::Update(float deltatime, float global_speed, PlayerObject *player, 
 	}
 	if (m_dirt_sprite1 != nullptr)
 	{
-		m_dirt_sprite1->setPosition(m_sprite->getTransform().transformPoint(-5.0f, -50.0f));
+		//m_dirt_sprite1->setPosition(m_sprite->getTransform().transformPoint(-5.0f, -50.0f));
+		m_dirt_sprite1->setPosition(m_sprite->getPosition());
 
 		m_dirt_sprite1->setOrigin(m_dirt_sprite1->getGlobalBounds().width / 2, m_dirt_sprite1->getGlobalBounds().height / 2);
 	}

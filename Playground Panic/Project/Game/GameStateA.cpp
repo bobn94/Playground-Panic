@@ -249,6 +249,10 @@ bool GameStateA::Enter()
 	m_clear->GetSprite()->setColor(sf::Color::Transparent);
 	m_clear->GetSprite()->setOrigin(m_clear->GetSprite()->getLocalBounds().width / 2, m_clear->GetSprite()->getLocalBounds().height / 2);
 
+	m_crosshair = new SpriteObject(&m_crosshair_texture);
+	m_crosshair->GetSprite()->setOrigin(m_crosshair->GetSprite()->getLocalBounds().width / 2, m_crosshair->GetSprite()->getLocalBounds().height / 2);
+	m_crosshair->GetSprite()->setScale(0.6f, 0.6f);
+
 	m_varning = new SpriteObject(&m_varning_texture);
 
 	m_point_house = sf::Vector2f(2490.0f, 850.0f);
@@ -885,7 +889,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_enemies[i]->Draw(&m_window);
 	}
 
-	//m_window.setMouseCursorVisible(false);
+	m_crosshair->SetPosition(m_mouse_position);
+	m_window.setMouseCursorVisible(false);
 
 	m_player->Draw(&m_window);
 	m_background_overlay->Draw(&m_window);
@@ -897,6 +902,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_healthbar->Draw(&m_window);
 	m_varning->Draw(&m_window);
 	m_clear->Draw(&m_window);
+	m_crosshair->Draw(&m_window);
 
 	if (m_parentUI.size() > 0)
 	{
@@ -1021,11 +1027,11 @@ void GameStateA::Exit() {
 		m_uibg = nullptr;
 	}
 
-	/*if (m_crosshair != nullptr)
+	if (m_crosshair != nullptr)
 	{
 	delete m_crosshair;
 	m_crosshair = nullptr;
-	}*/
+	}
 
 	if (m_frameheatbar != nullptr)
 	{

@@ -21,6 +21,11 @@ BikeKid::BikeKid(sf::Texture* texture, float radius, int atkTimer, bool special,
 
 	m_dirt_sprite1->setScale(0.6f, 0.6f);
 	m_dirt_sprite1->setOrigin(m_dirt_sprite1->getLocalBounds().width / 2, m_dirt_sprite1->getLocalBounds().height / 2);
+
+	if (m_animated)
+	{
+		m_sprite->setTextureRect(sf::IntRect(0, 0, 0, 0));
+	}
 }
 
 BikeKid::BikeKid(sf::Vector2f spawn_pos){
