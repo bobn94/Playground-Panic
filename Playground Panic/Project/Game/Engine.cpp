@@ -57,7 +57,9 @@ void Engine::Run(){
 			m_deltatime = static_cast<float>(deltaClock.restart().asSeconds()) / 1000;
 
 			//system("cls");
-			
+			if(!m_window->isOpen()){
+				mgr.isRunning = false;
+			}
 			mgr.Update(m_deltatime, *m_window, m_view, m_level);
 		
 			

@@ -82,8 +82,8 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 	m_window.clear(sf::Color(0, 90, 0));
 	m_window.draw(m_background_sprite);
 	m_window.draw(m_start_game_sprite);
-	m_window.draw(m_options_sprite);
-	m_window.draw(m_exit_game_sprite);
+	//m_window.draw(m_options_sprite);
+	//m_window.draw(m_exit_game_sprite);
 
 	m_window.display();
 	sf::Event event;
@@ -109,11 +109,11 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 		system("CLS");
 		sf::Vector2f mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 6.0f)) / 7.0f;
 
-
-		mouse_position.y /= 2;
-		mouse_position.x /= 2;
-		mouse_position.y -= 32;
-		mouse_position.x += 170;
+			mouse_position.y /= 2;
+			mouse_position.x /= 2;
+			mouse_position.y += 127;
+			mouse_position.x -= 206;
+		
 		std::cout << "Mouse: " << mouse_position.x << " : " << mouse_position.y << std::endl;
 		std::cout << "Start: " << m_start_game_sprite.getPosition().x << " : " << m_start_game_sprite.getPosition().y << std::endl;
 		if (mouse_position.x + 20 >= m_start_game_sprite.getPosition().x
@@ -122,9 +122,9 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 			&& mouse_position.y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
 		{
 
-			//sf::Sprite load_sprite(loading);
-			//load_sprite.setPosition(m_window.getSize().x / 2 - load_sprite.getLocalBounds().width / 2, m_window.getSize().y / 1.5 - load_sprite.getLocalBounds().width / 2);
-			/*m_window.clear(sf::Color(0, 90, 0));
+			/*sf::Sprite load_sprite(loading);
+			load_sprite.setPosition(m_window.getSize().x / 2 - load_sprite.getLocalBounds().width / 2, m_window.getSize().y / 1.5 - load_sprite.getLocalBounds().width / 2);
+			m_window.clear(sf::Color(0, 90, 0));
 			m_window.draw(m_background_sprite);
 			m_window.display();*/
 
@@ -145,7 +145,7 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 		&& mouse_position.y - m_window.getPosition().y + 30 >= m_exit_game_sprite.getPosition().y
 		&& mouse_position.y - m_window.getPosition().y + 30 <= m_start_game_sprite.getPosition().y + m_start_game_sprite.getOrigin().y * 2)
 		{
-		m_window.close();
+			m_window.close();
 		}*/
 	}
 
