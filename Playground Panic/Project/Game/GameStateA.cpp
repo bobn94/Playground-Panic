@@ -254,7 +254,7 @@ bool GameStateA::Enter()
 	m_crosshair->GetSprite()->setScale(0.6f, 0.6f);
 
 	m_varning = new SpriteObject(&m_varning_texture);
-
+	m_varning->SetPosition(sf::Vector2f(-999, -999));
 	m_point_house = sf::Vector2f(2490.0f, 850.0f);
 	m_point_street = sf::Vector2f(2509.0f, 3357.0f);
 
@@ -337,7 +337,9 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		m_first_run = false;
 	}
 	m_timer->Update();
-
+	if(m_player->GetCurrentHealth() >= m_player->GetMaxHealth()){
+		m_window.close();
+	}
 	sf::Vector2f m_view_position = sf::Vector2f(-99.0f, -99.0f);
 
 	if (m_view.getCenter().x == -99 && m_view.getCenter().y == -99)
@@ -433,7 +435,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 	if (40 * m_player->GetCurrentHealth() <= m_player->GetMaxHealth() * 40)
 	{
-		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 40.0f * m_player->GetCurrentHealth(), m_healthbar->GetSprite()->getLocalBounds().height));
+		m_healthbar->GetSprite()->setTextureRect(sf::IntRect(0, 0, 14.5f * m_player->GetCurrentHealth(), m_healthbar->GetSprite()->getLocalBounds().height));
 	}
 
 	if (10 * m_player->GetWeaponHeat() <= m_player->GetWeaponMaxHeat() * 40)

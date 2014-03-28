@@ -106,7 +106,7 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 
-		system("CLS");
+		
 		sf::Vector2f mouse_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window)) + static_cast<sf::Vector2f>(m_view.getCenter()) - static_cast<sf::Vector2f>((m_view.getSize() / 6.0f)) / 7.0f;
 
 			mouse_position.y /= 2;
@@ -114,8 +114,6 @@ bool MenuState::Update(float deltatime, sf::RenderWindow& m_window, sf::View &m_
 			mouse_position.y += 127;
 			mouse_position.x -= 206;
 		
-		std::cout << "Mouse: " << mouse_position.x << " : " << mouse_position.y << std::endl;
-		std::cout << "Start: " << m_start_game_sprite.getPosition().x << " : " << m_start_game_sprite.getPosition().y << std::endl;
 		if (mouse_position.x + 20 >= m_start_game_sprite.getPosition().x
 			&& mouse_position.x + 20 <= m_start_game_sprite.getPosition().x + m_start_game_sprite.getOrigin().x * 2
 			&& mouse_position.y + 30 >= m_start_game_sprite.getPosition().y

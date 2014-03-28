@@ -16,7 +16,7 @@ PlayerObject::PlayerObject(sf::Texture* texture, float radius, Collider* collide
 	m_org_speed = m_speed;
 	m_current_animation = nullptr;
 	m_pi = 3.14159265359f;
-	m_maxHP = 46;
+	m_maxHP = 21;
 	m_currentHP = 0;
 	
 	m_weapon_heat = 0;
