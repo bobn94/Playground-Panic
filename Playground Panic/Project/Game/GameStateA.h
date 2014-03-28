@@ -76,10 +76,16 @@ private:
 	sf::Texture m_player_texture;
 	std::string m_player_female_walk_path;
 
+	SpriteObject *m_steam;
+	sf::Texture m_steam_texture;
+	std::string m_steam_path;
+
 	std::vector<ProjectileObject*> m_projectile;
 	sf::Texture m_projectile_texture;
 	std::string m_projectile_path;
 	std::vector<Collider*> m_projectile_collider;
+	sf::Texture m_projectile_mud_texture;
+	std::string m_projectile_mud_path;
 
 	std::vector<Enemy*> m_enemies;
 
@@ -96,7 +102,6 @@ private:
 	sf::Texture m_bike_kid_texture;
 	std::string m_bike_kid_path;
 	std::vector<Collider*> m_bike_kid_collider;
-	sf::Texture m_projectile_mud_texture;
 
 	std::vector<ParentUI*> m_parentUI;
 	std::map<ParentUI*, SlowKid*>mm_special_kid;

@@ -96,6 +96,12 @@ bool GameStateA::Enter()
 	}
 	m_player_texture.setSmooth(true);
 
+	if (!m_steam_texture.loadFromFile("../data/textures/bloon.png"))
+	{
+		// Shit happened
+	}
+	m_steam_texture.setSmooth(true);
+
 	if (!m_projectile_texture.loadFromFile("../data/textures/Sponge.png"))
 	{
 		// Shit happened
@@ -214,6 +220,8 @@ bool GameStateA::Enter()
 	m_slow_kid_path = "../data/textures/Animation/slowkidwalk.txt";
 	m_bike_kid_path = "../data/textures/Animation/bikeKidWalk.txt";
 	m_projectile_path = "../data/textures/Animation/spongeAnim.txt";
+	m_projectile_mud_path = "../data/textures/Animation/mudAnim.txt";
+	m_steam_path = "../data/textures/Animation/steamAnim.txt";
 
 	m_map_colliders.push_back(new Collider(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(175, 2787)));
 	m_map_colliders.push_back(new Collider(sf::Vector2f(0, 2787), sf::Vector2f(1920, 453)));
@@ -235,6 +243,11 @@ bool GameStateA::Enter()
 	m_player_collider = new Collider(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(20.0f, 30.0f));
 	m_player = new PlayerObject(&m_player_texture, float(128.0f), m_player_collider, &m_player_dirt_texture, m_player_female_walk_path);
 	m_player->SetPosition(sf::Vector2f(2490.0f, 900.0f));
+
+	m_steam = new SpriteObject(&m_steam_texture, m_steam_path);
+	m_steam->GetSprite()->setOrigin(m_steam->GetSprite()->getLocalBounds().width / 2, m_steam->GetSprite()->getLocalBounds().height / 2);
+	m_steam->GetSprite()->setScale(0.6f, 0.6f);
+	m_steam->GetSprite()->setColor(sf::Color::Transparent);
 
 	m_heatbar = new SpriteObject(&m_heatbar_texture);
 	m_frameheatbar = new SpriteObject(&m_frameheatbar_texture);
@@ -455,6 +468,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if (m_player->GetWeaponHeat() <= 0 && m_player->GetOverheat())
 	{
 		m_player->SetOverheat(false);
+		m_steam->GetSprite()->setColor(sf::Color::Transparent);
 		steam_sound.stop();
 		steam_sound.setLoop(false);
 	}
@@ -470,8 +484,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_player_pst.getElapsedTime().asMilliseconds() > m_player_pss && !m_player->GetOverheat())
 	{
 		m_projectile.push_back(new ProjectileObject(&m_projectile_texture, float(8.0f), m_projectile_path, 0));
-		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(65.0f, -35.0f)); //128.0f, 10.0f
-		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(65.0f, 300.0f), m_mouse_position, m_player->GetPosition());
+		m_projectile[m_projectile.size() - 1]->SetPosition(m_player->GetSprite()->getTransform().transformPoint(76.0f, -35.0f)); //128.0f, 10.0f
+		m_projectile[m_projectile.size() - 1]->Initialize(m_player->GetSprite()->getTransform().transformPoint(76.0f, 300.0f), m_mouse_position, m_player->GetPosition());
 		m_projectile[m_projectile.size() - 1]->GetSprite()->setTextureRect(sf::IntRect(0, 0, 35, 111));
 
 		soundshoot1.setBuffer(shoot1);
@@ -485,6 +499,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			steam_sound.setBuffer(steam_buffer);
 			steam_sound.play();
 			steam_sound.setLoop(true);
+			m_steam->GetSprite()->setColor(sf::Color::White);
 			m_player->SetOverheat(true);
 		}
 		m_player->SetWeaponHeat(m_player->GetWeaponHeat() + 500000.0f * deltatime);
@@ -498,9 +513,10 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 			int enemy = rand() % m_enemies.size();
 			if (m_enemies[enemy]->GetCanShoot() && m_enemies[enemy]->GetDirt() > 0)
 			{
-				m_projectile.push_back(new ProjectileObject(&m_projectile_mud_texture, float(8.0f), "", 1));
+				m_projectile.push_back(new ProjectileObject(&m_projectile_mud_texture, float(8.0f), m_projectile_mud_path, 1));
 				m_projectile[m_projectile.size() - 1]->SetPosition(m_enemies[enemy]->GetSprite()->getTransform().transformPoint(53.0f, -35.0f));
 				m_projectile[m_projectile.size() - 1]->Initialize(m_enemies[enemy]->GetSprite()->getTransform().transformPoint(53.0f, 300.0f), m_player->GetPosition(), m_enemies[enemy]->GetPosition());
+				m_projectile[m_projectile.size() - 1]->GetSprite()->setTextureRect(sf::IntRect(0, 0, 26, 46));
 			}
 
 			m_enemy_pst.restart();
@@ -567,6 +583,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	}
 
 	m_player->Update(deltatime, m_global_speed, m_mouse_position);
+	m_steam->Update(deltatime);
+	m_steam->GetSprite()->setRotation(m_player->GetSprite()->getRotation());
 
 	for (int i = 0; i < m_parentUI.size(); i++)
 	{
@@ -877,6 +895,8 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 		}
 	}
 
+	m_steam->SetPosition(m_player->GetSprite()->getTransform().transformPoint(52.0f, 110.0f));
+
 	m_window.clear(sf::Color(18, 45, 0));
 	m_background->Draw(&m_window);
 
@@ -895,6 +915,7 @@ bool GameStateA::Update(float deltatime, sf::RenderWindow &m_window, sf::View &m
 	m_window.setMouseCursorVisible(false);
 
 	m_player->Draw(&m_window);
+	m_steam->Draw(&m_window);
 	m_background_overlay->Draw(&m_window);
 	m_uibg->Draw(&m_window);
 	m_frameheatbar->Draw(&m_window);

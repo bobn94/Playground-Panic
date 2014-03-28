@@ -3,9 +3,13 @@
 #include "stdafx.h"
 #include "SpriteObject.h"
 
-SpriteObject::SpriteObject(sf::Texture* texture, std::string filepath) : GameObject(texture, 0.0f, nullptr, filepath = "")
+SpriteObject::SpriteObject(sf::Texture* texture, std::string filepath) : GameObject(texture, 0.0f, nullptr, filepath)
 {
-	m_sprite = new sf::Sprite(*m_texture);
+	filepath;
+	if (m_animated == false)
+	{
+		m_sprite = new sf::Sprite(*m_texture);
+	}
 }
 
 SpriteObject::~SpriteObject()

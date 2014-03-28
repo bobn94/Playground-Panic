@@ -105,6 +105,11 @@ void GameObject::LoadAnimation(std::string path, sf::Texture* texture)
 	std::string row;
 	stream >> row;
 
+	for (int j = m_animation.size() - 1; j >= 0; j--)
+	{
+		m_animation.erase(m_animation.begin() + j);
+	}
+
 	std::string imgpath;
 	int rownr = 0;
 	while (!stream.eof())
@@ -135,11 +140,6 @@ void GameObject::LoadAnimation(std::string path, sf::Texture* texture)
 		ss >> frame.width;
 		ss >> frame.height;
 		
-		/*frame.x = frame.x * m_sprite->getScale().x;
-		frame.width = frame.width * m_sprite->getScale().x;
-		frame.y = frame.y * m_sprite->getScale().y;
-		frame.height = frame.height * m_sprite->getScale().y;*/
-
 		if (first)
 		{
 			//m_sprite->setTextureRect(sf::IntRect(frame.x, frame.y, frame.width, frame.height));
